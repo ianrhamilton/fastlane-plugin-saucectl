@@ -1,4 +1,3 @@
-require_relative '../lib/fastlane/plugin/rsaucectl/helper/rsaucectl_installer'
 require_relative 'spec_helper'
 require_relative 'utils/mock_api'
 

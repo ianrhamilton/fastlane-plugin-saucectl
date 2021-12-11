@@ -18,6 +18,7 @@ AllCops:
   - "**/lib/assets/MatchfileTemplate"
   - "**/spec/fixtures/broken_files/broken_file.rb"
   - "**/*.provisionprofile"
+  - './spec/*.rb'
 Style/MultipleComparison:
   Enabled: false
 Style/PercentLiteralDelimiters:
