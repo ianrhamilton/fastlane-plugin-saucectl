@@ -6,11 +6,11 @@ Gem::Specification.new do |spec|
   spec.name          = 'fastlane-plugin-rsaucectl'
   spec.version       = Fastlane::Rsaucectl::VERSION
   spec.author        = 'Ian Hamilton'
-  spec.email         = 'ian.hamilton@dnata.com'
+  spec.email         = 'ian.ross.hamilton@gmail.com'
 
   spec.summary       = 'Test your iOS and and Android apps at scale using Sauce Labs toolkit.'
-  # spec.homepage      = "https://github.com/<GITHUB_USERNAME>/fastlane-plugin-rsaucectl"
-  spec.license       = "MIT"
+  spec.homepage      = 'https://github.com/ianrhamilton/fastlane-plugin-rsaucectl'
+  spec.license       = 'MIT'
 
   spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
