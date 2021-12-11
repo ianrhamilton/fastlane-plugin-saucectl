@@ -1,9 +1,14 @@
-describe Fastlane::Actions::RsaucectlAction do
-  describe '#run' do
-    it 'prints a message' do
-      expect(Fastlane::UI).to receive(:message).with("The rsaucectl plugin is working!")
+require_relative '../lib/fastlane/plugin/rsaucectl/helper/rsaucectl_installer'
+require_relative 'spec_helper'
+require_relative 'utils/mock_api'
 
-      Fastlane::Actions::RsaucectlAction.run(nil)
+describe Fastlane::Saucectl::Installer do
+  describe 'installer' do
+    it 'should download saucectl binary' do
+      mock = Saucectl::MockApi.new
+      mock.download
+      installer = Fastlane::Saucectl::Installer.install
+      expect(installer).to be_truthy
     end
   end
 end

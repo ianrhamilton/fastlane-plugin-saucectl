@@ -1,0 +1,43 @@
+{
+    "items": [
+        {
+            "id": "1234-1234-1234-1234-1234",
+            "owner": {
+                "id": "1234-1234-1234-1234-1234",
+                "org_id": "1234-1234-1234-1234-1234"
+            },
+            "name": "test.apk",
+            "upload_timestamp": 1636368973,
+            "etag": "1234-1234-1234-1234-1234",
+            "kind": "android",
+            "group_id": 111111,
+            "description": null,
+            "metadata": {
+                "identifier": "com.test.apk",
+                "name": "",
+                "version": null,
+                "is_test_runner": false,
+                "icon": null,
+                "version_code": null,
+                "min_sdk": 24,
+                "target_sdk": 29,
+                "test_runner_class": ""
+            },
+            "access": {
+                "team_ids": [
+                    "1234-1234-1234-1234-1234"
+                ],
+                "org_ids": []
+            },
+            "sha256": "1234-1234-1234-1234-1234"
+        }
+    ],
+    "links": {
+        "prev": null,
+        "next": null,
+        "self": "?q=test.apk&kind=Android&page=1&per_page=25"
+    },
+    "page": 1,
+    "per_page": 25,
+    "total_items": 1
+}
