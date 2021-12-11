@@ -24,7 +24,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('fastlane', '>= 2.197.0')
   spec.add_development_dependency('pry')
   spec.add_development_dependency('rake')
-  spec.add_development_dependency("rsaucectl")
   spec.add_development_dependency('rspec')
   spec.add_development_dependency('rspec_junit_formatter')
   spec.add_development_dependency('rubocop', '1.12.1')
