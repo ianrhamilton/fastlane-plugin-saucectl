@@ -1,5 +1,3 @@
-require 'fastlane/plugin/rsaucectl/version'
-
 module Fastlane
   module Rsaucectl
     # Return all .rb files inside the "actions" and "helper" directory

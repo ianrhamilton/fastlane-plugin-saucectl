@@ -1,33 +1,31 @@
-# frozen_string_literal: true
-
-require 'find'
-require 'open3'
-require 'json'
-require_relative 'file_utils'
+require "find"
+require "open3"
+require "json"
+require_relative "file_utils"
 
 module Fastlane
   module Saucectl
     # This class is responsible for creating test execution plans for ios applications and will distribute tests
     # that will be be executed via the cloud provider.
     #
-    class AndroidTestPlan
+    class Espresso
       include FileUtils
 
       TEST_FUNCTION_REGEX = /([a-z]+[A-Z][a-zA-Z]+)[(][)]/.freeze
-      DEFAULT_PATH_TO_TESTS = 'app/src/androidTest'
+      DEFAULT_PATH_TO_TESTS = "app/src/androidTest"
 
       def initialize(config)
         @config = config
-        @path_to_tests = config['path_to_tests'].nil? ? DEFAULT_PATH_TO_TESTS : config['path_to_tests']
+        @path_to_tests = config["path_to_tests"].nil? ? DEFAULT_PATH_TO_TESTS : config["path_to_tests"]
       end
 
       def test_data
         test_details = []
         search_retrieve_test_classes(@path_to_tests).each do |f|
-          next unless File.basename(f) =~ FileUtils.CLASS_NAME_REGEX
+          next unless File.basename(f) =~ CLASS_NAME_REGEX
 
-          test_details << { package: File.readlines(f).first.chomp.gsub('package ', '').gsub(';', ''),
-                            class: File.basename(f).gsub(FileUtils.FILE_TYPE_REGEX, ''),
+          test_details << { package: File.readlines(f).first.chomp.gsub("package ", "").gsub(";", ""),
+                            class: File.basename(f).gsub(FILE_TYPE_REGEX, ""),
                             tests: tests_from(f) }
         end
 
@@ -37,10 +35,10 @@ module Fastlane
       def test_distribution
         test_distribution_check
         tests_arr = []
-        case @config['test_distribution']
-        when 'package'
+        case @config["test_distribution"]
+        when "package"
           test_data.each { |type| tests_arr << type[:package] }
-        when 'class'
+        when "class"
           test_data.each { |type| tests_arr << "#{type[:package]}.#{type[:class]}" }
         else
           test_data.each do |type|
@@ -51,12 +49,12 @@ module Fastlane
       end
 
       def test_distribution_check
-        return @config['test_distribution'] if @config['test_distribution'].kind_of?(Array)
+        return @config["test_distribution"] if @config["test_distribution"].is_a?(Array)
 
         distribution_types = %w[class testCase package shard]
-        return if distribution_types.include?(@config['test_distribution'])
+        return if distribution_types.include?(@config["test_distribution"]) || @config["test_distribution"].nil?
 
-        raise "#{@config['test_distribution']} is not a valid method of test distribution"
+        raise "#{@config["test_distribution"]} is not a valid method of test distribution"
       end
 
       def strip_empty(test_details)
@@ -66,19 +64,19 @@ module Fastlane
       end
 
       def tests_from(path)
-        stdout, = find(path, '@Test')
+        stdout, = find(path, "@Test")
         test_cases = []
         stdout.split.each do |line|
-          test_cases << line.match(TEST_FUNCTION_REGEX).to_s.gsub(/[()]/, '') if line =~ TEST_FUNCTION_REGEX
+          test_cases << line.match(TEST_FUNCTION_REGEX).to_s.gsub(/[()]/, "") if line =~ TEST_FUNCTION_REGEX
         end
         strip_skipped(path, test_cases)
       end
 
       def fetch_disabled_tests(path)
-        stdout, = find(path, '@Ignore')
+        stdout, = find(path, "@Ignore")
         test_cases = []
         stdout.split.each do |line|
-          test_cases << line.match(TEST_FUNCTION_REGEX).to_s.gsub(/[()]/, '') if line =~ TEST_FUNCTION_REGEX
+          test_cases << line.match(TEST_FUNCTION_REGEX).to_s.gsub(/[()]/, "") if line =~ TEST_FUNCTION_REGEX
         end
         test_cases
       end

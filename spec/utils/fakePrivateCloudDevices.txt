@@ -1,5 +1,0 @@
-fake_test_device1
-fake_test_device2
-fake_test_device3
-fake_test_device4
-fake_test_device5

@@ -12,11 +12,11 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/ianrhamilton/fastlane-plugin-rsaucectl'
   spec.license       = 'MIT'
 
-  spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)
+  spec.files         = Dir['lib/**/**/*.rb']
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = '>= 2.5'
+  spec.required_ruby_version = '>= 2.7'
 
   # Don't add a dependency to fastlane or fastlane_re
   # since this would cause a circular dependency

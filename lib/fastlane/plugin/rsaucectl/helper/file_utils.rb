@@ -1,5 +1,5 @@
-require 'open3'
-require 'json'
+require "open3"
+require "json"
 
 # utility class for helper functions
 module FileUtils

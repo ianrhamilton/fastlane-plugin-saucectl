@@ -27,7 +27,7 @@ describe Fastlane::Saucectl::Api do
       @config['region'] = 'fail'
 
       expect { Fastlane::Saucectl::Api.new(@config).base_url_for_region }.
-        to raise_error(StandardError, "Invalid region fail \n Available regions: 'eu' and 'us'")
+        to raise_error(StandardError, "fail is an invalid region ❌. Available: 'eu' and 'us'")
     end
 
     it 'should get sauce labs apps' do

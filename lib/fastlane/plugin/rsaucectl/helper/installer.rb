@@ -14,9 +14,9 @@ module Fastlane
         Timeout.timeout(timeout_in_seconds) do
           download_saucectl_installer
           execute_saucectl_binary
-          UI.success("Successfully installed saucectl runner binary")
+          UI.success("✅ Successfully installed saucectl runner binary 🚀")
         rescue StandardError => e
-          UI.error("❌ Failed to install saucectl binary: #{e}")
+          UI.user_error!("❌ Failed to install saucectl binary: #{e}")
         end
       end
 

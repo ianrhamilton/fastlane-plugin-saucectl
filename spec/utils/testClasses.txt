@@ -1,3 +1,0 @@
-com.test.SomeClass1
-com.test.SomeClass2
-com.test.SomeClass3

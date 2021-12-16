@@ -1,7 +1,8 @@
 require 'base64'
-require_relative 'android_test_plan'
-require_relative 'file_utils'
-require_relative 'ios_test_plan'
+require 'fastlane'
+require 'fastlane_core/ui/ui'
+require_relative 'espresso'
+require_relative 'xctest'
 
 module Fastlane
   module Saucectl
@@ -11,23 +12,29 @@ module Fastlane
     class Suites
       include FileUtils
 
+      UI = FastlaneCore::UI unless Fastlane.const_defined?("UI")
+
       def initialize(config)
         @config = config
       end
 
       def device_array
-        if @config['real_devices'].kind_of?(String)
-          @config['real_devices'] = File.read(@config['real_devices'].to_s)
-        else
-          @config['real_devices']
-        end
+        UI.user_error!("❌ Expected array of devices") unless @config['real_devices'].kind_of?(Array)
+        @config['real_devices']
       end
 
       def test_plan
         if @config['platform'].casecmp('ios').zero?
-          Fastlane::Saucectl::AppleTestPlan.new(@config)
+          is_ios_reqs_satisfied?
+          Fastlane::Saucectl::XCTest.new(@config)
         else
-          Fastlane::Saucectl::AndroidTestPlan.new(@config)
+          Fastlane::Saucectl::Espresso.new(@config)
+        end
+      end
+
+      def is_ios_reqs_satisfied?
+        if @config['test_target'].nil? && @config['test_plan'].nil?
+          UI.user_error!("❌ For ios you must specify test_target or testPlan")
         end
       end
 
@@ -79,7 +86,7 @@ module Fastlane
         arr = test_distribution_array
         shards = arr.each_slice((arr.size / device_array.size.to_f).round).to_a
         test_suites = []
-        device_array.each_with_index do |device, i|
+        shards.each_with_index do |device, i|
           test_suites << {
             'name' => suite_name("shard #{i}").downcase,
             'testOptions' => default_test_options(shards[i])
@@ -150,7 +157,7 @@ module Fastlane
       def device_type
         device_types = %w[ANY TABLET PHONE any tablet phone]
         unless @config['device_type'].nil? || device_types.include?(@config['device_type'])
-          raise "#{@config['device_type']} is not a recognised device type"
+          UI.user_error!("❌ #{@config['device_type']} is not a recognised device type")
         end
 
         device_type = @config['device_type'].nil? ? 'phone' : @config['device_type']

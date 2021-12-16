@@ -16,7 +16,6 @@ module Fastlane
       # Get App Storage Files
       # @return the set of files that have been uploaded to Sauce Storage by the requester.
       def retrieve_all_apps
-        UI.message("Getting apps for #{@config['app_name']} on #{@config['platform']}")
         api = Fastlane::Saucectl::Api.new(@config)
         api.retrieve_all_apps
       end
@@ -33,7 +32,6 @@ module Fastlane
                file_id
              end
 
-        UI.important("Deleting #{@config['app_name']} on #{@config['platform']} with id: #{id}")
         api = Fastlane::Saucectl::Api.new(@config)
         api.delete_app("v1/storage/files/#{id}")
       end
@@ -43,7 +41,6 @@ module Fastlane
       # You can look up file IDs using the Get App Storage Groups endpoint.
       # @return json response containing the group ID and the number of files deleted.
       def delete_all_apps_for(group_id)
-        UI.important("Deleting all apps for #{group_id}")
         path = "v1/storage/files/#{group_id}"
         api = Fastlane::Saucectl::Api.new(@config)
         api.delete_app(path)

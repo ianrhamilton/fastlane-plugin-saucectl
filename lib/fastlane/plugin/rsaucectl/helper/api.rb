@@ -91,7 +91,7 @@ module Fastlane
         case @config['region']
         when 'eu' then base_url('eu-central-1')
         when 'us' then base_url('us-west-1')
-        else UI.user_error!("❌ Invalid region #{@config['region']} \n Available regions: 'eu' and 'us'")
+        else UI.user_error!("#{@config['region']} is an invalid region ❌. Available: 'eu' and 'us'")
         end
       end
 
