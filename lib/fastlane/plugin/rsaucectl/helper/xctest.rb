@@ -11,7 +11,6 @@ module Fastlane
     #
     class XCTest
 
-
       TEST_FUNCTION_REGEX = /(test+[A-Z][a-zA-Z]+)[(][)]/.freeze
 
       def initialize(config)
@@ -75,9 +74,9 @@ module Fastlane
         return @config["test_distribution"] if @config["test_distribution"].is_a?(Array)
 
         distribution_types = %w[class testCase shard]
-        return if distribution_types.include?(@config["test_distribution"])
-
-        raise "#{@config['test_distribution']} is not a valid method of test distribution"
+        unless distribution_types.include?(@config["test_distribution"]) || @config["test_distribution"].nil?
+          raise "#{@config['test_distribution']} is not a valid method of test distribution"
+        end
       end
 
       def strip_skipped(all_tests)

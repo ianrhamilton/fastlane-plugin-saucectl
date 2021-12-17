@@ -12,7 +12,7 @@ module Fastlane
     #
     # This class creates saucectl config.yml file based on given specifications
     #
-    class SaucectlConfigGenerator
+    class ConfigGenerator
       def initialize(config)
         @config = config
       end
@@ -22,8 +22,8 @@ module Fastlane
           'apiVersion' => 'v1alpha',
           'kind' => @config['kind'],
           'sauce' => {
-            'region' => @config['region'],
-            'concurrency' => @config['max_concurrency_size'],
+            'region' => (@config['region'].nil? ? 'eu-central-1' : @config['region']).to_s,
+            'concurrency' => (@config['max_concurrency_size'].nil? ? 1 : @config['max_concurrency_size']).to_s,
             'metadata' => {
               'name' => "#{ENV['JOB_NAME']}-#{ENV['BUILD_NUMBER']}",
               'build' => "Release #{ENV['CI_COMMIT_SHORT_SHA']}"
@@ -51,7 +51,7 @@ module Fastlane
       def create
         file_name = 'config.yml'
         suite = Fastlane::Saucectl::Suites.new(@config)
-        suites = { 'suites' => if @config[:is_virtual_device]
+        suites = { 'suites' => if @config['is_virtual_device']
                                  suite.create_virtual_device_suites
                                else
                                  suite.create_real_device_suites

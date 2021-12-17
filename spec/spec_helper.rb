@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
 require 'simplecov'
 SimpleCov.start do
   add_filter 'spec'
-  add_filter 'lib/helper/file_utils.rb'
+  add_filter 'lib/fastlane/plugin/rsaucectl/helper/file_utils'
 end
 
 if ENV['IS_CI']

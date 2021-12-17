@@ -79,5 +79,12 @@ describe Fastlane::Saucectl::Espresso do
         expect(spec[:tests].include?("dashboardProductTest")).to be_falsey
       end
     end
+
+    it "should get ignored tests" do
+      @config["path_to_tests"] = File.expand_path("my-demo-app-android/app/src/androidTest")
+      test_plan = Fastlane::Saucectl::Espresso.new(@config)
+      ignored_tests = test_plan.fetch_disabled_tests(@config["path_to_tests"])
+      expect(ignored_tests.include?("dashboardProductTest")).to be_truthy
+    end
   end
 end

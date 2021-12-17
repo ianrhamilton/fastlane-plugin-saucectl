@@ -34,7 +34,7 @@ module Fastlane
 
       def is_ios_reqs_satisfied?
         if @config['test_target'].nil? && @config['test_plan'].nil?
-          UI.user_error!("❌ For ios you must specify test_target or testPlan")
+          UI.user_error!("❌ For ios you must specify test_target or test_plan")
         end
       end
 
@@ -82,22 +82,9 @@ module Fastlane
         test_suites
       end
 
-      def shard_real_device_suites
-        arr = test_distribution_array
-        shards = arr.each_slice((arr.size / device_array.size.to_f).round).to_a
-        test_suites = []
-        shards.each_with_index do |device, i|
-          test_suites << {
-            'name' => suite_name("shard #{i}").downcase,
-            'testOptions' => default_test_options(shards[i])
-          }.merge(device_type_values(device))
-        end
-        test_suites
-      end
-
       def create_real_device_suites
         if @config['test_distribution'] == 'shard'
-          shard_real_device_suites
+          UI.user_error!("❌ sharding is not supported for real devices")
         else
           test_suites = []
           device_array.each do |device_name|
@@ -117,17 +104,33 @@ module Fastlane
       end
 
       def virtual_device_options
-        platform_versions = if @config['virtual_device_platform_version'].nil?
+        platform_versions = if @config['platform_version'].nil?
                               '11.0'
                             else
-                              @config['virtual_device_platform_version'].join(',')
+                              @config['platform_version'].join(',')
                             end
         {
-          'emulators' => [{
-                            'name' => @config['virtual_device_name'],
-                            'orientation' => @config['orientation'] || 'portrait',
-                            'platformVersions' => platform_versions.split(',')
-                          }]
+          'emulators' => [@config['virtual_device_name'].nil? ? use_default_emulator(platform_versions) : emulator(platform_versions)]
+        }
+      end
+
+      def emulator(platform_versions)
+        emulators = []
+        if @config['virtual_device_name'].kind_of?(Array)
+          @config['virtual_device_name'].each do |emulator|
+            emulators << { 'name' => emulator,
+                           'orientation' => @config['orientation'] || 'portrait',
+                           'platformVersions' => platform_versions.split(',')
+            }
+          end
+          emulators
+        end
+      end
+
+      def use_default_emulator(platform_versions)
+        { 'name' => 'Android GoogleApi Emulator',
+          'orientation' => @config['orientation'] || 'portrait',
+          'platformVersions' => platform_versions.split(',')
         }
       end
 
