@@ -9,7 +9,7 @@ module Fastlane
     class Installer
       UI = FastlaneCore::UI unless Fastlane.const_defined?("UI")
 
-      def self.install
+      def install
         timeout_in_seconds = 30
         Timeout.timeout(timeout_in_seconds) do
           download_saucectl_installer
@@ -20,13 +20,13 @@ module Fastlane
         end
       end
 
-      def self.download_saucectl_installer
+      def download_saucectl_installer
         open('sauce', 'wb') do |file|
           file << open('https://saucelabs.github.io/saucectl/install').read
         end
       end
 
-      def self.execute_saucectl_binary
+      def execute_saucectl_binary
         system('sh sauce')
         FileUtils.mv('bin', '.sauce') unless Dir.exist?('.sauce')
       end
