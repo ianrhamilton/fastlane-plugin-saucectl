@@ -18,19 +18,19 @@ module Fastlane
       end
 
       def test_plan_exists?
-        File.exist?(Dir["**/#{@config['test_plan']}.xctestplan"][0])
+        File.exist?(Dir["**/#{@config[:test_plan]}.xctestplan"][0])
       rescue StandardError
         false
       end
 
       def valid_test_plan?
-        File.exist?(Dir["**/#{@config['test_plan']}.xctestplan"][0])
+        File.exist?(Dir["**/#{@config[:test_plan]}.xctestplan"][0])
       rescue StandardError
-        raise "#{@config['test_plan']} was not found in workspace"
+        raise "#{@config[:test_plan]} was not found in workspace"
       end
 
       def fetch_test_plan
-        plan_path = Dir["**/#{@config['test_plan']}.xctestplan"][0]
+        plan_path = Dir["**/#{@config[:test_plan]}.xctestplan"][0]
         selected = File.read(plan_path)
         JSON.parse(selected)["testTargets"][0]
       end
@@ -53,13 +53,13 @@ module Fastlane
       end
 
       def test_target
-        @config["test_target"].nil? ? fetch_target_from_test_plan : @config["test_target"]
+        @config[:test_target].nil? ? fetch_target_from_test_plan : @config[:test_target]
       end
 
       def test_distribution
         test_distribution_check
         tests_arr = []
-        case @config["test_distribution"]
+        case @config[:test_distribution]
         when "class"
           test_data.each { |type| tests_arr << "#{test_target}.#{type[:class]}" }
         else
@@ -71,11 +71,11 @@ module Fastlane
       end
 
       def test_distribution_check
-        return @config["test_distribution"] if @config["test_distribution"].is_a?(Array)
+        return @config[:test_distribution] if @config[:test_distribution].is_a?(Array)
 
         distribution_types = %w[class testCase shard]
-        unless distribution_types.include?(@config["test_distribution"]) || @config["test_distribution"].nil?
-          raise "#{@config['test_distribution']} is not a valid method of test distribution"
+        unless distribution_types.include?(@config[:test_distribution]) || @config[:test_distribution].nil?
+          raise "#{@config[:test_distribution]} is not a valid method of test distribution"
         end
       end
 

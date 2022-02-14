@@ -20,7 +20,7 @@ module Fastlane
 
       def initialize(config)
         @config = config
-        @encoded_auth_string = Base64.strict_encode64("#{@config['username']}:#{@config['api_key']}")
+        @encoded_auth_string = Base64.strict_encode64("#{@config[:sauce_username]}:#{@config[:sauce_access_key]}")
       end
 
       def available_devices
@@ -53,7 +53,8 @@ module Fastlane
       end
 
       def retrieve_all_apps
-        path = "v1/storage/files?q=#{@config['app_name']}&kind=#{@config['platform']}"
+        UI.message("retrieving all apps for \"#{@config[:app_name]}\".")
+        path = "v1/storage/files?q=#{@config[:app_name]}&kind=#{@config[:platform]}"
         https, url = build_http_request_for(path)
         request = Net::HTTP::Get.new(url)
         request['Authorization'] = "Basic #{@encoded_auth_string}"
@@ -64,12 +65,13 @@ module Fastlane
         response
       end
 
-      def upload(description = nil)
+      def upload
+        UI.message("uploading \"#{@config[:app_name]}\" upload to Sauce Labs.")
         path = 'v1/storage/upload'
         https, url = build_http_request_for(path)
         request = Net::HTTP::Post.new(url)
         request['Authorization'] = "Basic #{@encoded_auth_string}"
-        request.set_form(create_form_data_with(description), 'multipart/form-data')
+        request.set_form(create_form_data, 'multipart/form-data')
 
         response = https.request(request)
         UI.user_error!("❌ Request failed: #{response.code} #{response.message}") unless response.kind_of?(Net::HTTPOK)
@@ -88,10 +90,10 @@ module Fastlane
       end
 
       def base_url_for_region
-        case @config['region']
+        case @config[:region]
         when 'eu' then base_url('eu-central-1')
         when 'us' then base_url('us-west-1')
-        else UI.user_error!("#{@config['region']} is an invalid region ❌. Available: 'eu' and 'us'")
+        else UI.user_error!("#{@config[:region]} is an invalid region ❌. Available: 'eu' and 'us'")
         end
       end
 
@@ -102,12 +104,12 @@ module Fastlane
         [https, url]
       end
 
-      def create_form_data_with(description = nil)
+      def create_form_data
         [
           ['payload',
-           "@#{@config['app_path']}#{@config['app_name']}"],
-          ['name', @config['app_name'],
-           ['description', description.nil? ? 'uploaded via rsaucectl gem' : description]]
+           "@#{@config[:app_path]}#{@config[:app_name]}"],
+          ['name', @config[:app_name],
+           ['description', @config[:app_description].nil? ? 'uploaded via fastlane-plugin-rsaucectl' : @config[:app_description]]]
         ]
       end
 

@@ -16,7 +16,7 @@ module Fastlane
 
       def initialize(config)
         @config = config
-        @path_to_tests = config["path_to_tests"].nil? ? DEFAULT_PATH_TO_TESTS : config["path_to_tests"]
+        @path_to_tests = config[:path_to_tests].nil? ? DEFAULT_PATH_TO_TESTS : config[:path_to_tests]
       end
 
       def test_data
@@ -35,7 +35,7 @@ module Fastlane
       def test_distribution
         test_distribution_check
         tests_arr = []
-        case @config["test_distribution"]
+        case @config[:test_distribution]
         when "package"
           test_data.each { |type| tests_arr << type[:package] }
         when "class"
@@ -49,11 +49,11 @@ module Fastlane
       end
 
       def test_distribution_check
-        return @config["test_distribution"] if @config["test_distribution"].is_a?(Array)
+        return @config[:test_distribution] if @config[:test_distribution].is_a?(Array)
 
         distribution_types = %w[class testCase package shard]
-        unless distribution_types.include?(@config["test_distribution"]) || @config["test_distribution"].nil?
-          raise "#{@config['test_distribution']} is not a valid method of test distribution"
+        unless distribution_types.include?(@config[:test_distribution]) || @config[:test_distribution].nil?
+          raise "#{@config[:test_distribution]} is not a valid method of test distribution"
         end
       end
 

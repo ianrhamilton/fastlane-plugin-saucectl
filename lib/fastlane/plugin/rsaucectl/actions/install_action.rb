@@ -18,6 +18,10 @@ module Fastlane
         ["Ian Hamilton"]
       end
 
+      def self.category
+        :testing
+      end
+
       def self.is_supported?(platform)
         [:ios, :android].include?(platform)
       end

@@ -5,7 +5,7 @@ describe Fastlane::Saucectl::ConfigGenerator do
   describe 'config generator' do
     before do
       @config = {}
-      @config["path_to_tests"] = File.expand_path("my-demo-app-android/app/src/androidTest")
+      @config[:path_to_tests] = File.expand_path("my-demo-app-android/app/src/androidTest")
     end
 
     after do
@@ -13,11 +13,11 @@ describe Fastlane::Saucectl::ConfigGenerator do
     end
 
     it 'should create config.yml file based on user specified virtual device configurations' do
-      @config['test_distribution'] = 'package'
-      @config['is_virtual_device'] = true
-      @config['platform'] = 'android'
-      @config['kind'] = 'espresso'
-      @config['region'] = 'eu'
+      @config[:test_distribution] = 'package'
+      @config[:is_virtual_device] = true
+      @config[:platform] = 'android'
+      @config[:kind] = 'espresso'
+      @config[:region] = 'eu'
       File.open('config.yml', 'w') { |f| YAML.dump(@config, f) }
 
       Fastlane::Saucectl::ConfigGenerator.new(@config).create
@@ -26,12 +26,12 @@ describe Fastlane::Saucectl::ConfigGenerator do
     end
 
     it 'should create config.yml file based on user specified virtual device configurations' do
-      @config['test_distribution'] = 'package'
-      @config['is_virtual_device'] = false
-      @config['real_devices'] = ['device one', 'device_two', 'device three', 'device_four']
-      @config['platform'] = 'android'
-      @config['kind'] = 'espresso'
-      @config['region'] = 'eu'
+      @config[:test_distribution] = 'package'
+      @config[:is_virtual_device] = false
+      @config[:real_devices] = ['device one', 'device_two', 'device three', 'device_four']
+      @config[:platform] = 'android'
+      @config[:kind] = 'espresso'
+      @config[:region] = 'eu'
       File.open('config.yml', 'w') { |f| YAML.dump(@config, f) }
 
       Fastlane::Saucectl::ConfigGenerator.new(@config).create

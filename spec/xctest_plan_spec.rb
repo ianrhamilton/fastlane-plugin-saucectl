@@ -4,12 +4,12 @@ describe Fastlane::Saucectl::XCTest do
   describe "xctest test plan" do
     before do
       @config = {}
-      @config["username"] = "foo"
-      @config["access_key"] = "123"
+      @config[:username] = "foo"
+      @config[:access_key] = "123"
     end
 
     it "should read user all tests from ios xctest projects, excluding any skipped tests" do
-      @config["test_target"] = "MyDemoAppUITests"
+      @config[:test_target] = "MyDemoAppUITests"
       test_array = %w[testProductListingPageAddItemToCart testProductListingPageAddMultipleItemsToCart
                       testProductListingPageDefault testProductDetails testProductDetailsPrice testProductDetailsHighlights
                       testProductDetailsDecreaseNumberOfItems testProductDetailsIncreaseNumberOfItems testProductDetailsDefaultColor
@@ -25,8 +25,8 @@ describe Fastlane::Saucectl::XCTest do
 
     it "should fetch tests by test class" do
       expected_classes = ["MyDemoAppUITests.My_Demo_AppUITests"]
-      @config["test_target"] = "MyDemoAppUITests"
-      @config["test_distribution"] = "class"
+      @config[:test_target] = "MyDemoAppUITests"
+      @config[:test_distribution] = "class"
       test_plan = Fastlane::Saucectl::XCTest.new(@config)
       test_class = test_plan.test_distribution
       expect(test_class).to eql(expected_classes)
@@ -55,8 +55,8 @@ describe Fastlane::Saucectl::XCTest do
                       MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToDrawing
                       MyDemoAppUITests.My_Demo_AppUITests/testNavigateFromCartToCatalog
                       MyDemoAppUITests.My_Demo_AppUITests/testNavigateCartToCatalog]
-      @config["test_target"] = "MyDemoAppUITests"
-      @config["test_distribution"] = "testCase"
+      @config[:test_target] = "MyDemoAppUITests"
+      @config[:test_distribution] = "testCase"
       test_plan = Fastlane::Saucectl::XCTest.new(@config)
       test_cases = test_plan.test_distribution
 
@@ -86,8 +86,8 @@ describe Fastlane::Saucectl::XCTest do
                       MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToDrawing
                       MyDemoAppUITests.My_Demo_AppUITests/testNavigateFromCartToCatalog
                       MyDemoAppUITests.My_Demo_AppUITests/testNavigateCartToCatalog]
-      @config["test_target"] = "MyDemoAppUITests"
-      @config["test_distribution"] = "shard"
+      @config[:test_target] = "MyDemoAppUITests"
+      @config[:test_distribution] = "shard"
       test_plan = Fastlane::Saucectl::XCTest.new(@config)
       test_cases = test_plan.test_distribution
       expect(test_cases).to eql(test_array)
@@ -95,20 +95,20 @@ describe Fastlane::Saucectl::XCTest do
 
     it "should raise an error when unrecognised test distribution type is specified" do
       invalid_distribution_method = "fail"
-      @config["test_target"] = "MyDemoAppUITests"
-      @config["test_distribution"] = invalid_distribution_method
+      @config[:test_target] = "MyDemoAppUITests"
+      @config[:test_distribution] = invalid_distribution_method
       expect { Fastlane::Saucectl::XCTest.new(@config).test_distribution }
         .to raise_error(StandardError, "#{invalid_distribution_method} is not a valid method of test distribution")
     end
 
     it "should raise an error when user specifies invalid test plan" do
-      @config["test_plan"] = "UITest"
+      @config[:test_plan] = "UITest"
       expect { Fastlane::Saucectl::XCTest.new(@config).valid_test_plan? }
-        .to raise_error(StandardError, "#{@config["test_plan"]} was not found in workspace")
+        .to raise_error(StandardError, "#{@config[:test_plan]} was not found in workspace")
     end
 
     it "should strip skipped tests when user specifies test plan containing stripped tests" do
-      @config["test_plan"] = "UITests"
+      @config[:test_plan] = "UITests"
       test_plan = Fastlane::Saucectl::XCTest.new(@config)
       test_plan.test_data.each do |spec|
         expect(spec).not_to include("testNavigateCartToCatalog")
@@ -121,13 +121,13 @@ describe Fastlane::Saucectl::XCTest do
                        { :class => "SomeSpec", :tests => "MyDemoAppUITests.SomeSpec/testThree" },
                        { :class => "SomeSpec", :tests => "MyDemoAppUITests.SomeSpec/testFour" },
                        { :class => "SomeSpec", :tests => "MyDemoAppUITests.SomeSpec/testFive" }]
-      @config["test_plan"] = "EnabledUITests"
+      @config[:test_plan] = "EnabledUITests"
       test_plan = Fastlane::Saucectl::XCTest.new(@config).test_data
       expect(test_plan).to eql(enabled_tests)
     end
 
     it "should get skipped tests from test plan" do
-      @config["test_plan"] = "UITests"
+      @config[:test_plan] = "UITests"
       test_plan = Fastlane::Saucectl::XCTest.new(@config).fetch_disabled_tests
       expect(test_plan).to eql(["My_Demo_AppUITests/testNavigateCartToCatalog"])
     end

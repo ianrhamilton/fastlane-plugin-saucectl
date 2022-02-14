@@ -50,8 +50,7 @@ module Fastlane
       # @param description [String] A description of the file
       # @return a unique file ID assigned to the app.
       def upload_app(description = nil)
-        api = Fastlane::Saucectl::Api.new(@config)
-        api.upload(description)
+        Fastlane::Saucectl::Api.new(@config).upload
       end
     end
   end

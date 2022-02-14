@@ -1,0 +1,8 @@
+---
+platform_error: "No platform specified, set using: platform: 'android'"
+app_path_error: "No App path given, set using: app_path: 'path/to/my/testApp.apk'"
+app_name_error: "No App name given, set using: app_name: 'testApp.apk'"
+region_error: "$region is an invalid region. Supported regions are 'us' and 'eu'"
+sauce_username_error: "No sauce labs username provided, set using: sauce_username: 'sauce user name', or consider setting your credentials as environment variables."
+sauce_api_key_error: "No sauce labs access key provided, set using: sauce_access_key: '1234' or consider setting your credentials as environment variables."
+supported_regions: ['us', 'eu']

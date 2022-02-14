@@ -5,35 +5,35 @@ describe Fastlane::Saucectl::Api do
   describe 'api' do
     before do
       @config = {}
-      @config['username'] = 'foo'
-      @config['access_key'] = '123'
+      @config[:username] = 'foo'
+      @config[:access_key] = '123'
     end
 
     it 'should build base url for US region' do
-      @config['region'] = 'us'
+      @config[:region] = 'us'
       api = Fastlane::Saucectl::Api.new(@config)
       response = api.base_url_for_region
       expect(response).to eql('https://api.us-west-1.saucelabs.com')
     end
 
     it 'should build base url for EU region' do
-      @config['region'] = 'eu'
+      @config[:region] = 'eu'
       api = Fastlane::Saucectl::Api.new(@config)
       response = api.base_url_for_region
       expect(response).to eql('https://api.eu-central-1.saucelabs.com')
     end
 
     it 'should throw and error when invalid region is set' do
-      @config['region'] = 'fail'
+      @config[:region] = 'fail'
 
       expect { Fastlane::Saucectl::Api.new(@config).base_url_for_region }.
         to raise_error(StandardError, "fail is an invalid region ❌. Available: 'eu' and 'us'")
     end
 
     it 'should get sauce labs apps' do
-      @config['region'] = 'eu'
-      @config['platform'] = 'android'
-      @config['app_name'] = 'test.apk'
+      @config[:region] = 'eu'
+      @config[:platform] = 'android'
+      @config[:app_name] = 'test.apk'
       mock_api = Saucectl::MockApi.new
       mock_api.with(:get,
                     'storage/files?kind=android&q=test.apk',
@@ -47,9 +47,9 @@ describe Fastlane::Saucectl::Api do
     end
 
     it 'should delete sauce labs app by file_id' do
-      @config['region'] = 'eu'
-      @config['platform'] = 'android'
-      @config['app_name'] = 'test.apk'
+      @config[:region] = 'eu'
+      @config[:platform] = 'android'
+      @config[:app_name] = 'test.apk'
       mock_api = Saucectl::MockApi.new
       mock_api.with(:get,
                     'storage/files?kind=android&q=test.apk',
@@ -69,9 +69,9 @@ describe Fastlane::Saucectl::Api do
     end
 
     it 'should delete app by user specified id' do
-      @config['region'] = 'eu'
-      @config['platform'] = 'android'
-      @config['app_name'] = 'test.apk'
+      @config[:region] = 'eu'
+      @config[:platform] = 'android'
+      @config[:app_name] = 'test.apk'
 
       mock_api = Saucectl::MockApi.new
       mock_api.with(:get,
@@ -92,9 +92,9 @@ describe Fastlane::Saucectl::Api do
     end
 
     it 'should delete sauce labs app by group_id' do
-      @config['region'] = 'eu'
-      @config['platform'] = 'android'
-      @config['app_name'] = 'test.apk'
+      @config[:region] = 'eu'
+      @config[:platform] = 'android'
+      @config[:app_name] = 'test.apk'
 
       mock_api = Saucectl::MockApi.new
       mock_api.with(:delete,
@@ -109,10 +109,10 @@ describe Fastlane::Saucectl::Api do
     end
 
     it 'should upload applications app' do
-      @config['region'] = 'eu'
-      @config['platform'] = 'android'
-      @config['app_name'] = 'test.apk'
-      @config['app_path'] = "#{__dir__}/utils/test.apk"
+      @config[:region] = 'eu'
+      @config[:platform] = 'android'
+      @config[:app_name] = 'test.apk'
+      @config[:app_path] = "#{__dir__}/utils/test.apk"
 
       mock_api = Saucectl::MockApi.new
       mock_api.with(:post,
@@ -127,8 +127,8 @@ describe Fastlane::Saucectl::Api do
     end
 
     it 'should get available real devices' do
-      @config['region'] = 'eu'
-      @config['platform'] = 'android'
+      @config[:region] = 'eu'
+      @config[:platform] = 'android'
 
       mock_api = Saucectl::MockApi.new
       mock_api.available_devices
@@ -139,8 +139,8 @@ describe Fastlane::Saucectl::Api do
     end
 
     it 'should get available ios devices' do
-      @config['region'] = 'eu'
-      @config['platform'] = 'android'
+      @config[:region] = 'eu'
+      @config[:platform] = 'android'
 
       mock_api = Saucectl::MockApi.new
       mock_api.available_devices
@@ -153,8 +153,8 @@ describe Fastlane::Saucectl::Api do
     end
 
     it 'should get available android devices' do
-      @config['region'] = 'eu'
-      @config['platform'] = 'android'
+      @config[:region] = 'eu'
+      @config[:platform] = 'android'
 
       mock_api = Saucectl::MockApi.new
       mock_api.available_devices

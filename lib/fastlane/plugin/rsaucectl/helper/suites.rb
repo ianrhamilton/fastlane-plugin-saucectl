@@ -19,12 +19,12 @@ module Fastlane
       end
 
       def device_array
-        UI.user_error!("❌ Expected array of devices") unless @config['real_devices'].kind_of?(Array)
-        @config['real_devices']
+        UI.user_error!("❌ Expected array of devices") unless @config[:real_devices].kind_of?(Array)
+        @config[:real_devices]
       end
 
-      def test_plan
-        if @config['platform'].casecmp('ios').zero?
+      def create_test_plan
+        if @config[:platform].casecmp('ios').zero?
           is_ios_reqs_satisfied?
           Fastlane::Saucectl::XCTest.new(@config)
         else
@@ -33,29 +33,29 @@ module Fastlane
       end
 
       def is_ios_reqs_satisfied?
-        if @config['test_target'].nil? && @config['test_plan'].nil?
+        if @config[:test_target].nil? && @config[:test_plan].nil?
           UI.user_error!("❌ For ios you must specify test_target or test_plan")
         end
       end
 
       def test_distribution_array
-        if @config['test_distribution'].kind_of?(Array)
-          @config['test_distribution']
+        if @config[:test_distribution].kind_of?(Array)
+          @config[:test_distribution]
         else
-          test_plan.test_distribution
+          create_test_plan.test_distribution
         end
       end
 
       def suite_name(test_type)
         if ENV['JOB_NAME'].nil? && ENV['BUILD_NUMBER'].nil?
-          "#{@config['kind']}-#{test_type.split('.')[-1]}"
+          "#{@config[:kind]}-#{test_type.split('.')[-1]}"
         else
           "#{ENV['JOB_NAME']}-#{ENV['BUILD_NUMBER']}-#{test_type.split('.')[-1]}"
         end
       end
 
       def create_virtual_device_suites
-        if @config['test_distribution'] == 'shard'
+        if @config[:test_distribution] == 'shard'
           shard_virtual_device_suites
         else
           test_suites = []
@@ -72,7 +72,7 @@ module Fastlane
       def shard_virtual_device_suites
         test_suites = []
         arr = test_distribution_array
-        shards = arr.each_slice((arr.size / @config['shards'].to_f).round).to_a
+        shards = arr.each_slice((arr.size / @config[:shards].to_f).round).to_a
         shards.each_with_index do |suite, i|
           test_suites << {
             'name' => suite_name("shard #{i}").downcase,
@@ -83,7 +83,7 @@ module Fastlane
       end
 
       def create_real_device_suites
-        if @config['test_distribution'] == 'shard'
+        if @config[:test_distribution] == 'shard'
           UI.user_error!("❌ sharding is not supported for real devices")
         else
           test_suites = []
@@ -100,26 +100,26 @@ module Fastlane
       end
 
       def device_type_values(name = nil)
-        @config['is_virtual_device'] ? virtual_device_options : real_device_options(name)
+        @config[:is_virtual_device] ? virtual_device_options : real_device_options(name)
       end
 
       def virtual_device_options
-        platform_versions = if @config['platform_version'].nil?
+        platform_versions = if @config[:platform_version].nil?
                               '11.0'
                             else
-                              @config['platform_version'].join(',')
+                              @config[:platform_version].join(',')
                             end
         {
-          'emulators' => [@config['virtual_device_name'].nil? ? use_default_emulator(platform_versions) : emulator(platform_versions)]
+          'emulators' => [@config[:virtual_device_name].nil? ? use_default_emulator(platform_versions) : emulator(platform_versions)]
         }
       end
 
       def emulator(platform_versions)
         emulators = []
-        if @config['virtual_device_name'].kind_of?(Array)
-          @config['virtual_device_name'].each do |emulator|
+        if @config[:virtual_device_name].kind_of?(Array)
+          @config[:virtual_device_name].each do |emulator|
             emulators << { 'name' => emulator,
-                           'orientation' => @config['orientation'] || 'portrait',
+                           'orientation' => @config[:orientation] || 'portrait',
                            'platformVersions' => platform_versions.split(',')
             }
           end
@@ -129,7 +129,7 @@ module Fastlane
 
       def use_default_emulator(platform_versions)
         { 'name' => 'Android GoogleApi Emulator',
-          'orientation' => @config['orientation'] || 'portrait',
+          'orientation' => @config[:orientation] || 'portrait',
           'platformVersions' => platform_versions.split(',')
         }
       end
@@ -142,8 +142,8 @@ module Fastlane
       end
 
       def default_test_options(test_type)
-        test_option_type = @config['test_distribution'] == 'package' ? 'package' : 'class'
-        if @config['platform'] == 'android'
+        test_option_type = @config[:test_distribution] == 'package' ? 'package' : 'class'
+        if @config[:platform] == 'android'
           { test_option_type => test_type }.merge(android_test_options)
         else
           { 'class' => test_type }
@@ -152,23 +152,23 @@ module Fastlane
 
       def android_test_options
         {
-          'clearPackageData' => @config['clearPackageData'] || true,
-          'useTestOrchestrator' => @config['useTestOrchestrator'] || true
+          'clearPackageData' => @config[:clearPackageData] || true,
+          'useTestOrchestrator' => @config[:useTestOrchestrator] || true
         }
       end
 
       def device_type
         device_types = %w[ANY TABLET PHONE any tablet phone]
-        unless @config['device_type'].nil? || device_types.include?(@config['device_type'])
-          UI.user_error!("❌ #{@config['device_type']} is not a recognised device type")
+        unless @config[:device_type].nil? || device_types.include?(@config[:device_type])
+          UI.user_error!("❌ #{@config[:device_type]} is not a recognised device type")
         end
 
-        device_type = @config['device_type'].nil? ? 'phone' : @config['device_type']
+        device_type = @config[:device_type].nil? ? 'phone' : @config[:device_type]
         { 'deviceType' => device_type.upcase }
       end
 
       def cloud_type
-        type = !(@config['private'].nil? || @config['private'] == false)
+        type = !(@config[:private].nil? || @config[:private] == false)
         { 'private' => type }
       end
     end
