@@ -1,5 +1,6 @@
 require_relative 'spec_helper'
 require_relative 'utils/mock_api'
+require_relative '../lib/fastlane/plugin/rsaucectl/helper/storage'
 
 describe Fastlane::Saucectl::Api do
   describe 'api' do

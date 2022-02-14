@@ -12,7 +12,7 @@ module Fastlane
       SAUCE_APP_ID = :SAUCE_APP_ID
     end
 
-    class UploadAction < Action
+    class UploadToSaucelabsAction < Action
       def self.run(params)
         @strings = YAML.load_file("#{__dir__}/../strings/messages.yml")
         response = Fastlane::Saucectl::Api.new(config(params)).upload
@@ -21,7 +21,7 @@ module Fastlane
       end
 
       def self.config(params)
-        conf = {
+        {
           platform: params[:platform],
           app_path: params[:app_path],
           app_name: params[:app_name],
@@ -30,17 +30,6 @@ module Fastlane
           sauce_username: params[:sauce_username],
           sauce_access_key: params[:sauce_access_key]
         }
-        verify(conf)
-        conf
-      end
-
-      def self.verify(params)
-        UI.user_error!(@strings['platform_error']) if params[:platform].empty?
-        UI.user_error!(@strings['app_path_error']) if params[:app_path].empty?
-        UI.user_error!(@strings['app_name_error']) if params[:app_name].empty?
-        UI.user_error!(@strings['region_error'].gsub!('$region', params[:region])) unless @strings['supported_regions'].include?(params[:region])
-        UI.user_error!(@strings['sauce_username_error']) if params[:sauce_username].empty? && ENV['SAUCE_USERNAME'].nil?
-        UI.user_error!(@strings['sauce_api_key_error']) if params[:sauce_access_key].empty? && ENV['SAUCE_ACCESS_KEY'].nil?
       end
 
       def self.description
@@ -120,8 +109,8 @@ module Fastlane
 
       def self.example_code
         [
-          "saucelabs_upload",
-          "saucelabs_upload(
+          "upload_to_saucelabs",
+          "upload_to_saucelabs(
             platform: 'android',
             app_path: 'app/build/outputs/apk/debug/app-debug.apk',
             app_name: 'Android.MyCustomApp.apk',
