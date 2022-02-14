@@ -86,6 +86,7 @@ describe Fastlane::Actions::UploadAction do
     end
 
     it "should raise an error when no sauce username is specified" do
+      ENV['SAUCE_USERNAME'] = nil
       expect do
         action.run({
                      platform: 'android',
@@ -100,6 +101,7 @@ describe Fastlane::Actions::UploadAction do
     end
 
     it "should raise an error when no sauce access key is specified" do
+      ENV['SAUCE_ACCESS_KEY'] = nil
       expect do
         action.run({
                      platform: 'android',

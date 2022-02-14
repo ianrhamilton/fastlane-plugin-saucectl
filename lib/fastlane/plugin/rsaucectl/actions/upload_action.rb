@@ -39,8 +39,8 @@ module Fastlane
         UI.user_error!(@strings['app_path_error']) if params[:app_path].empty?
         UI.user_error!(@strings['app_name_error']) if params[:app_name].empty?
         UI.user_error!(@strings['region_error'].gsub!('$region', params[:region])) unless @strings['supported_regions'].include?(params[:region])
-        UI.user_error!(@strings['sauce_username_error']) if params[:sauce_username].empty? || ENV['SAUCE_USERNAME'].nil?
-        UI.user_error!(@strings['sauce_api_key_error']) if params[:sauce_access_key].empty? || ENV['SAUCE_ACCESS_KEY'].nil?
+        UI.user_error!(@strings['sauce_username_error']) if params[:sauce_username].empty? && ENV['SAUCE_USERNAME'].nil?
+        UI.user_error!(@strings['sauce_api_key_error']) if params[:sauce_access_key].empty? && ENV['SAUCE_ACCESS_KEY'].nil?
       end
 
       def self.description
@@ -92,9 +92,7 @@ module Fastlane
                                        default_value: Actions.lane_context[SharedValues::SAUCE_USERNAME],
                                        type: String,
                                        verify_block: proc do |value|
-                                         if value.nil? || ENV['SAUCE_USERNAME'].nil?
-                                           UI.user_error!(@strings['sauce_username_error'])
-                                         end
+                                         UI.user_error!(@strings['sauce_username_error']) if value.nil? && ENV['SAUCE_USERNAME'].nil?
                                        end),
           FastlaneCore::ConfigItem.new(key: :sauce_access_key,
                                        env_name: "SAUCE_ACCESS_KEY",
@@ -103,9 +101,7 @@ module Fastlane
                                        default_value: Actions.lane_context[SharedValues::SAUCE_ACCESS_KEY],
                                        type: String,
                                        verify_block: proc do |value|
-                                         if value.nil? || ENV['SAUCE_ACCESS_KEY'].nil?
-                                           UI.user_error!(@strings['sauce_api_key_error'])
-                                         end
+                                         UI.user_error!(@strings['sauce_api_key_error']) if value.nil? && ENV['SAUCE_ACCESS_KEY'].nil?
                                        end)
         ]
       end
