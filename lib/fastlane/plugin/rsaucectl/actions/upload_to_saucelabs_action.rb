@@ -12,7 +12,7 @@ module Fastlane
     end
 
     class UploadToSaucelabsAction < Action
-      @strings = YAML.load_file("#{__dir__}/../strings/messages.yml")
+      @messages = YAML.load_file("#{__dir__}/../strings/messages.yml")
 
       def self.run(params)
         response = Fastlane::Saucectl::Api.new(config(params)).upload
@@ -47,21 +47,21 @@ module Fastlane
                                        optional: false,
                                        is_string: true,
                                        verify_block: proc do |value|
-                                         UI.user_error!(@strings['platform_error']) if value.to_s.empty?
+                                         UI.user_error!(@messages['platform_error']) if value.to_s.empty?
                                        end),
           FastlaneCore::ConfigItem.new(key: :app_path,
                                        description: "Path to the application under test",
                                        optional: false,
                                        is_string: true,
                                        verify_block: proc do |value|
-                                         UI.user_error!(@strings['app_path_error']) unless value && !value.empty?
+                                         UI.user_error!(@messages['app_path_error']) unless value && !value.empty?
                                        end),
           FastlaneCore::ConfigItem.new(key: :app_name,
                                        description: "Name of your application under test",
                                        optional: false,
                                        is_string: true,
                                        verify_block: proc do |value|
-                                         UI.user_error!(@strings['app_name_error']) unless value && !value.empty?
+                                         UI.user_error!(@messages['app_name_error']) unless value && !value.empty?
                                        end),
           FastlaneCore::ConfigItem.new(key: :app_description,
                                        description: "A description to distinguish your app",
@@ -72,7 +72,7 @@ module Fastlane
                                        optional: false,
                                        is_string: true,
                                        verify_block: proc do |value|
-                                         UI.user_error!(@strings['region_error'].gsub!('$region', value)) unless @strings['supported_regions'].include?(value)
+                                         UI.user_error!(@messages['region_error'].gsub!('$region', value)) unless @messages['supported_regions'].include?(value)
                                        end),
           FastlaneCore::ConfigItem.new(key: :sauce_username,
                                        env_name: "SAUCE_USERNAME",
@@ -81,7 +81,7 @@ module Fastlane
                                        default_value: Actions.lane_context[SharedValues::SAUCE_USERNAME],
                                        is_string: true,
                                        verify_block: proc do |value|
-                                         UI.user_error!(@strings['sauce_username_error']) if value.nil? && ENV['SAUCE_USERNAME'].nil?
+                                         UI.user_error!(@messages['sauce_username_error']) if value.nil? && ENV['SAUCE_USERNAME'].nil?
                                        end),
           FastlaneCore::ConfigItem.new(key: :sauce_access_key,
                                        env_name: "SAUCE_ACCESS_KEY",
@@ -90,7 +90,7 @@ module Fastlane
                                        default_value: Actions.lane_context[SharedValues::SAUCE_ACCESS_KEY],
                                        is_string: true,
                                        verify_block: proc do |value|
-                                         UI.user_error!(@strings['sauce_api_key_error']) if value.nil? && ENV['SAUCE_ACCESS_KEY'].nil?
+                                         UI.user_error!(@messages['sauce_api_key_error']) if value.nil? && ENV['SAUCE_ACCESS_KEY'].nil?
                                        end)
         ]
       end
