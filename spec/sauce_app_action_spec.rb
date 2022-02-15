@@ -1,0 +1,34 @@
+require_relative "spec_helper"
+require_relative '../spec/utils/mock_api'
+
+describe Fastlane::Actions::UploadToSaucelabsAction do
+  describe 'Upload to Sauce Labs Storage' do
+
+    before do
+      @config = {}
+    end
+
+    it "should return application list of applications for platform by platform" do
+      @config[:region] = 'eu'
+      @config[:platform] = 'android'
+      @config[:app_name] = 'test.apk'
+      mock_api = Saucectl::MockApi.new
+      mock_api.with(:get,
+                    'storage/files?kind=android&q=test.apk',
+                    default_header,
+                    'apps_response.json',
+                    200)
+
+      response = Fastlane::FastFile.new.parse("lane :test do
+          sauce_apps({
+                    platform: 'android',
+                    sauce_username: 'foo',
+                    sauce_access_key: 'bar123',
+                    app_name: 'test.apk',
+                   region: 'eu'
+                  })
+        end").runner.execute(:test)
+      expect(response.code).to eql('200')
+    end
+  end
+end
