@@ -12,6 +12,7 @@ AllCops:
   - "**/*.gemspec"
   Exclude:
   - './spec/*.rb'
+  - './fastlane/**'
 Style/MultipleComparison:
   Enabled: false
 Style/PercentLiteralDelimiters:
@@ -129,9 +130,6 @@ Naming/PredicateName:
   Enabled: false
 Style/PerlBackrefs:
   Enabled: false
-Layout/SpaceAroundOperators:
-  Exclude:
-  - "**/spec/actions_specs/xcodebuild_spec.rb"
 Naming/FileName:
   Exclude:
   - "**/Dangerfile"
