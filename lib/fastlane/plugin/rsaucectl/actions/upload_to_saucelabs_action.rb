@@ -6,8 +6,6 @@ require_relative '../helper/api'
 module Fastlane
   module Actions
     module SharedValues
-      SAUCE_USERNAME = :SAUCE_USERNAME
-      SAUCE_ACCESS_KEY = :SAUCE_ACCESS_KEY
       SAUCE_APP_ID = :SAUCE_APP_ID
     end
 
@@ -63,10 +61,6 @@ module Fastlane
                                        verify_block: proc do |value|
                                          UI.user_error!(@messages['app_name_error']) unless value && !value.empty?
                                        end),
-          FastlaneCore::ConfigItem.new(key: :app_description,
-                                       description: "A description to distinguish your app",
-                                       optional: true,
-                                       is_string: true),
           FastlaneCore::ConfigItem.new(key: :region,
                                        description: "Data Center region (us or eu), set using: region: 'eu'",
                                        optional: false,
@@ -75,23 +69,23 @@ module Fastlane
                                          UI.user_error!(@messages['region_error'].gsub!('$region', value)) unless @messages['supported_regions'].include?(value)
                                        end),
           FastlaneCore::ConfigItem.new(key: :sauce_username,
-                                       env_name: "SAUCE_USERNAME",
                                        description: "Your sauce labs username in order to authenticate upload requests",
                                        optional: false,
-                                       default_value: Actions.lane_context[SharedValues::SAUCE_USERNAME],
                                        is_string: true,
                                        verify_block: proc do |value|
-                                         UI.user_error!(@messages['sauce_username_error']) if value.nil? && ENV['SAUCE_USERNAME'].nil?
+                                         UI.user_error!(@messages['sauce_username_error']) if value.empty?
                                        end),
           FastlaneCore::ConfigItem.new(key: :sauce_access_key,
-                                       env_name: "SAUCE_ACCESS_KEY",
                                        description: "Your sauce labs access key in order to authenticate upload requests",
                                        optional: false,
-                                       default_value: Actions.lane_context[SharedValues::SAUCE_ACCESS_KEY],
                                        is_string: true,
                                        verify_block: proc do |value|
-                                         UI.user_error!(@messages['sauce_api_key_error']) if value.nil? && ENV['SAUCE_ACCESS_KEY'].nil?
-                                       end)
+                                         UI.user_error!(@messages['sauce_api_key_error']) if value.empty?
+                                       end),
+          FastlaneCore::ConfigItem.new(key: :app_description,
+                                       description: "A description to distinguish your app",
+                                       optional: true,
+                                       is_string: true)
         ]
       end
 

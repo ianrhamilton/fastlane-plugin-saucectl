@@ -67,7 +67,7 @@ module Fastlane
       end
 
       def upload
-        UI.message("uploading \"#{@config[:app_name]}\" upload to Sauce Labs.")
+        UI.message("⏳ Uploading \"#{@config[:app_name]}\" upload to Sauce Labs.")
         path = 'v1/storage/upload'
         https, url = build_http_request_for(path)
         request = Net::HTTP::Post.new(url)
