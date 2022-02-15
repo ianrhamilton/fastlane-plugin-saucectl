@@ -2,7 +2,6 @@ require "find"
 require "open3"
 require "json"
 require_relative "file_utils"
-include FileUtils
 
 module Fastlane
   module Saucectl
@@ -10,7 +9,7 @@ module Fastlane
     # that will be be executed via the cloud provider.
     #
     class XCTest
-
+      include FileUtils
       TEST_FUNCTION_REGEX = /(test+[A-Z][a-zA-Z]+)[(][)]/.freeze
 
       def initialize(config)
@@ -71,7 +70,7 @@ module Fastlane
       end
 
       def test_distribution_check
-        return @config[:test_distribution] if @config[:test_distribution].is_a?(Array)
+        return @config[:test_distribution] if @config[:test_distribution].kind_of?(Array)
 
         distribution_types = %w[class testCase shard]
         unless distribution_types.include?(@config[:test_distribution]) || @config[:test_distribution].nil?

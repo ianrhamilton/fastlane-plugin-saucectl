@@ -7,7 +7,7 @@ module Fastlane
     # This class provides the functions required to install the saucectl binary
     #
     class Installer
-      UI = FastlaneCore::UI unless Fastlane.const_defined?("UI")
+      UI = FastlaneCore::UI unless Fastlane.const_defined?(:UI)
 
       def install
         timeout_in_seconds = 30

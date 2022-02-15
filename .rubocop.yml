@@ -3,21 +3,14 @@ require:
 - rubocop/require_tools
 - rubocop-performance
 AllCops:
-  TargetRubyVersion: 2.7
+  SuggestExtensions: false
+  TargetRubyVersion: 2.6
   NewCops: enable
   Include:
   - "**/*.rb"
   - "**/*file"
   - "**/*.gemspec"
-  - "*/lib/assets/*Template"
-  - "*/lib/assets/*TemplateAndroid"
   Exclude:
-  - "**/lib/assets/custom_action_template.rb"
-  - "./vendor/**/*"
-  - "**/lib/assets/DefaultFastfileTemplate"
-  - "**/lib/assets/MatchfileTemplate"
-  - "**/spec/fixtures/broken_files/broken_file.rb"
-  - "**/*.provisionprofile"
   - './spec/*.rb'
 Style/MultipleComparison:
   Enabled: false
@@ -51,6 +44,8 @@ Style/TernaryParentheses:
   Enabled: false
 Style/EmptyMethod:
   Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
 Lint/UselessAssignment:
   Exclude:
   - "**/spec/**/*"
@@ -58,13 +53,12 @@ Require/MissingRequireStatement:
   Exclude:
   - "**/spec/**/*.rb"
   - "**/spec_helper.rb"
-  - spaceship/lib/spaceship/babosa_fix.rb
-  - fastlane_core/lib/fastlane_core/ui/disable_colors.rb
   - "**/Fastfile"
   - "**/*.gemspec"
   - rakelib/**/*
   - "**/*.rake"
   - "**/Rakefile"
+  - '**/lib/fastlane/plugin/rsaucectl/actions/**'
   - fastlane/**/*
   - supply/**/*
 Layout/FirstHashElementIndentation:

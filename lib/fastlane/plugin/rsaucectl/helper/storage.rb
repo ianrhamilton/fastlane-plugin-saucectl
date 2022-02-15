@@ -7,7 +7,7 @@ module Fastlane
   module Saucectl
     # This class provides the ability to store, delete, and retrieve data from the Sauce Labs Storage API
     class Storage
-      UI = FastlaneCore::UI unless Fastlane.const_defined?("UI")
+      UI = FastlaneCore::UI unless Fastlane.const_defined?(:UI)
 
       def initialize(config)
         @config = config

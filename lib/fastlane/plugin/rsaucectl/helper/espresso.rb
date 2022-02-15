@@ -49,7 +49,7 @@ module Fastlane
       end
 
       def test_distribution_check
-        return @config[:test_distribution] if @config[:test_distribution].is_a?(Array)
+        return @config[:test_distribution] if @config[:test_distribution].kind_of?(Array)
 
         distribution_types = %w[class testCase package shard]
         unless distribution_types.include?(@config[:test_distribution]) || @config[:test_distribution].nil?

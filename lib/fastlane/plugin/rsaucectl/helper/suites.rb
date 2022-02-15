@@ -12,7 +12,7 @@ module Fastlane
     class Suites
       include FileUtils
 
-      UI = FastlaneCore::UI unless Fastlane.const_defined?("UI")
+      UI = FastlaneCore::UI unless Fastlane.const_defined?(:UI)
 
       def initialize(config)
         @config = config
@@ -120,8 +120,7 @@ module Fastlane
           @config[:virtual_device_name].each do |emulator|
             emulators << { 'name' => emulator,
                            'orientation' => @config[:orientation] || 'portrait',
-                           'platformVersions' => platform_versions.split(',')
-            }
+                           'platformVersions' => platform_versions.split(',') }
           end
           emulators
         end
@@ -130,8 +129,7 @@ module Fastlane
       def use_default_emulator(platform_versions)
         { 'name' => 'Android GoogleApi Emulator',
           'orientation' => @config[:orientation] || 'portrait',
-          'platformVersions' => platform_versions.split(',')
-        }
+          'platformVersions' => platform_versions.split(',') }
       end
 
       def real_device_options(name)

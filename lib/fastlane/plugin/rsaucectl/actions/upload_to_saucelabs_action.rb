@@ -5,7 +5,6 @@ require_relative '../helper/api'
 
 module Fastlane
   module Actions
-
     module SharedValues
       SAUCE_USERNAME = :SAUCE_USERNAME
       SAUCE_ACCESS_KEY = :SAUCE_ACCESS_KEY

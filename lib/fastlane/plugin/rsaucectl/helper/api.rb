@@ -16,7 +16,7 @@ module Fastlane
     # for more information see: https://docs.saucelabs.com/dev/api/storage/
     #
     class Api
-      UI = FastlaneCore::UI unless Fastlane.const_defined?("UI")
+      UI = FastlaneCore::UI unless Fastlane.const_defined?(:UI)
 
       def initialize(config)
         @config = config
