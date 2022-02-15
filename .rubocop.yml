@@ -59,6 +59,7 @@ Require/MissingRequireStatement:
   - "**/*.rake"
   - "**/Rakefile"
   - '**/lib/fastlane/plugin/rsaucectl/actions/**'
+  - '**/lib/fastlane/plugin/rsaucectl/helper/**'
   - fastlane/**/*
   - supply/**/*
 Layout/FirstHashElementIndentation:
