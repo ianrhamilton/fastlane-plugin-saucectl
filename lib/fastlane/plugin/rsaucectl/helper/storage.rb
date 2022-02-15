@@ -18,7 +18,8 @@ module Fastlane
         api.retrieve_all_apps
       end
 
-      # Delete an App Storage File
+      # Delete app by the Sauce Labs identifier of the stored file. You can look up file IDs using the Get App Storage Files endpoint.
+      # https://docs.saucelabs.com/dev/api/storage/#get-app-storage-files
       # @return json response containing the file id and the number of files deleted.
       def delete_app_with_file_id
         api = Fastlane::Saucectl::Api.new(@config)
@@ -26,7 +27,8 @@ module Fastlane
       end
 
       # Deletes the specified group of files from Sauce Storage.
-      # You can look up file IDs using the Get App Storage Groups endpoint.
+      # The Sauce Labs identifier of the group of files. You can look up file IDs using the Get App Storage Groups endpoint.
+      # https://docs.saucelabs.com/dev/api/storage/#get-app-storage-groups
       # @return json response containing the group ID and the number of files deleted.
       def delete_all_apps_for_group_id
         path = "v1/storage/files/#{@config[:group_id]}"

@@ -34,7 +34,7 @@ module Fastlane
       end
 
       def self.details
-        "Delete test artifacts from sauce labs storage"
+        "Delete test artifacts from sauce labs storage by storage id or group id"
       end
 
       def self.available_options
