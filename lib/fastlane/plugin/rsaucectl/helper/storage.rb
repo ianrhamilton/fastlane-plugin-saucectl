@@ -19,18 +19,10 @@ module Fastlane
       end
 
       # Delete an App Storage File
-      # if an app_id is not supplied then the most recently uploaded app will be deleted
       # @return json response containing the file id and the number of files deleted.
       def delete_app_with_file_id
-        id = if @config[:app_id].nil?
-               response = JSON.parse(retrieve_all_apps.body)
-               response['items'][0]['id']
-             else
-               @config[:app_id]
-             end
-
         api = Fastlane::Saucectl::Api.new(@config)
-        api.delete_app("v1/storage/files/#{id}")
+        api.delete_app("v1/storage/files/#{@config[:app_id]}")
       end
 
       # Deletes the specified group of files from Sauce Storage.

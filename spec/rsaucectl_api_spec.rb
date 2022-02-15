@@ -33,7 +33,6 @@ describe Fastlane::Saucectl::Api do
 
     it 'should get sauce labs apps' do
       @config[:region] = 'eu'
-      @config[:region] = 'eu'
       @config[:platform] = 'android'
       @config[:app_name] = 'test.apk'
       mock_api = Saucectl::MockApi.new
@@ -45,29 +44,6 @@ describe Fastlane::Saucectl::Api do
 
       api = Fastlane::Saucectl::Storage.new(@config)
       response = api.retrieve_all_apps
-      expect(response.code).to eql('200')
-    end
-
-    it 'should delete sauce labs app by file_id' do
-      @config[:region] = 'eu'
-      @config[:platform] = 'android'
-      @config[:app_name] = 'test.apk'
-
-      mock_api = Saucectl::MockApi.new
-      mock_api.with(:get,
-                    'storage/files?kind=android&q=test.apk',
-                    default_header,
-                    'apps_response.json',
-                    200)
-
-      mock_api.with(:delete,
-                    'storage/files/1234-1234-1234-1234-1234',
-                    delete_header,
-                    'delete_response.json',
-                    200)
-
-      api = Fastlane::Saucectl::Storage.new(@config)
-      response = api.delete_app_with_file_id
       expect(response.code).to eql('200')
     end
 

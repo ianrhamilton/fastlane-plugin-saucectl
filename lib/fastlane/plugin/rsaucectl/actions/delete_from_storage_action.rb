@@ -2,10 +2,13 @@ require 'fastlane/action'
 require 'json'
 require 'yaml'
 require_relative '../helper/api'
+require_relative '../helper/storage'
 
 module Fastlane
   module Actions
     class DeleteFromStorageAction < Action
+      @messages = YAML.load_file("#{__dir__}/../strings/messages.yml")
+
       def self.run(params)
         if params[:group_id].nil?
           Fastlane::Saucectl::Storage.new(config(params)).delete_app_with_file_id
