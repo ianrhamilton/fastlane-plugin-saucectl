@@ -1,5 +1,6 @@
 require 'fastlane_core/ui/ui'
 require 'fastlane'
+require 'open-uri'
 
 module Fastlane
   module Saucectl
@@ -7,8 +8,6 @@ module Fastlane
     # This class provides the functions required to install the saucectl binary
     #
     class Installer
-      UI = FastlaneCore::UI unless Fastlane.const_defined?(:UI)
-
       def install
         timeout_in_seconds = 30
         Timeout.timeout(timeout_in_seconds) do
@@ -22,6 +21,7 @@ module Fastlane
 
       def download_saucectl_installer
         open('sauce', 'wb') do |file|
+          open('https://saucelabs.github.io/saucectl/install').read
           file << open('https://saucelabs.github.io/saucectl/install').read
         end
       end

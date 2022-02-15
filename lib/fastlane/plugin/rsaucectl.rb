@@ -1,5 +1,8 @@
+require 'fastlane'
+
 module Fastlane
   module Rsaucectl
+    UI = FastlaneCore::UI
     # Return all .rb files inside the "actions" and "helper" directory
     def self.all_classes
       Dir[File.expand_path('**/actions/*_action.rb', File.dirname(__FILE__))]

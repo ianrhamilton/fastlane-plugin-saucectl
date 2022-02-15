@@ -12,8 +12,9 @@ module Fastlane
     end
 
     class UploadToSaucelabsAction < Action
+      @strings = YAML.load_file("#{__dir__}/../strings/messages.yml")
+
       def self.run(params)
-        @strings = YAML.load_file("#{__dir__}/../strings/messages.yml")
         response = Fastlane::Saucectl::Api.new(config(params)).upload
         body = JSON.parse(response.body)
         ENV['SAUCE_APP_ID'] = body['items'][0]['id']
@@ -41,7 +42,7 @@ module Fastlane
 
       def self.available_options
         [
-          FastlaneCore::ConfigItem.new(platform: :platform,
+          FastlaneCore::ConfigItem.new(key: :platform,
                                        description: "application under test platform (ios or android)",
                                        optional: false,
                                        is_string: true,
@@ -51,25 +52,25 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :app_path,
                                        description: "Path to the application under test",
                                        optional: false,
-                                       type: String,
+                                       is_string: true,
                                        verify_block: proc do |value|
                                          UI.user_error!(@strings['app_path_error']) unless value && !value.empty?
                                        end),
           FastlaneCore::ConfigItem.new(key: :app_name,
                                        description: "Name of your application under test",
                                        optional: false,
-                                       type: String,
+                                       is_string: true,
                                        verify_block: proc do |value|
                                          UI.user_error!(@strings['app_name_error']) unless value && !value.empty?
                                        end),
           FastlaneCore::ConfigItem.new(key: :app_description,
-                                       description: "A description to distinguish your app.",
+                                       description: "A description to distinguish your app",
                                        optional: true,
-                                       type: String),
+                                       is_string: true),
           FastlaneCore::ConfigItem.new(key: :region,
                                        description: "Data Center region (us or eu), set using: region: 'eu'",
                                        optional: false,
-                                       type: String,
+                                       is_string: true,
                                        verify_block: proc do |value|
                                          UI.user_error!(@strings['region_error'].gsub!('$region', value)) unless @strings['supported_regions'].include?(value)
                                        end),
@@ -78,7 +79,7 @@ module Fastlane
                                        description: "Your sauce labs username in order to authenticate upload requests",
                                        optional: false,
                                        default_value: Actions.lane_context[SharedValues::SAUCE_USERNAME],
-                                       type: String,
+                                       is_string: true,
                                        verify_block: proc do |value|
                                          UI.user_error!(@strings['sauce_username_error']) if value.nil? && ENV['SAUCE_USERNAME'].nil?
                                        end),
@@ -87,7 +88,7 @@ module Fastlane
                                        description: "Your sauce labs access key in order to authenticate upload requests",
                                        optional: false,
                                        default_value: Actions.lane_context[SharedValues::SAUCE_ACCESS_KEY],
-                                       type: String,
+                                       is_string: true,
                                        verify_block: proc do |value|
                                          UI.user_error!(@strings['sauce_api_key_error']) if value.nil? && ENV['SAUCE_ACCESS_KEY'].nil?
                                        end)
@@ -116,7 +117,8 @@ module Fastlane
             app_description: 'description of my app'
             region: 'eu',
             sauce_username: 'sauce username',
-            sauce_access_key: 'sauce api name'"
+            sauce_access_key: 'sauce api name'
+          )"
         ]
       end
 

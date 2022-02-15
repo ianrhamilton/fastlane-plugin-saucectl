@@ -1,4 +1,4 @@
-# require_relative "spec_helper"
+require_relative 'spec_helper'
 require_relative '../spec/utils/mock_api'
 
 describe Fastlane::Actions::InstallToolkitAction do
@@ -7,6 +7,7 @@ describe Fastlane::Actions::InstallToolkitAction do
     let(:action) { Fastlane::Actions::InstallToolkitAction }
 
     before do
+      FileUtils.rmdir('bin') if File.exist?('bin')
       FileUtils.mkdir('bin')
       Saucectl::MockApi.new.download
     end

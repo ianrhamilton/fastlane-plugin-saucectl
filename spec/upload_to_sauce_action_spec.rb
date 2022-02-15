@@ -1,5 +1,52 @@
-# require_relative "spec_helper"
-# require_relative '../spec/utils/mock_api'
+require_relative "spec_helper"
+require_relative '../spec/utils/mock_api'
+
+describe Fastlane::Actions::UploadToSaucelabsAction do
+  describe 'Upload to Sauce Labs Storage' do
+
+    before do
+      mock_api = Saucectl::MockApi.new
+      mock_api.with(:post,
+                    'storage/upload',
+                    upload_header,
+                    'apps_response.json',
+                    200)
+    end
+
+    it "should return application id when successfully uploaded to sauce" do
+      Fastlane::FastFile.new.parse("lane :test do
+          upload_to_saucelabs({
+                    platform: 'android',
+                    sauce_username: 'foo',
+                    sauce_access_key: 'bar123',
+                    app_name: 'Android.MyCustomApp.apk',
+                    app_path: 'app/build/outputs/apk/debug/app-debug.apk',
+                    region: 'eu'
+                  })
+        end").runner.execute(:test)
+      expect(ENV['SAUCE_APP_ID']).to eql('1234-1234-1234-1234-1234')
+
+      # action.run({
+      #              platform: 'android',
+      #              sauce_username: 'foo',
+      #              sauce_access_key: 'bar123',
+      #              app_name: 'Android.MyCustomApp.apk',
+      #              app_path: 'app/build/outputs/apk/debug/app-debug.apk',
+      #              region: 'eu'
+      #            })
+      #
+      # expect(ENV['SAUCE_APP_ID']).to eql('1234-1234-1234-1234-1234')
+    end
+
+#     it "should fail when no username is given" do
+#       expect do
+#         Fastlane::FastFile.new.parse("lane :test do
+#           upload_to_saucelabs({})
+#         end").runner.execute(:test)
+#       end.to raise_error("todo")
+#     end
+#   end
+# end
 #
 # describe Fastlane::Actions::UploadToSaucelabsAction do
 #   describe "sauce labs upload action" do
@@ -114,5 +161,5 @@
 #
 #       end.to raise_error("No sauce labs access key provided, set using: sauce_access_key: '1234' or consider setting your credentials as environment variables.")
 #     end
-#   end
-# end
+  end
+end

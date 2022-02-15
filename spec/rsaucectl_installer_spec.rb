@@ -4,11 +4,12 @@ require_relative '../lib/fastlane/plugin/rsaucectl/helper/installer'
 
 describe Fastlane::Saucectl::Installer do
   before do
+    FileUtils.rm_r('bin') if Dir.exist?('bin')
     FileUtils.mkdir('bin')
   end
 
   after do
-    FileUtils.rmdir('.sauce')
+    FileUtils.rm_r('.sauce') if Dir.exist?('.sauce')
   end
 
   describe 'installer' do

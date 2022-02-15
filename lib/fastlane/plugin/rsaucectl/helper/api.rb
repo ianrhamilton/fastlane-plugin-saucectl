@@ -21,6 +21,7 @@ module Fastlane
       def initialize(config)
         @config = config
         @encoded_auth_string = Base64.strict_encode64("#{@config[:sauce_username]}:#{@config[:sauce_access_key]}")
+        @messages = YAML.load_file("#{__dir__}/../strings/messages.yml")
       end
 
       def available_devices
@@ -72,8 +73,8 @@ module Fastlane
         request = Net::HTTP::Post.new(url)
         request['Authorization'] = "Basic #{@encoded_auth_string}"
         request.set_form(create_form_data, 'multipart/form-data')
-
         response = https.request(request)
+        UI.success("✅ Successfully uploaded app to sauce labs: \n #{response.body}") if response.kind_of?(Net::HTTPOK)
         UI.user_error!("❌ Request failed: #{response.code} #{response.message}") unless response.kind_of?(Net::HTTPOK)
 
         response
@@ -84,6 +85,7 @@ module Fastlane
         request = Net::HTTP::Delete.new(url.path)
         request['Authorization'] = "Basic #{@encoded_auth_string}"
         response = https.request(request)
+        UI.success("✅ Successfully deleted app from sauce labs storage: \n #{response.body}") if response.kind_of?(Net::HTTPOK)
         UI.user_error!("❌ Request failed: #{response.code} #{response.message}") unless response.kind_of?(Net::HTTPOK)
 
         response
@@ -93,7 +95,7 @@ module Fastlane
         case @config[:region]
         when 'eu' then base_url('eu-central-1')
         when 'us' then base_url('us-west-1')
-        else UI.user_error!("#{@config[:region]} is an invalid region ❌. Available: 'eu' and 'us'")
+        else UI.user_error!("#{@config[:region]} is an invalid region ❌. Available: #{@messages['supported_regions']}")
         end
       end
 

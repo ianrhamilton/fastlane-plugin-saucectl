@@ -4,7 +4,7 @@ require_relative '../helper/installer'
 module Fastlane
   module Actions
     class InstallToolkitAction < Action
-      def self.run
+      def self.run(param = '')
         UI.message("Installing saucectl 🤖 🚀")
         installer = Saucectl::Installer.new
         installer.install
