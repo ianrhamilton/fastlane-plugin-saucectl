@@ -33,6 +33,7 @@ describe Fastlane::Saucectl::Api do
 
     it 'should get sauce labs apps' do
       @config[:region] = 'eu'
+      @config[:region] = 'eu'
       @config[:platform] = 'android'
       @config[:app_name] = 'test.apk'
       mock_api = Saucectl::MockApi.new
@@ -51,6 +52,7 @@ describe Fastlane::Saucectl::Api do
       @config[:region] = 'eu'
       @config[:platform] = 'android'
       @config[:app_name] = 'test.apk'
+
       mock_api = Saucectl::MockApi.new
       mock_api.with(:get,
                     'storage/files?kind=android&q=test.apk',
@@ -65,30 +67,31 @@ describe Fastlane::Saucectl::Api do
                     200)
 
       api = Fastlane::Saucectl::Storage.new(@config)
-      response = api.delete_app_with
+      response = api.delete_app_with_file_id
       expect(response.code).to eql('200')
     end
 
-    it 'should delete app by user specified id' do
+    it 'should delete app by user specified app id' do
       @config[:region] = 'eu'
       @config[:platform] = 'android'
       @config[:app_name] = 'test.apk'
+      @config[:app_id] = '1235-1235-1235-1235-1235'
 
       mock_api = Saucectl::MockApi.new
       mock_api.with(:get,
-                    'storage/files?kind=Android&q=test.apk',
+                    'storage/files?kind=android&q=test.apk',
                     default_header,
                     'apps_response.json',
                     200)
 
       mock_api.with(:delete,
-                    'storage/files/1234-1234-1234-1234-1234',
+                    'storage/files/1235-1235-1235-1235-1235',
                     delete_header,
                     'delete_by_id_response.json',
                     200)
 
       api = Fastlane::Saucectl::Storage.new(@config)
-      response = api.delete_app_with("1234-1234-1234-1234-1234")
+      response = api.delete_app_with_file_id
       expect(response.code).to eql('200')
     end
 
@@ -96,16 +99,17 @@ describe Fastlane::Saucectl::Api do
       @config[:region] = 'eu'
       @config[:platform] = 'android'
       @config[:app_name] = 'test.apk'
+      @config[:group_id] = '123456789'
 
       mock_api = Saucectl::MockApi.new
       mock_api.with(:delete,
-                    'storage/files/123456789',
+                    "storage/files/#{@config[:group_id]}",
                     delete_header,
                     'delete_response.json',
                     200)
 
       api = Fastlane::Saucectl::Storage.new(@config)
-      response = api.delete_all_apps_for('123456789')
+      response = api.delete_all_apps_for_group_id
       expect(response.code).to eql('200')
     end
 

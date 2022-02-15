@@ -7,8 +7,6 @@ module Fastlane
   module Saucectl
     # This class provides the ability to store, delete, and retrieve data from the Sauce Labs Storage API
     class Storage
-      UI = FastlaneCore::UI unless Fastlane.const_defined?(:UI)
-
       def initialize(config)
         @config = config
       end
@@ -21,15 +19,14 @@ module Fastlane
       end
 
       # Delete an App Storage File
-      # @param file_id [String] The file id of the app to delete (optional - defaults to nil)
-      # @param file_index [String] The index of the file to delete (optional - defaults to 0)
+      # if an app_id is not supplied then the most recently uploaded app will be deleted
       # @return json response containing the file id and the number of files deleted.
-      def delete_app_with(file_id = nil, file_index = 0)
-        id = if file_id.nil?
+      def delete_app_with_file_id
+        id = if @config[:app_id].nil?
                response = JSON.parse(retrieve_all_apps.body)
-               response['items'][file_index]['id']
+               response['items'][0]['id']
              else
-               file_id
+               @config[:app_id]
              end
 
         api = Fastlane::Saucectl::Api.new(@config)
@@ -37,19 +34,17 @@ module Fastlane
       end
 
       # Deletes the specified group of files from Sauce Storage.
-      # @param group_id String : The Sauce Labs identifier of the group of files.
       # You can look up file IDs using the Get App Storage Groups endpoint.
       # @return json response containing the group ID and the number of files deleted.
-      def delete_all_apps_for(group_id)
-        path = "v1/storage/files/#{group_id}"
+      def delete_all_apps_for_group_id
+        path = "v1/storage/files/#{@config[:group_id]}"
         api = Fastlane::Saucectl::Api.new(@config)
         api.delete_app(path)
       end
 
       # Uploads an application file to Sauce Storage for the purpose of mobile application testing
-      # @param description [String] A description of the file
       # @return a unique file ID assigned to the app.
-      def upload_app(description = nil)
+      def upload_app
         Fastlane::Saucectl::Api.new(@config).upload
       end
     end
