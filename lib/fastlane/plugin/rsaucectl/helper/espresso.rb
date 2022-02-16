@@ -12,16 +12,14 @@ module Fastlane
       include FileUtils
 
       TEST_FUNCTION_REGEX = /([a-z]+[A-Z][a-zA-Z]+)[(][)]/.freeze
-      DEFAULT_PATH_TO_TESTS = "app/src/androidTest"
 
       def initialize(config)
         @config = config
-        @path_to_tests = config[:path_to_tests].nil? ? DEFAULT_PATH_TO_TESTS : config[:path_to_tests]
       end
 
       def test_data
         test_details = []
-        search_retrieve_test_classes(@path_to_tests).each do |f|
+        search_retrieve_test_classes(@config[:path_to_tests]).each do |f|
           next unless File.basename(f) =~ CLASS_NAME_REGEX
 
           test_details << { package: File.readlines(f).first.chomp.gsub("package ", "").gsub(";", ""),
