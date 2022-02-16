@@ -21,15 +21,16 @@ module Fastlane
         {
           'apiVersion' => 'v1alpha',
           'kind' => @config[:kind],
+          'retries' => @config[:retries],
           'sauce' => {
-            'region' => (@config[:region].nil? ? 'eu-central-1' : @config[:region]).to_s,
-            'concurrency' => (@config[:max_concurrency_size].nil? ? 1 : @config[:max_concurrency_size]).to_s,
+            'region' => set_region.to_s,
+            'concurrency' => @config[:max_concurrency_size].to_s,
             'metadata' => {
               'name' => "#{ENV['JOB_NAME']}-#{ENV['BUILD_NUMBER']}",
               'build' => "Release #{ENV['CI_COMMIT_SHORT_SHA']}"
             }
           },
-          (@config['kind']).to_s => {
+          (@config[:kind]).to_s => {
             'app' => "#{@config[:app_path]}/#{@config[:app_name]}",
             'testApp' => "#{@config[:app_path]}/#{@config[:test_runner_app]}"
           },
@@ -46,6 +47,15 @@ module Fastlane
             }
           }
         }
+      end
+
+      def set_region
+        case @config[:region]
+        when 'eu'
+          'eu-central-1'
+        else
+          'us-west-1'
+        end
       end
 
       def create

@@ -104,32 +104,25 @@ module Fastlane
       end
 
       def virtual_device_options
-        platform_versions = if @config[:platform_version].nil?
-                              '11.0'
-                            else
-                              @config[:platform_version].join(',')
-                            end
-        {
-          'emulators' => [@config[:virtual_device_name].nil? ? use_default_emulator(platform_versions) : emulator(platform_versions)]
-        }
+        { 'emulators' => [@config[:virtual_device_name].nil? ? use_default_emulator : emulator] }
       end
 
-      def emulator(platform_versions)
+      def emulator
         emulators = []
         if @config[:virtual_device_name].kind_of?(Array)
           @config[:virtual_device_name].each do |emulator|
             emulators << { 'name' => emulator,
                            'orientation' => @config[:orientation] || 'portrait',
-                           'platformVersions' => platform_versions.split(',') }
+                           'platformVersions' => @config[:platform_versions] }
           end
           emulators
         end
       end
 
-      def use_default_emulator(platform_versions)
+      def use_default_emulator
         { 'name' => 'Android GoogleApi Emulator',
           'orientation' => @config[:orientation] || 'portrait',
-          'platformVersions' => platform_versions.split(',') }
+          'platformVersions' => @config[:platform_versions] }
       end
 
       def real_device_options(name)

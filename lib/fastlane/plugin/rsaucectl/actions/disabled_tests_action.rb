@@ -20,11 +20,11 @@ module Fastlane
       end
 
       def self.verify_config(params)
-        if params[:platform].eql?('ios') && (params[:test_plan].nil? && params[:test_target].nil?)
-          UI.user_error!('Cannot get tests for an ios project without a known test plan or test target')
+        if params[:platform].eql?('ios') && params[:test_plan].nil?
+          UI.user_error!('Cannot get skipped tests for an ios project without a known test_plan')
         end
-        if params[:platform].eql?('android') && !(params[:test_plan].nil? && params[:test_target].nil?)
-          UI.user_error!('test_plan and test_target options are reserved for ios projects only')
+        if params[:platform].eql?('android') && !params[:test_plan].nil?
+          UI.user_error!('test_plan option is reserved for ios projects only')
         end
       end
 
@@ -74,14 +74,16 @@ module Fastlane
 
       def self.example_code
         [
-          "sauce_apps",
-          "sauce_apps(
-            platform: 'android',
-            app_name: 'Android.MyCustomApp.apk',
-            region: 'eu',
-            sauce_username: 'sauce username',
-            sauce_access_key: 'sauce api name'
-          )"
+          "disabled_tests",
+          "disabled_tests({ platform: 'android',
+                            path_to_tests: 'my-demo-app-android/app/src/androidTest'
+          })",
+          "disabled_tests({ platform: 'ios',
+                            test_plan: 'UITests'
+          })",
+          "disabled_tests({ platform: 'ios',
+                            test_plan: 'UITests'
+          })"
         ]
       end
 

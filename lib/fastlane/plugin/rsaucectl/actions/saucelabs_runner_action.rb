@@ -1,23 +1,15 @@
 require 'fastlane/action'
 require 'json'
 require 'yaml'
-require_relative '../helper/api'
+require_relative '../helper/config'
 
 module Fastlane
   module Actions
-    module SharedValues
-      SAUCE_APP_ID = :SAUCE_APP_ID
-      SAUCE_USERNAME = :SAUCE_USERNAME
-      SAUCE_ACCESS_KEY = :SAUCE_ACCESS_KEY
-    end
-
-    class UploadToSaucelabsAction < Action
+    class SauceLabsRunnerAction < Action
       @messages = YAML.load_file("#{__dir__}/../strings/messages.yml")
 
       def self.run(params)
-        response = Fastlane::Saucectl::Api.new(config(params)).upload
-        body = JSON.parse(response.body)
-        ENV['SAUCE_APP_ID'] = body['items'][0]['id']
+        Fastlane::Saucectl::ConfigGenerator.new(config(params)).create
       end
 
       def self.config(params)
@@ -25,10 +17,11 @@ module Fastlane
           platform: params[:platform],
           app_path: params[:app_path],
           app_name: params[:app_name],
-          app_description: params[:app_description],
+          test_runner_app: params[:test_runner_app],
           region: params[:region],
-          sauce_username: params[:sauce_username],
-          sauce_access_key: params[:sauce_access_key]
+          test_distribution: params[:test_distribution],
+          is_virtual_device: params[:is_virtual_device],
+          kind: params[:kind]
         }
       end
 
@@ -120,12 +113,14 @@ module Fastlane
 
       def self.output
         [
-          ['SAUCE_APP_ID', 'App id of uploaded app.']
+          ['SAUCE_APP_ID', 'App id of uploaded app.'],
+          ['SAUCE_USERNAME', 'SauceLabs basic auth username'],
+          ['SAUCE_ACCESS_KEY', 'SauceLabs basic auth access key']
         ]
       end
 
       def self.return_value
-        "Returns the application id of the app uploaded"
+        "Creates required config.yml file with a .sauce directory in order to execute ui tests via SauceLabs"
       end
     end
   end

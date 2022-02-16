@@ -7,7 +7,7 @@ describe Fastlane::Saucectl::Suites do
       @config = {}
     end
 
-    it 'should allow user to add device array to config.yml file' do
+    it 'should allow user to add devices array' do
       @config[:real_devices] = %w[device_one device_two device_three]
       device_array = Fastlane::Saucectl::Suites.new(@config).device_array
       expect(device_array).to eql(@config[:real_devices])

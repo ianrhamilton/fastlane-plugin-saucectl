@@ -7,13 +7,15 @@ describe Fastlane::Actions::InstallToolkitAction do
     let(:action) { Fastlane::Actions::InstallToolkitAction }
 
     before do
-      FileUtils.rmdir('bin') if File.exist?('bin')
+      FileUtils.rm_r('.sauce') if Dir.exist?('.sauce')
+      FileUtils.rm_r('bin') if Dir.exist?('bin')
       FileUtils.mkdir('bin')
       Saucectl::MockApi.new.download
     end
 
     after do
-      FileUtils.rmdir('.sauce')
+      FileUtils.rm_r('bin') if Dir.exist?('bin')
+      FileUtils.rm_r('.sauce') if Dir.exist?('.sauce')
     end
 
     it 'should download saucectl binary' do
