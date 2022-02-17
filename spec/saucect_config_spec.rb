@@ -25,7 +25,21 @@ describe Fastlane::Saucectl::ConfigGenerator do
       expect(File.exist?("#{origin_folder}/.sauce/config.yml")).to be_truthy
     end
 
-    it 'should create config.yml file based on user specified virtual device configurations' do
+    it 'should create config.yml file based on user specified android real device configurations' do
+      @config[:test_distribution] = 'package'
+      @config[:is_virtual_device] = false
+      @config[:real_devices] = ['device one', 'device_two', 'device three', 'device_four']
+      @config[:platform] = 'android'
+      @config[:kind] = 'espresso'
+      @config[:region] = 'eu'
+      File.open('config.yml', 'w') { |f| YAML.dump(@config, f) }
+
+      Fastlane::Saucectl::ConfigGenerator.new(@config).create
+      origin_folder = File.expand_path("../", "#{__dir__}")
+      expect(File.exist?("#{origin_folder}/.sauce/config.yml")).to be_truthy
+    end
+
+    it 'should create config.yml file based on user specified ios real device configurations' do
       @config[:test_distribution] = 'package'
       @config[:is_virtual_device] = false
       @config[:real_devices] = ['device one', 'device_two', 'device three', 'device_four']

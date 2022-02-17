@@ -121,15 +121,21 @@ module Fastlane
 
       def self.example_code
         [
-          "upload_to_saucelabs",
-          "upload_to_saucelabs(
+          "saucelabs_config",
+          "saucelabs_config(
             platform: 'android',
-            app_path: 'app/build/outputs/apk/debug/app-debug.apk',
+            kind: 'espresso',
+            app_path: 'Android.MyCustomApp.apk',
             app_name: 'Android.MyCustomApp.apk',
-            app_description: 'description of my app'
+            test_runner_app: '',
             region: 'eu',
-            sauce_username: 'sauce username',
-            sauce_access_key: 'sauce api name'
+            test_distribution: '',
+            is_virtual_device: '',
+            virtual_device_names: [],
+            platform_versions: [],
+            real_devices: [],
+            test_target: '',
+            test_plan: ''
           )"
         ]
       end

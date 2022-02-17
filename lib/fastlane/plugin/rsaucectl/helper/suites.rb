@@ -24,11 +24,20 @@ module Fastlane
       end
 
       def create_test_plan
+        check_kind
         if @config[:platform].casecmp('ios').zero?
           is_ios_reqs_satisfied?
           Fastlane::Saucectl::XCTest.new(@config)
         else
           Fastlane::Saucectl::Espresso.new(@config)
+        end
+      end
+
+      def check_kind
+        if @config[:platform].eql?('android')
+          UI.user_error!("❌ #{@config[:kind]} is not a supported test framework for android. Use espresso") unless @config[:kind].eql?('espresso')
+        else
+          UI.user_error!("❌ #{@config[:kind]} is not a supported test framework for iOS. Use xcuitest") unless @config[:kind].eql?('xcuitest')
         end
       end
 

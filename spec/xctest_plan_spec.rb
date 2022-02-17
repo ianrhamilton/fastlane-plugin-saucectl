@@ -97,8 +97,9 @@ describe Fastlane::Saucectl::XCTest do
       invalid_distribution_method = "fail"
       @config[:test_target] = "MyDemoAppUITests"
       @config[:test_distribution] = invalid_distribution_method
+      distribution_types = %w[class testCase shard]
       expect { Fastlane::Saucectl::XCTest.new(@config).test_distribution }
-        .to raise_error(StandardError, "#{invalid_distribution_method} is not a valid method of test distribution")
+        .to raise_error(StandardError, "#{@config[:test_distribution]} is not a valid method of test distribution. \n Supported types for iOS: \n #{distribution_types}")
     end
 
     it "should raise an error when user specifies invalid test plan" do
