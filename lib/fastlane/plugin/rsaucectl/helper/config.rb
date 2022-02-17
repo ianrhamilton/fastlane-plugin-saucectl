@@ -24,7 +24,7 @@ module Fastlane
           'retries' => @config[:retries],
           'sauce' => {
             'region' => set_region.to_s,
-            'concurrency' => @config[:max_concurrency_size].to_s,
+            'concurrency' => @config[:max_concurrency_size],
             'metadata' => {
               'name' => "#{ENV['JOB_NAME']}-#{ENV['BUILD_NUMBER']}",
               'build' => "Release #{ENV['CI_COMMIT_SHORT_SHA']}"

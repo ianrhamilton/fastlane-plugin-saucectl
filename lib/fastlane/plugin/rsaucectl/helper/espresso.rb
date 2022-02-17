@@ -10,6 +10,7 @@ module Fastlane
     #
     class Espresso
       include FileUtils
+      UI = FastlaneCore::UI unless Fastlane.const_defined?(:UI)
 
       TEST_FUNCTION_REGEX = /([a-z]+[A-Z][a-zA-Z]+)[(][)]/.freeze
 

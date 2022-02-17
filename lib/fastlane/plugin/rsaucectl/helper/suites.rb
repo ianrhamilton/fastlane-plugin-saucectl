@@ -84,16 +84,29 @@ module Fastlane
         shards = arr.each_slice((arr.size / @config[:shards].to_f).round).to_a
         shards.each_with_index do |suite, i|
           test_suites << {
-            'name' => suite_name("shard #{i}").downcase,
+            'name' => suite_name("shard #{i + 1}").downcase,
             'testOptions' => default_test_options(suite)
           }.merge(device_type_values)
         end
         test_suites
       end
 
+      def shard_real_device_suites
+        test_suites = []
+        arr = test_distribution_array
+        shards = arr.each_slice((arr.size / @config[:real_devices].size.to_f).round).to_a
+        shards.each_with_index do |suite, i|
+          test_suites << {
+            'name' => suite_name("shard #{i + 1}").downcase,
+            'testOptions' => default_test_options(suite)
+          }.merge(device_type_values(device_array[i]))
+        end
+        test_suites
+      end
+
       def create_real_device_suites
         if @config[:test_distribution] == 'shard'
-          UI.user_error!("❌ sharding is not supported for real devices")
+          shard_real_device_suites
         else
           test_suites = []
           device_array.each do |device_name|
@@ -113,25 +126,17 @@ module Fastlane
       end
 
       def virtual_device_options
-        { 'emulators' => [@config[:virtual_device_name].nil? ? use_default_emulator : emulator] }
+        { 'emulators' => emulator }
       end
 
       def emulator
         emulators = []
-        if @config[:virtual_device_name].kind_of?(Array)
-          @config[:virtual_device_name].each do |emulator|
-            emulators << { 'name' => emulator,
-                           'orientation' => @config[:orientation] || 'portrait',
-                           'platformVersions' => @config[:platform_versions] }
-          end
-          emulators
+        @config[:virtual_device_name].to_ary.each do |emulator|
+          emulators << { 'name' => emulator,
+                         'orientation' => @config[:orientation],
+                         'platformVersions' => %w[10.0 11.0] }
         end
-      end
-
-      def use_default_emulator
-        { 'name' => 'Android GoogleApi Emulator',
-          'orientation' => @config[:orientation] || 'portrait',
-          'platformVersions' => @config[:platform_versions] }
+        emulators
       end
 
       def real_device_options(name)
@@ -152,8 +157,8 @@ module Fastlane
 
       def android_test_options
         {
-          'clearPackageData' => @config[:clearPackageData] || true,
-          'useTestOrchestrator' => @config[:useTestOrchestrator] || true
+          'clearPackageData' => @config[:clear_data],
+          'useTestOrchestrator' => @config[:use_test_orchestrator]
         }
       end
 

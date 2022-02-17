@@ -5,7 +5,7 @@ require_relative '../helper/config'
 
 module Fastlane
   module Actions
-    class SauceLabsConfigAction < Action
+    class SauceConfigAction < Action
       @messages = YAML.load_file("#{__dir__}/../strings/messages.yml")
 
       def self.run(params)
@@ -103,7 +103,38 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :test_plan,
                                        description: "Name of the Xcode test plan",
                                        optional: true,
-                                       type: String)
+                                       type: String),
+          FastlaneCore::ConfigItem.new(key: :path_to_tests,
+                                       description: "Path to your espresso tests",
+                                       optional: true,
+                                       type: String,
+                                       default_value: "#{Dir.pwd}/app/src/androidTest"),
+          FastlaneCore::ConfigItem.new(key: :clear_data,
+                                       description: "Clear package data from device (android only)",
+                                       optional: true,
+                                       is_string: false,
+                                       default_value: true),
+          FastlaneCore::ConfigItem.new(key: :use_test_orchestrator,
+                                       description: "User Android test orchestrator (android only)",
+                                       optional: true,
+                                       is_string: false,
+                                       default_value: true),
+          FastlaneCore::ConfigItem.new(key: :virtual_device_name,
+                                       description: "The name of the device to emulate for this test suite. To ensure name accuracy, check the list of supported virtual devices. If you are using android emulators for this test suite, this property is REQUIRED",
+                                       optional: true,
+                                       type: Array,
+                                       default_value: ['Android GoogleApi Emulator']),
+          FastlaneCore::ConfigItem.new(key: :max_concurrency_size,
+                                       description: "Sets the maximum number of suites to execute at the same time. If the test defines more suites than the max, excess suites are queued and run in order as each suite completes",
+                                       optional: true,
+                                       type: Integer,
+                                       default_value: 1),
+          FastlaneCore::ConfigItem.new(key: :orientation,
+                                       description: "The screen orientation to use while executing this test suite on this virtual device. Valid values are portrait or landscape",
+                                       optional: true,
+                                       type: String,
+                                       default_value: 'portrait')
+
         ]
       end
 
@@ -121,8 +152,8 @@ module Fastlane
 
       def self.example_code
         [
-          "saucelabs_config",
-          "saucelabs_config(
+          "sauce_config",
+          "sauce_config(
             platform: 'android',
             kind: 'espresso',
             app_path: 'Android.MyCustomApp.apk',
