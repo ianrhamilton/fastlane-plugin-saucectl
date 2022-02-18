@@ -9,7 +9,7 @@ describe Fastlane::Saucectl::ConfigGenerator do
     end
 
     after do
-      # FileUtils.rm_rf('.sauce')
+      FileUtils.rm_rf('.sauce')
     end
 
     it 'should create config.yml file based on user specified virtual device configurations' do

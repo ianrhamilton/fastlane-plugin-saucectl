@@ -24,7 +24,7 @@ describe Fastlane::Saucectl::XCTest do
     end
 
     it "should fetch tests by test class" do
-      expected_classes = ["MyDemoAppUITests.My_Demo_AppUITests"]
+      expected_classes = %w[MyDemoAppUITests.My_Demo_AppUITests MyDemoAppUITests.My_Demo_OtherTests]
       @config[:test_target] = "MyDemoAppUITests"
       @config[:test_distribution] = "class"
       test_plan = Fastlane::Saucectl::XCTest.new(@config)
@@ -54,7 +54,12 @@ describe Fastlane::Saucectl::XCTest do
                       MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToGeoLocation
                       MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToDrawing
                       MyDemoAppUITests.My_Demo_AppUITests/testNavigateFromCartToCatalog
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateCartToCatalog]
+                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateCartToCatalog
+                      MyDemoAppUITests.My_Demo_OtherTests/testOne
+                      MyDemoAppUITests.My_Demo_OtherTests/testTwo
+                      MyDemoAppUITests.My_Demo_OtherTests/testThree
+                      MyDemoAppUITests.My_Demo_OtherTests/testFour
+                      MyDemoAppUITests.My_Demo_OtherTests/testFive]
       @config[:test_target] = "MyDemoAppUITests"
       @config[:test_distribution] = "testCase"
       test_plan = Fastlane::Saucectl::XCTest.new(@config)
@@ -63,7 +68,7 @@ describe Fastlane::Saucectl::XCTest do
       expect(test_cases).to eql(test_array)
     end
 
-    it "should fetch tests by test case when sharding" do
+    it "ios: should fetch tests by test case when sharding" do
       test_array = %w[MyDemoAppUITests.My_Demo_AppUITests/testProductListingPageAddItemToCart
                       MyDemoAppUITests.My_Demo_AppUITests/testProductListingPageAddMultipleItemsToCart
                       MyDemoAppUITests.My_Demo_AppUITests/testProductListingPageDefault
@@ -85,7 +90,12 @@ describe Fastlane::Saucectl::XCTest do
                       MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToGeoLocation
                       MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToDrawing
                       MyDemoAppUITests.My_Demo_AppUITests/testNavigateFromCartToCatalog
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateCartToCatalog]
+                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateCartToCatalog
+                      MyDemoAppUITests.My_Demo_OtherTests/testOne
+                      MyDemoAppUITests.My_Demo_OtherTests/testTwo
+                      MyDemoAppUITests.My_Demo_OtherTests/testThree
+                      MyDemoAppUITests.My_Demo_OtherTests/testFour
+                      MyDemoAppUITests.My_Demo_OtherTests/testFive]
       @config[:test_target] = "MyDemoAppUITests"
       @config[:test_distribution] = "shard"
       test_plan = Fastlane::Saucectl::XCTest.new(@config)

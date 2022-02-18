@@ -52,7 +52,7 @@ module Fastlane
 
         distribution_types = %w[class testCase package shard]
         unless distribution_types.include?(@config[:test_distribution]) || @config[:test_distribution].nil?
-          raise "#{@config[:test_distribution]} is not a valid method of test distribution"
+          UI.user_error!("#{@config[:test_distribution]} is not a valid method of test distribution")
         end
       end
 

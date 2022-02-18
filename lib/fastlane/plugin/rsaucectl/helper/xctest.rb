@@ -10,6 +10,7 @@ module Fastlane
     #
     class XCTest
       include FileUtils
+      UI = FastlaneCore::UI unless Fastlane.const_defined?(:UI)
       TEST_FUNCTION_REGEX = /(test+[A-Z][a-zA-Z]+)[(][)]/.freeze
 
       def initialize(config)
@@ -25,7 +26,7 @@ module Fastlane
       def valid_test_plan?
         File.exist?(Dir["**/#{@config[:test_plan]}.xctestplan"][0])
       rescue StandardError
-        raise "#{@config[:test_plan]} was not found in workspace"
+        UI.user_error!("#{@config[:test_plan]} was not found in workspace")
       end
 
       def fetch_test_plan
@@ -74,7 +75,7 @@ module Fastlane
 
         distribution_types = %w[class testCase shard]
         unless distribution_types.include?(@config[:test_distribution]) || @config[:test_distribution].nil?
-          raise "#{@config[:test_distribution]} is not a valid method of test distribution. \n Supported types for iOS: \n #{distribution_types}"
+          UI.user_error!("#{@config[:test_distribution]} is not a valid method of test distribution. \n Supported types for iOS: \n #{distribution_types}")
         end
       end
 
