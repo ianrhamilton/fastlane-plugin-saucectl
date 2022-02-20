@@ -56,12 +56,15 @@ module Fastlane
         @config[:test_target].nil? ? fetch_target_from_test_plan : @config[:test_target]
       end
 
+      #TODO: fix the function that skipped tests to and add class and test hash instead
       def test_distribution
         test_distribution_check
         tests_arr = []
         case @config[:test_distribution]
         when "class"
-          test_data.each { |type| tests_arr << "#{test_target}.#{type[:class]}" }
+          test_data.each do |type|
+            tests_arr << "#{test_target}.#{type[:class]}"
+          end
         else
           test_data.each do |type|
             type[:tests].each { |test| tests_arr << "#{test_target}.#{type[:class]}/#{test}" }
@@ -84,8 +87,8 @@ module Fastlane
         skipped_tests = fetch_disabled_tests
         all_tests.each do |tests|
           tests[:tests].each do |test|
-            unless skipped_tests.include?(test)
-              enabled_ui_tests << "#{test_target}.#{tests[:class]}/#{test.partition('.')[2]}"
+            unless skipped_tests.to_s.include?(test)
+              enabled_ui_tests << "#{test_target}.#{tests[:class]}/#{test}"
             end
           end
         end
