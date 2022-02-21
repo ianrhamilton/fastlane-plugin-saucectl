@@ -1,7 +1,7 @@
 # rsaucectl plugin
 
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-rsaucectl)
-
+[![codecov](https://codecov.io/gh/ianrhamilton/fastlane-plugin-rsaucectl/branch/main/graph/badge.svg?token=15LFKDU5VF)](https://codecov.io/gh/ianrhamilton/fastlane-plugin-rsaucectl)
 ## Getting Started
 
 This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To get started with `fastlane-plugin-rsaucectl`, add it to your project by running:
