@@ -15,21 +15,9 @@ module Fastlane
       @messages = YAML.load_file("#{__dir__}/../strings/messages.yml")
 
       def self.run(params)
-        response = Fastlane::Saucectl::Api.new(config(params)).upload
+        response = Fastlane::Saucectl::Api.new(params).upload
         body = JSON.parse(response.body)
         ENV['SAUCE_APP_ID'] = body['items'][0]['id']
-      end
-
-      def self.config(params)
-        {
-          platform: params[:platform],
-          app_path: params[:app_path],
-          app_name: params[:app_name],
-          app_description: params[:app_description],
-          region: params[:region],
-          sauce_username: params[:sauce_username],
-          sauce_access_key: params[:sauce_access_key]
-        }
       end
 
       def self.description
@@ -71,6 +59,7 @@ module Fastlane
                                          UI.user_error!(@messages['region_error'].gsub!('$region', value)) unless @messages['supported_regions'].include?(value)
                                        end),
           FastlaneCore::ConfigItem.new(key: :sauce_username,
+                                       default_value: Actions.lane_context[SharedValues::SAUCE_USERNAME],
                                        description: "Your sauce labs username in order to authenticate upload requests",
                                        optional: false,
                                        is_string: true,
@@ -78,6 +67,7 @@ module Fastlane
                                          UI.user_error!(@messages['sauce_username_error']) if value.empty?
                                        end),
           FastlaneCore::ConfigItem.new(key: :sauce_access_key,
+                                       default_value: Actions.lane_context[SharedValues::SAUCE_ACCESS_KEY],
                                        description: "Your sauce labs access key in order to authenticate upload requests",
                                        optional: false,
                                        is_string: true,
@@ -105,16 +95,40 @@ module Fastlane
 
       def self.example_code
         [
-          "upload_to_saucelabs",
-          "upload_to_saucelabs(
-            platform: 'android',
-            app_path: 'app/build/outputs/apk/debug/app-debug.apk',
-            app_name: 'Android.MyCustomApp.apk',
-            app_description: 'description of my app'
-            region: 'eu',
-            sauce_username: 'sauce username',
-            sauce_access_key: 'sauce api name'
-          )"
+          "upload_to_saucelabs({
+                    platform: 'android',
+                    sauce_username: 'username',
+                    sauce_access_key: 'accessKey',
+                    app_name: 'Android.MyCustomApp.apk',
+                    app_path: 'app/build/outputs/apk/debug/app-debug.apk',
+                    region: 'eu'
+                  })",
+          "upload_to_saucelabs({
+                    platform: 'android',
+                    sauce_username: 'username',
+                    sauce_access_key: 'accessKey',
+                    app_name: 'Android.MyCustomApp.apk',
+                    app_path: 'app/build/outputs/apk/debug/app-debug.apk',
+                    region: 'eu',
+                    app_description: 'this is a test description'
+                  })",
+          "upload_to_saucelabs({
+                    platform: 'ios',
+                    sauce_username: 'username',
+                    sauce_access_key: 'accessKey',
+                    app_name: 'MyTestApp.ipa',
+                    app_path: 'path/to/my/app/MyTestApp.ipa',
+                    region: 'eu'
+                  })",
+          "upload_to_saucelabs({
+                    platform: 'ios',
+                    sauce_username: 'username',
+                    sauce_access_key: 'accessKey',
+                    app_name: 'MyTestApp.ipa',
+                    app_path: 'path/to/my/app/MyTestApp.ipa',
+                    region: 'eu',
+                    app_description: 'this is a test description'
+                  })",
         ]
       end
 
