@@ -52,7 +52,7 @@ describe Fastlane::Actions::SauceConfigAction do
       expect(config).to eql expected_config
     end
 
-    it 'android: should create real device config.yml file with test distribution method as testCase' do
+    it 'should create real device config.yml file for android platform with test distribution method as testCase' do
       Fastlane::FastFile.new.parse("lane :test do
           sauce_config({ platform: 'android',
                          kind: 'espresso',
@@ -71,7 +71,7 @@ describe Fastlane::Actions::SauceConfigAction do
       expect(config).to eql expected_config
     end
 
-    it 'android: should create real device config.yml file with test distribution method as shard' do
+    it 'should create real device config.yml file for android platform with test distribution method as shard' do
       Fastlane::FastFile.new.parse("lane :test do
           sauce_config({ platform: 'android',
                          kind: 'espresso',
@@ -123,7 +123,7 @@ describe Fastlane::Actions::SauceConfigAction do
       end.to raise_error('❌ Expected array of devices')
     end
 
-    it ' should raise an error when user does not specify a testPlan or testTarget for ios platform' do
+    it 'should raise an error when user does not specify a testPlan or testTarget for ios platform' do
       expect do
         Fastlane::FastFile.new.parse("lane :test do
           sauce_config({ platform: 'ios',
