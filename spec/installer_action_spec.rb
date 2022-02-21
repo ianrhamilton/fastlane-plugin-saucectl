@@ -10,7 +10,6 @@ describe Fastlane::Actions::InstallToolkitAction do
       FileUtils.rm_r('.sauce') if Dir.exist?('.sauce')
       FileUtils.rm_r('bin') if Dir.exist?('bin')
       FileUtils.mkdir('bin')
-      Saucectl::MockApi.new.download
     end
 
     after do
@@ -19,8 +18,14 @@ describe Fastlane::Actions::InstallToolkitAction do
     end
 
     it 'should download saucectl binary' do
+      Saucectl::MockApi.new.download
       installer = action.run
       expect(installer).to be_truthy
+    end
+
+    it 'should handle failed download of saucectl binary' do
+      Saucectl::MockApi.new.failed_download
+      expect { action.run }.to raise_error('❌ Failed to install saucectl binary: status code ["503", ""]')
     end
   end
 end

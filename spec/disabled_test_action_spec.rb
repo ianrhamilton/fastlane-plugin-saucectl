@@ -18,7 +18,8 @@ describe Fastlane::Actions::DisabledTestsAction do
                          test_plan: 'UITests'
           })
         end").runner.execute(:test)
-    expect(response).to include("My_Demo_AppUITests/testNavigateCartToCatalog")
+
+    expect(response).to include({:class=>"My_Demo_AppUITests", :tests=>"testNavigateCartToCatalog"}, {:class=>"My_Demo_OtherTests", :tests=>"testOne"}, {:class=>"My_Demo_OtherTests", :tests=>"testTwo"}, {:class=>"My_Demo_OtherTests", :tests=>"testThree"})
   end
 
   it "ios platform should raise an error when user does not specify test_plan" do
@@ -26,7 +27,7 @@ describe Fastlane::Actions::DisabledTestsAction do
       Fastlane::FastFile.new.parse("lane :test do
           disabled_tests({platform: 'ios'})
         end").runner.execute(:test)
-      end.to raise_error('Cannot get skipped tests for an ios project without a known test_plan')
+    end.to raise_error('Cannot get skipped tests for an ios project without a known test_plan')
   end
 
   it "android platform should raise an error when user specifies test_plan" do

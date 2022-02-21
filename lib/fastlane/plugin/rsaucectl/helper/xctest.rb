@@ -56,7 +56,6 @@ module Fastlane
         @config[:test_target].nil? ? fetch_target_from_test_plan : @config[:test_target]
       end
 
-      #TODO: fix the function that skipped tests to and add class and test hash instead
       def test_distribution
         test_distribution_check
         tests_arr = []
@@ -82,19 +81,6 @@ module Fastlane
         end
       end
 
-      def strip_skipped(all_tests)
-        enabled_ui_tests = []
-        skipped_tests = fetch_disabled_tests
-        all_tests.each do |tests|
-          tests[:tests].each do |test|
-            unless skipped_tests.to_s.include?(test)
-              enabled_ui_tests << "#{test_target}.#{tests[:class]}/#{test}"
-            end
-          end
-        end
-        enabled_ui_tests
-      end
-
       def fetch_selected_tests
         ui_tests = []
         fetch_test_plan["selectedTests"].each do |test|
@@ -104,10 +90,26 @@ module Fastlane
         ui_tests
       end
 
+      def strip_skipped(all_tests)
+        enabled_ui_tests = []
+        skipped_tests = fetch_disabled_tests
+        all_tests.each do |tests|
+          tests[:tests].each do |test|
+            unless skipped_tests.to_s.include?(test)
+              enabled_ui_tests << { class: tests[:class].to_s, tests: [test] }
+            end
+          end
+        end
+        enabled_ui_tests
+      end
+
       def fetch_disabled_tests
         skipped = fetch_test_plan["skippedTests"]
         ui_tests = []
-        skipped.each { |test| ui_tests << test.gsub(/[()]/, "").to_s }
+        skipped.each do |test|
+          test_case = test.gsub('/', ' ').split
+          ui_tests << { class: test_case[0], tests: test_case[1].gsub(/[()]/, "").to_s }
+        end
         ui_tests
       end
 

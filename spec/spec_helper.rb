@@ -4,6 +4,7 @@ require 'simplecov'
 SimpleCov.start do
   add_filter 'spec'
   add_filter 'lib/fastlane/plugin/rsaucectl/helper/file_utils'
+  add_filter 'lib/fastlane/plugin/rsaucectl/actions'
 end
 
 if ENV['IS_CI']

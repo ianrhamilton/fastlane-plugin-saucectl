@@ -123,6 +123,9 @@ describe Fastlane::Saucectl::XCTest do
       test_plan = Fastlane::Saucectl::XCTest.new(@config)
       test_plan.test_data.each do |spec|
         expect(spec).not_to include("testNavigateCartToCatalog")
+        expect(spec).not_to include("testOne")
+        expect(spec).not_to include("testTwo")
+        expect(spec).not_to include("testThree")
       end
     end
 
@@ -140,7 +143,7 @@ describe Fastlane::Saucectl::XCTest do
     it "should get skipped tests from test plan" do
       @config[:test_plan] = "UITests"
       test_plan = Fastlane::Saucectl::XCTest.new(@config).fetch_disabled_tests
-      expect(test_plan).to eql(["My_Demo_AppUITests/testNavigateCartToCatalog"])
+      expect(test_plan).to eql([{ :class => "My_Demo_AppUITests", :tests => "testNavigateCartToCatalog" }, { :class => "My_Demo_OtherTests", :tests => "testOne" }, { :class => "My_Demo_OtherTests", :tests => "testTwo" }, { :class => "My_Demo_OtherTests", :tests => "testThree" }])
     end
   end
 end

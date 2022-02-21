@@ -14,8 +14,9 @@ module Fastlane
           download_saucectl_installer
           execute_saucectl_binary
           UI.success("✅ Successfully installed saucectl runner binary 🚀")
-        rescue StandardError => e
-          UI.user_error!("❌ Failed to install saucectl binary: #{e}")
+        rescue OpenURI::HTTPError => e
+          response = e.io
+          UI.user_error!("❌ Failed to install saucectl binary: status code #{response.status}")
         end
       end
 

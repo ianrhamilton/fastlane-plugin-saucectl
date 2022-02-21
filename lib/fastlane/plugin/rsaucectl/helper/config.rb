@@ -13,6 +13,8 @@ module Fastlane
     # This class creates saucectl config.yml file based on given specifications
     #
     class ConfigGenerator
+      UI = FastlaneCore::UI unless Fastlane.const_defined?(:UI)
+
       def initialize(config)
         @config = config
       end
@@ -61,6 +63,8 @@ module Fastlane
       def create
         file_name = 'config.yml'
         suite = Fastlane::Saucectl::Suites.new(@config)
+        UI.user_error!("❌ Sauce Labs platform does not support virtual device execution for ios apps") if @config[:platform].eql?('ios') && @config[:is_virtual_device]
+
         suites = { 'suites' => if @config[:is_virtual_device]
                                  suite.create_virtual_device_suites
                                else

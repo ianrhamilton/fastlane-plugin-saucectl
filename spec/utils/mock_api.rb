@@ -22,6 +22,17 @@ module Saucectl
         ).to_return(status: 200, body: '', headers: {})
     end
 
+    def failed_download
+      stub_request(:get, 'https://saucelabs.github.io/saucectl/install')
+        .with(
+          headers: {
+            'Accept' => '*/*',
+            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+            'User-Agent' => 'Ruby'
+          }
+        ).to_return(status: 503, body: "Service Unavailable", headers: {})
+    end
+
     def available_devices
       stub_request(:get, 'https://api.eu-central-1.saucelabs.com/v1/rdc/devices/available')
         .with(

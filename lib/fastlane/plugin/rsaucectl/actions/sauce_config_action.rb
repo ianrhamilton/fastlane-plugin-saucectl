@@ -80,7 +80,7 @@ module Fastlane
                                        type: String,
                                        default_value: 'class'),
           FastlaneCore::ConfigItem.new(key: :is_virtual_device,
-                                       description: "Is device under test a an emulator (support for android only)",
+                                       description: "Is the device under test an emulator (support for android only)",
                                        optional: true,
                                        is_string: false,
                                        default_value: false),

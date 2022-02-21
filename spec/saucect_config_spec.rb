@@ -12,6 +12,20 @@ describe Fastlane::Saucectl::ConfigGenerator do
       FileUtils.rm_rf('.sauce')
     end
 
+    it 'should handle us region' do
+      @config[:region] = 'us'
+      expect(Fastlane::Saucectl::ConfigGenerator.new(@config).set_region).to eql 'us-west-1'
+    end
+
+    it 'should handle us region when not set' do
+      expect(Fastlane::Saucectl::ConfigGenerator.new(@config).set_region).to eql 'us-west-1'
+    end
+
+    it 'should handle eu region' do
+      @config[:region] = 'eu'
+      expect(Fastlane::Saucectl::ConfigGenerator.new(@config).set_region).to eql 'eu-central-1'
+    end
+
     it 'should create config.yml file based on user specified virtual device configurations' do
       @config[:test_distribution] = 'shard'
       @config[:is_virtual_device] = true
