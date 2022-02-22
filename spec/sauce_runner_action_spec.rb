@@ -10,7 +10,7 @@ describe Fastlane::Actions::SauceRunnerAction do
     end
 
     after do
-      FileUtils.rm_rf('.sauce')
+      # FileUtils.rm_rf('.sauce')
     end
 
     it 'should create config.yml file for android espresso based on user specified virtual device configurations' do

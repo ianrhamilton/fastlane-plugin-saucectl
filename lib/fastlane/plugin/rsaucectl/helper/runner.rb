@@ -16,9 +16,10 @@ module Fastlane
         unless File.exist?(EXECUTABLE)
           UI.user_error!("❌ sauce labs executable file does not exist! Expected sauce executable file to be located at:'#{Dir.pwd}/#{EXECUTABLE}'")
         end
-
-        stdout, stderr, status = syscall("./#{EXECUTABLE} run")
-        status.exitstatus == 1 ? UI.user_error!("❌ #{stderr}") : status
+        Timeout.timeout(config[:timeout_in_seconds]) do
+          _stdout, stderr, status = syscall("./#{EXECUTABLE} run")
+          status.exitstatus == 1 ? UI.user_error!("❌ #{stderr}") : status
+        end
       end
     end
   end

@@ -128,7 +128,7 @@ module Fastlane
                     app_path: 'path/to/my/app/MyTestApp.ipa',
                     region: 'eu',
                     app_description: 'this is a test description'
-                  })",
+                  })"
         ]
       end
 
