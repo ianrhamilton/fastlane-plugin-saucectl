@@ -32,8 +32,9 @@ jobs:
         run: git submodule init && git submodule update
       - name: Run tests
         run: bundle exec rake spec
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        env:
+          CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
+      - name: Simplecov Report
+        uses: aki77/simplecov-report-action@v1
         with:
-          token: ${{secrets.CODECOV_TOKEN}}
-          version: "v0.1.15"
+          token: ${{ secrets.CODECOV_TOKEN }}
