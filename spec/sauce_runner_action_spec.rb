@@ -1,8 +1,8 @@
 require_relative 'spec_helper'
 require 'yaml'
 
-describe Fastlane::Actions::SauceConfigAction do
-  describe 'saucelabs config action' do
+describe Fastlane::Actions::SauceRunnerAction do
+  describe 'saucelabs runner action' do
 
     before do
       ENV['JOB_NAME'] = 'unit-test'
@@ -15,7 +15,7 @@ describe Fastlane::Actions::SauceConfigAction do
 
     it 'should create config.yml file for android espresso based on user specified virtual device configurations' do
       Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'android',
+          sauce_runner({ platform: 'android',
                          kind: 'espresso',
                          app_path: '#{File.expand_path("my-demo-app-android")}',
                          app_name: 'myTestApp.apk',
@@ -35,7 +35,7 @@ describe Fastlane::Actions::SauceConfigAction do
 
     it 'should create config.yml file for android espresso based on user specified real device configurations' do
       Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'android',
+          sauce_runner({ platform: 'android',
                          kind: 'espresso',
                          app_path: '#{File.expand_path("my-demo-app-android")}',
                          app_name: 'myTestApp.apk',
@@ -54,7 +54,7 @@ describe Fastlane::Actions::SauceConfigAction do
 
     it 'should create real device config.yml file for android platform with test distribution method as testCase' do
       Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'android',
+          sauce_runner({ platform: 'android',
                          kind: 'espresso',
                          app_path: '#{File.expand_path("my-demo-app-android")}',
                          app_name: 'myTestApp.apk',
@@ -73,7 +73,7 @@ describe Fastlane::Actions::SauceConfigAction do
 
     it 'should create real device config.yml file for android platform with test distribution method as shard' do
       Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'android',
+          sauce_runner({ platform: 'android',
                          kind: 'espresso',
                          app_path: '#{File.expand_path("my-demo-app-android")}',
                          app_name: 'myTestApp.apk',
@@ -93,7 +93,7 @@ describe Fastlane::Actions::SauceConfigAction do
     it 'should raise an error when user specifies invalid test kind for android platform' do
       expect do
         Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'android',
+          sauce_runner({ platform: 'android',
                          kind: 'xcuitest',
                          app_path: '#{File.expand_path("my-demo-app-android")}',
                          app_name: 'myTestApp.apk',
@@ -110,7 +110,7 @@ describe Fastlane::Actions::SauceConfigAction do
     it 'should raise an error when user does not specify a device array for android platform' do
       expect do
         Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'android',
+          sauce_runner({ platform: 'android',
                          kind: 'espresso',
                          app_path: '#{File.expand_path("my-demo-app-android")}',
                          app_name: 'myTestApp.apk',
@@ -126,7 +126,7 @@ describe Fastlane::Actions::SauceConfigAction do
     it 'should raise an error when user does not specify a testPlan or testTarget for ios platform' do
       expect do
         Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'ios',
+          sauce_runner({ platform: 'ios',
                          kind: 'xcuitest',
                          app_path: '#{File.expand_path("my-demo-app-ios")}',
                          app_name: 'MyTestApp.ipa',
@@ -142,7 +142,7 @@ describe Fastlane::Actions::SauceConfigAction do
     it 'should raise an error when user specifies invalid test kind for ios platform' do
       expect do
         Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'ios',
+          sauce_runner({ platform: 'ios',
                          kind: 'espresso',
                          app_path: '#{File.expand_path("my-demo-app-ios")}',
                          app_name: 'MyTestApp.ipa',
@@ -158,7 +158,7 @@ describe Fastlane::Actions::SauceConfigAction do
 
     it 'should create config.yml file for real ios devices using xcode test target' do
       Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'ios',
+          sauce_runner({ platform: 'ios',
                          kind: 'xcuitest',
                          app_path: '#{File.expand_path("my-demo-app-ios")}',
                          app_name: 'MyTestApp.ipa',
@@ -176,7 +176,7 @@ describe Fastlane::Actions::SauceConfigAction do
 
     it 'should create real device config.yml file based on xcode test target using default distribution method (class)' do
       Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'ios',
+          sauce_runner({ platform: 'ios',
                          kind: 'xcuitest',
                          app_path: '#{File.expand_path("my-demo-app-ios")}',
                          app_name: 'MyTestApp.ipa',
@@ -194,7 +194,7 @@ describe Fastlane::Actions::SauceConfigAction do
 
     it 'should create real device config.yml file for ios real devices using xcode test target and distribution method set as shard' do
       Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'ios',
+          sauce_runner({ platform: 'ios',
                          kind: 'xcuitest',
                          app_path: '#{File.expand_path("my-demo-app-ios")}',
                          app_name: 'MyTestApp.ipa',
@@ -213,7 +213,7 @@ describe Fastlane::Actions::SauceConfigAction do
 
     it 'should create real device config.yml file for ios real devices using xcode test target and distribution method set as testCase' do
       Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'ios',
+          sauce_runner({ platform: 'ios',
                          kind: 'xcuitest',
                          app_path: '#{File.expand_path("my-demo-app-ios")}',
                          app_name: 'MyTestApp.ipa',
@@ -232,7 +232,7 @@ describe Fastlane::Actions::SauceConfigAction do
 
     it 'should create real device config.yml file based on xcode test plan using default distribution method (class)' do
       Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'ios',
+          sauce_runner({ platform: 'ios',
                          kind: 'xcuitest',
                          app_path: '#{File.expand_path("my-demo-app-ios")}',
                          app_name: 'MyTestApp.ipa',
@@ -251,7 +251,7 @@ describe Fastlane::Actions::SauceConfigAction do
 
     it 'should create real device config.yml file based on xcode test plan using sharding distribution method' do
       Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'ios',
+          sauce_runner({ platform: 'ios',
                          kind: 'xcuitest',
                          app_path: '#{File.expand_path("my-demo-app-ios")}',
                          app_name: 'MyTestApp.ipa',
@@ -271,7 +271,7 @@ describe Fastlane::Actions::SauceConfigAction do
 
     it 'should create real device config.yml file based on xcode test plan using testCase distribution method' do
       Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'ios',
+          sauce_runner({ platform: 'ios',
                          kind: 'xcuitest',
                          app_path: '#{File.expand_path("my-demo-app-ios")}',
                          app_name: 'MyTestApp.ipa',
@@ -291,7 +291,7 @@ describe Fastlane::Actions::SauceConfigAction do
     it 'should raise an error when user specifies virtual device option' do
       expect do
         Fastlane::FastFile.new.parse("lane :test do
-          sauce_config({ platform: 'ios',
+          sauce_runner({ platform: 'ios',
                          kind: 'xcuitest',
                          app_path: '#{File.expand_path("my-demo-app-ios")}',
                          app_name: 'MyTestApp.ipa',
