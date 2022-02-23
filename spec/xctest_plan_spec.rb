@@ -68,7 +68,7 @@ describe Fastlane::Saucectl::XCTest do
       expect(test_cases).to eql(test_array)
     end
 
-    it "ios: should fetch tests by test case when sharding" do
+    it "should fetch tests by test case when sharding" do
       test_array = %w[MyDemoAppUITests.My_Demo_AppUITests/testProductListingPageAddItemToCart
                       MyDemoAppUITests.My_Demo_AppUITests/testProductListingPageAddMultipleItemsToCart
                       MyDemoAppUITests.My_Demo_AppUITests/testProductListingPageDefault
