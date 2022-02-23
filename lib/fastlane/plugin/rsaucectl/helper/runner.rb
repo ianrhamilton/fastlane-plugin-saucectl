@@ -12,10 +12,6 @@ module Fastlane
       include FileUtils
       EXECUTABLE = 'saucectl'
 
-      def initialize(config)
-        @config = config
-      end
-
       def execute
         unless File.exist?(EXECUTABLE)
           UI.user_error!("❌ sauce labs executable file does not exist! Expected sauce executable file to be located at:'#{Dir.pwd}/#{EXECUTABLE}'")
