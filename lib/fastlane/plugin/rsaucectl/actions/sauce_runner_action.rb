@@ -2,6 +2,7 @@ require 'fastlane/action'
 require 'json'
 require 'yaml'
 require_relative '../helper/config'
+require_relative '../helper/runner'
 
 module Fastlane
   module Actions
@@ -10,7 +11,7 @@ module Fastlane
 
       def self.run(params)
         Fastlane::Saucectl::ConfigGenerator.new(params).create
-        # system('./saucectl run')
+        Fastlane::Saucectl::Runner.new(params).execute
       end
 
       def self.description
@@ -150,7 +151,23 @@ module Fastlane
                                        description: "Test execution timeout in minutes. Default to 30 minutes",
                                        optional: true,
                                        type: Integer,
-                                       default_value: 30)
+                                       default_value: 30),
+          FastlaneCore::ConfigItem.new(key: :sauce_username,
+                                       default_value: Actions.lane_context[SharedValues::SAUCE_USERNAME],
+                                       description: "Your sauce labs username in order to authenticate upload requests",
+                                       optional: false,
+                                       is_string: true,
+                                       verify_block: proc do |value|
+                                         UI.user_error!(@messages['sauce_username_error']) if value.empty?
+                                       end),
+          FastlaneCore::ConfigItem.new(key: :sauce_access_key,
+                                       default_value: Actions.lane_context[SharedValues::SAUCE_ACCESS_KEY],
+                                       description: "Your sauce labs access key in order to authenticate upload requests",
+                                       optional: false,
+                                       is_string: true,
+                                       verify_block: proc do |value|
+                                         UI.user_error!(@messages['sauce_api_key_error']) if value.empty?
+                                       end)
         ]
       end
 

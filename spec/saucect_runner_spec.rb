@@ -13,7 +13,7 @@ describe Fastlane::Saucectl::Runner do
     it 'should execute tests based on user specified config' do
       config = {}
       config[:timeout_in_minutes] = 30
-      expect {  Fastlane::Saucectl::Runner.new.execute(config) }.to raise_error(/❌ sauce labs executable file does not exist! Expected sauce executable file to be located at:/)
+      expect {  Fastlane::Saucectl::Runner.new(config).execute }.to raise_error(/❌ sauce labs executable file does not exist! Expected sauce executable file to be located at:/)
     end
   end
 end

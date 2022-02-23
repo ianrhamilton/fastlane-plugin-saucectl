@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('rubocop-performance')
   spec.add_development_dependency('rubocop-require_tools')
   spec.add_development_dependency('webmock')
+  spec.add_development_dependency('ox', '2.14.5')
   spec.metadata = {
     'rubygems_mfa_required' => 'true'
   }
