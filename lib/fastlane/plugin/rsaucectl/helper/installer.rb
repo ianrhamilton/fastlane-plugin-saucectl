@@ -10,25 +10,30 @@ module Fastlane
     #
     class Installer
       include FileUtils
+      UI = FastlaneCore::UI unless Fastlane.const_defined?(:UI)
 
       def install
-        download_saucectl_installer
-        execute_saucectl_binary
+        timeout_in_seconds = 30
+        Timeout.timeout(timeout_in_seconds) do
+          download_saucectl_installer
+          execute_saucectl_binary
+          UI.success("✅ Successfully installed saucectl runner binary 🚀")
+        rescue OpenURI::HTTPError => e
+          response = e.io
+          UI.user_error!("❌ Failed to install saucectl binary: status #{response.status[0]}")
+        end
       end
 
       def download_saucectl_installer
-        UI.message('Installing Sauce toolkit installer')
-        URI.open('sauce', 'wb') do |file|
-          file << URI.open('https://saucelabs.github.io/saucectl/install').read
+        open('sauce', 'wb') do |file|
+          file << open('https://saucelabs.github.io/saucectl/install').read
         end
       end
 
       def execute_saucectl_binary
-        _stdout, stderr, status = syscall("sh sauce")
-        response = stderr.io
-        status.exitstatus == 1 ? UI.user_error!("❌ Failed to install saucectl binary: status code #{response.status}") : status
+        _stdout, stderr, status = syscall('sh sauce')
+        status.exitstatus == 1 ? UI.user_error!("❌ failed to install saucectl: #{stderr}") : status
         FileUtils.mv('bin', '.sauce') unless Dir.exist?('.sauce')
-        UI.success("✅ Successfully installed saucectl runner binary 🚀")
       end
     end
   end

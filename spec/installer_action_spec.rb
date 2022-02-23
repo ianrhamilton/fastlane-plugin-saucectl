@@ -25,7 +25,7 @@ describe Fastlane::Actions::InstallToolkitAction do
 
     it 'should handle failed download of saucectl binary' do
       Saucectl::MockApi.new.failed_download
-      expect { action.run }.to raise_error('❌ Failed to install saucectl binary: status code ["503", ""] after 30 seconds')
+      expect { action.run }.to raise_error('❌ Failed to install saucectl binary: status 503')
     end
   end
 end
