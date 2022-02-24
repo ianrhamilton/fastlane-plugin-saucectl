@@ -65,7 +65,7 @@ module Fastlane
         suite = Fastlane::Saucectl::Suites.new(@config)
         UI.user_error!("❌ Sauce Labs platform does not support virtual device execution for ios apps") if @config[:platform].eql?('ios') && @config[:is_virtual_device]
 
-        suites = { 'suites' => if @config[:is_virtual_device]
+        suites = { 'suites' => if @config[:emulators]
                                  suite.create_virtual_device_suites
                                else
                                  suite.create_real_device_suites

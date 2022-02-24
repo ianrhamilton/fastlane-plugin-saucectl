@@ -27,46 +27,70 @@ describe Fastlane::Saucectl::ConfigGenerator do
     end
 
     it 'should create config.yml file based on user specified virtual device configurations' do
-      @config[:test_distribution] = 'shard'
-      @config[:is_virtual_device] = true
+      @config[:path_to_tests] = File.expand_path("my-demo-app-android/app/src/androidTest")
       @config[:platform] = 'android'
       @config[:kind] = 'espresso'
-      @config[:region] = 'eu'
-      @config[:shards] = 2
-      @config[:platform_versions] = ['11.0']
-      @config[:virtual_device_name] = ['FooBar']
+      @config[:path_to_tests] = File.expand_path("my-demo-app-android/app/src/androidTest")
+      @config[:clear_data] = true
+      @config[:use_test_orchestrator] = true
+      @config[:app_path] = File.expand_path("my-demo-app-android")
+      @config[:app_name] = 'myTestApp.apk'
+      @config[:test_runner_app] = 'myTestRunner.apk'
+      @config[:emulators] = [
+        {
+          name: "Android GoogleApi Emulator",
+          platform_versions: %w[10.0 11.0],
+          orientation: 'portrait'
+        }
+      ]
       File.open('config.yml', 'w') { |f| YAML.dump(@config, f) }
 
       Fastlane::Saucectl::ConfigGenerator.new(@config).create
-      origin_folder = File.expand_path("../", "#{__dir__}")
-      expect(File.exist?("#{origin_folder}/.sauce/config.yml")).to be_truthy
+
+      config_folder = File.expand_path("../", "#{__dir__}")
+      config = YAML.load_file("#{config_folder}/.sauce/config.yml")
+      expected_config = {"apiVersion"=>"v1alpha", "kind"=>"espresso", "retries"=>nil, "sauce"=>{"region"=>"us-west-1", "concurrency"=>nil, "metadata"=>{"name"=>"-", "build"=>"Release "}}, "espresso"=>{"app"=> File.expand_path("my-demo-app-android/myTestApp.apk"), "testApp"=> File.expand_path("my-demo-app-android/myTestRunner.apk")}, "artifacts"=>{"download"=>{"when"=>"always", "match"=>["junit.xml"], "directory"=>"./artifacts/"}}, "reporters"=>{"junit"=>{"enabled"=>true}}, "suites"=>[{"name"=>"espresso-logintest#nocredentiallogintest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.LoginTest#noCredentialLoginTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "emulators"=>[{"name"=>"Android GoogleApi Emulator", "orientation"=>"portrait", "platformVersions"=>["10.0", "11.0"]}]}, {"name"=>"espresso-logintest#nousernamelogintest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.LoginTest#noUsernameLoginTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "emulators"=>[{"name"=>"Android GoogleApi Emulator", "orientation"=>"portrait", "platformVersions"=> %w[10.0 11.0] }]}, { "name"=>"espresso-logintest#nopasswordlogintest", "testOptions"=>{ "class"=>"com.saucelabs.mydemoapp.android.view.activities.LoginTest#noPasswordLoginTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "emulators"=>[{ "name"=>"Android GoogleApi Emulator", "orientation"=>"portrait", "platformVersions"=>["10.0", "11.0"]}]}, { "name"=>"espresso-logintest#succesfullogintest", "testOptions"=>{ "class"=>"com.saucelabs.mydemoapp.android.view.activities.LoginTest#succesfulLoginTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "emulators"=>[{ "name"=>"Android GoogleApi Emulator", "orientation"=>"portrait", "platformVersions"=> %w[10.0 11.0] }]}, { "name"=>"espresso-webviewtest#withouturltest", "testOptions"=>{ "class"=>"com.saucelabs.mydemoapp.android.view.activities.WebViewTest#withoutUrlTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "emulators"=>[{ "name"=>"Android GoogleApi Emulator", "orientation"=>"portrait", "platformVersions"=>["10.0", "11.0"]}]}, { "name"=>"espresso-webviewtest#webviewtest", "testOptions"=>{ "class"=>"com.saucelabs.mydemoapp.android.view.activities.WebViewTest#webViewTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "emulators"=>[{ "name"=>"Android GoogleApi Emulator", "orientation"=>"portrait", "platformVersions"=> %w[10.0 11.0] }]}]}
+      expect(expected_config).to eql config
     end
 
     it 'should create config.yml file based on user specified android real device configurations' do
-      @config[:test_distribution] = 'package'
-      @config[:is_virtual_device] = false
-      @config[:real_devices] = ['device one', 'device_two', 'device three', 'device_four']
+      @config[:path_to_tests] = File.expand_path("my-demo-app-android/app/src/androidTest")
       @config[:platform] = 'android'
       @config[:kind] = 'espresso'
-      @config[:region] = 'eu'
+      @config[:path_to_tests] = File.expand_path("my-demo-app-android/app/src/androidTest")
+      @config[:clear_data] = true
+      @config[:use_test_orchestrator] = true
+      @config[:app_path] = File.expand_path("my-demo-app-android")
+      @config[:app_name] = 'myTestApp.apk'
+      @config[:test_runner_app] = 'myTestRunner.apk'
+      @config[:devices] = [
+        {
+          name: "Some Android Device",
+          platform_versions: %w[12.3 11.1],
+          orientation: 'portrait',
+          device_type: 'phone',
+          carrier_connectivity: false,
+          deviceType: 'phone'
+
+        },
+        {
+          id: "android_googleApi_Emulator",
+          orientation: 'portrait',
+          device_type: 'phone',
+          carrier_connectivity: false,
+          deviceType: 'phone'
+        },
+      ]
+
       File.open('config.yml', 'w') { |f| YAML.dump(@config, f) }
 
       Fastlane::Saucectl::ConfigGenerator.new(@config).create
-      origin_folder = File.expand_path("../", "#{__dir__}")
-      expect(File.exist?("#{origin_folder}/.sauce/config.yml")).to be_truthy
-    end
 
-    it 'should create config.yml file based on user specified ios real device configurations' do
-      @config[:test_distribution] = 'shard'
-      @config[:real_devices] = ['device one', 'device_two']
-      @config[:platform] = 'android'
-      @config[:kind] = 'espresso'
-      @config[:region] = 'eu'
-      File.open('config.yml', 'w') { |f| YAML.dump(@config, f) }
+      config_folder = File.expand_path("../", "#{__dir__}")
+      config = YAML.load_file("#{config_folder}/.sauce/config.yml")
 
-      Fastlane::Saucectl::ConfigGenerator.new(@config).create
-      origin_folder = File.expand_path("../", "#{__dir__}")
-      expect(File.exist?("#{origin_folder}/.sauce/config.yml")).to be_truthy
+      expected_config = {"apiVersion"=>"v1alpha", "kind"=>"espresso", "retries"=>nil, "sauce"=>{"region"=>"us-west-1", "concurrency"=>nil, "metadata"=>{"name"=>"-", "build"=>"Release "}}, "espresso"=>{"app"=> File.expand_path("my-demo-app-android/myTestApp.apk"), "testApp"=> File.expand_path("my-demo-app-android/myTestRunner.apk")}, "artifacts"=>{"download"=>{"when"=>"always", "match"=>["junit.xml"], "directory"=>"./artifacts/"}}, "reporters"=>{"junit"=>{"enabled"=>true}}, "suites"=>[{"name"=>"espresso-logintest#nocredentiallogintest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.LoginTest#noCredentialLoginTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"name"=>"Some Android Device", "orientation"=>"portrait", "options"=>{"carrierConnectivity"=>false, "deviceType"=>"PHONE", "private"=>nil}}]}, {"name"=>"espresso-logintest#nousernamelogintest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.LoginTest#noUsernameLoginTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"name"=>"Some Android Device", "orientation"=>"portrait", "options"=>{"carrierConnectivity"=>false, "deviceType"=>nil, "private"=>nil}}]}, {"name"=>"espresso-logintest#nopasswordlogintest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.LoginTest#noPasswordLoginTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"name"=>"Some Android Device", "orientation"=>"portrait", "options"=>{"carrierConnectivity"=>false, "deviceType"=>nil, "private"=>nil}}]}, {"name"=>"espresso-logintest#succesfullogintest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.LoginTest#succesfulLoginTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"name"=>"Some Android Device", "orientation"=>"portrait", "options"=>{"carrierConnectivity"=>false, "deviceType"=>nil, "private"=>nil}}]}, {"name"=>"espresso-webviewtest#withouturltest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.WebViewTest#withoutUrlTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"name"=>"Some Android Device", "orientation"=>"portrait", "options"=>{"carrierConnectivity"=>false, "deviceType"=>nil, "private"=>nil}}]}, {"name"=>"espresso-webviewtest#webviewtest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.WebViewTest#webViewTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"name"=>"Some Android Device", "orientation"=>"portrait", "options"=>{"carrierConnectivity"=>false, "deviceType"=>nil, "private"=>nil}}]}, {"name"=>"espresso-logintest#nocredentiallogintest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.LoginTest#noCredentialLoginTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"id"=>"android_googleApi_Emulator", "orientation"=>"portrait", "options"=>{"carrierConnectivity"=>false, "deviceType"=>"PHONE", "private"=>nil}}]}, {"name"=>"espresso-logintest#nousernamelogintest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.LoginTest#noUsernameLoginTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"id"=>"android_googleApi_Emulator", "orientation"=>"portrait", "options"=>{"carrierConnectivity"=>false, "deviceType"=>nil, "private"=>nil}}]}, {"name"=>"espresso-logintest#nopasswordlogintest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.LoginTest#noPasswordLoginTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"id"=>"android_googleApi_Emulator", "orientation"=>"portrait", "options"=>{"carrierConnectivity"=>false, "deviceType"=>nil, "private"=>nil}}]}, {"name"=>"espresso-logintest#succesfullogintest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.LoginTest#succesfulLoginTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"id"=>"android_googleApi_Emulator", "orientation"=>"portrait", "options"=>{"carrierConnectivity"=>false, "deviceType"=>nil, "private"=>nil}}]}, {"name"=>"espresso-webviewtest#withouturltest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.WebViewTest#withoutUrlTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"id"=>"android_googleApi_Emulator", "orientation"=>"portrait", "options"=>{"carrierConnectivity"=>false, "deviceType"=>nil, "private"=>nil}}]}, {"name"=>"espresso-webviewtest#webviewtest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.WebViewTest#webViewTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"id"=>"android_googleApi_Emulator", "orientation"=>"portrait", "options"=>{"carrierConnectivity"=>false, "deviceType"=>nil, "private"=>nil}}]}]}
+      expect(expected_config).to eql config
     end
   end
 end

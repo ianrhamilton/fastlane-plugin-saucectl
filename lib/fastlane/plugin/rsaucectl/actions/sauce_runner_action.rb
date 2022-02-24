@@ -11,7 +11,7 @@ module Fastlane
 
       def self.run(params)
         Fastlane::Saucectl::ConfigGenerator.new(params).create
-        Fastlane::Saucectl::Runner.new(params).execute
+        Fastlane::Saucectl::Runner.new.execute
       end
 
       def self.description
@@ -81,24 +81,58 @@ module Fastlane
                                        optional: true,
                                        type: String,
                                        default_value: 'class'),
-          FastlaneCore::ConfigItem.new(key: :is_virtual_device,
-                                       description: "Is the device under test an emulator (support for android only)",
-                                       optional: true,
-                                       is_string: false,
-                                       default_value: false),
-          FastlaneCore::ConfigItem.new(key: :virtual_device_names,
-                                       description: "Virtual devices in which you would like to test your applications on",
-                                       optional: true,
-                                       type: Array),
-          FastlaneCore::ConfigItem.new(key: :platform_versions,
-                                       description: "Platform version of the device or virtual device you wish to test your application on",
+          FastlaneCore::ConfigItem.new(key: :emulators,
+                                       description: "The parent property that defines details for running this suite on virtual devices using an emulator",
                                        optional: true,
                                        type: Array,
-                                       default_value: ['11.0']),
-          FastlaneCore::ConfigItem.new(key: :real_devices,
-                                       description: "Array of devices to execute tests on",
+                                       verify_block: proc do |emulators|
+                                         emulators.each do |emulator|
+                                           if emulator.class != Hash
+                                             UI.user_error!("Each emulator must be represented by a Hash object, #{emulator.class} found")
+                                           end
+                                           verify_device_property(emulator, :name)
+                                           set_default_property(emulator, :orientation, 'portrait')
+                                           verify_device_property(emulator, :platform_versions)
+                                         end
+                                       end),
+          FastlaneCore::ConfigItem.new(key: :devices,
+                                       description: "The parent property that defines details for running this suite on real devices",
+                                       optional: true,
+                                       type: Array,
+                                       verify_block: proc do |devices|
+                                         devices.each do |device|
+                                           if device.class != Hash
+                                             UI.user_error!("Each device must be represented by a Hash object, #{device.class} found")
+                                           end
+                                           verify_optional_device_props(device)
+                                           verify_device_property(device, :platform_versions)
+                                           set_default_property(device, :orientation, 'portrait')
+                                           set_default_property(device, :device_type, 'phone')
+                                           set_default_property(device, :private, true)
+                                           set_default_property(device, :carrier_connectivity, false)
+                                         end
+                                       end),
+          FastlaneCore::ConfigItem.new(key: :devices,
+                                       description: "The parent property that defines details for running this suite on virtual devices using an emulator",
                                        optional: true,
                                        type: Array),
+          FastlaneCore::ConfigItem.new(key: :name,
+                                       description: "The name of the device or emulator",
+                                       optional: true,
+                                       type: String),
+          FastlaneCore::ConfigItem.new(key: :id,
+                                       description: "The id of the device",
+                                       optional: true,
+                                       type: String),
+          FastlaneCore::ConfigItem.new(key: :platform_versions,
+                                       description: "Platform versions of the virtual device you wish to test your application on",
+                                       optional: true,
+                                       type: Array),
+          FastlaneCore::ConfigItem.new(key: :orientation,
+                                       description: "The orientation of the device. Default: portrait",
+                                       optional: true,
+                                       type: String,
+                                       default_value: 'portrait'),
           FastlaneCore::ConfigItem.new(key: :device_type,
                                        description: "Request that the matching device is a specific type of device. Valid values are: ANY TABLET PHONE any tablet phone",
                                        optional: true,
@@ -107,8 +141,11 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :private,
                                        description: "Request that the matching device is from your organization's private pool",
                                        optional: true,
-                                       is_string: false,
-                                       default_value: false),
+                                       is_string: false),
+          FastlaneCore::ConfigItem.new(key: :carrierConnectivity,
+                                       description: "Request that the matching device is also connected to a cellular network",
+                                       optional: true,
+                                       is_string: false),
           FastlaneCore::ConfigItem.new(key: :test_target,
                                        description: "Name of the Xcode test target name",
                                        optional: true,
@@ -132,26 +169,11 @@ module Fastlane
                                        optional: true,
                                        is_string: false,
                                        default_value: true),
-          FastlaneCore::ConfigItem.new(key: :virtual_device_name,
-                                       description: "The name of the device to emulate for this test suite. To ensure name accuracy, check the list of supported virtual devices. If you are using android emulators for this test suite, this property is REQUIRED",
-                                       optional: true,
-                                       type: Array,
-                                       default_value: ['Android GoogleApi Emulator']),
           FastlaneCore::ConfigItem.new(key: :max_concurrency_size,
                                        description: "Sets the maximum number of suites to execute at the same time. If the test defines more suites than the max, excess suites are queued and run in order as each suite completes",
                                        optional: true,
                                        type: Integer,
                                        default_value: 1),
-          FastlaneCore::ConfigItem.new(key: :orientation,
-                                       description: "The screen orientation to use while executing this test suite on this virtual device. Valid values are portrait or landscape",
-                                       optional: true,
-                                       type: String,
-                                       default_value: 'portrait'),
-          FastlaneCore::ConfigItem.new(key: :timeout_in_minutes,
-                                       description: "Test execution timeout in minutes. Default to 30 minutes",
-                                       optional: true,
-                                       type: Integer,
-                                       default_value: 30),
           FastlaneCore::ConfigItem.new(key: :sauce_username,
                                        default_value: Actions.lane_context[SharedValues::SAUCE_USERNAME],
                                        description: "Your sauce labs username in order to authenticate upload requests",
@@ -170,6 +192,26 @@ module Fastlane
                                        end)
         ]
       end
+
+      def self.verify_device_property(device, property)
+        UI.user_error!("Each device must have #{property} property") unless device.key?(property)
+      end
+
+      def self.verify_optional_device_props(device)
+        unless device.key?(:name) || device.key?(:id)
+          UI.user_error!("Real devices must have a device name or device id")
+        end
+      end
+
+      private_class_method :verify_device_property
+
+      def self.set_default_property(device, property, default)
+        unless device.key?(property)
+          device[property] = default
+        end
+      end
+
+      private_class_method :set_default_property
 
       def self.authors
         ["Ian Hamilton"]

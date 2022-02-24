@@ -18,11 +18,6 @@ module Fastlane
         @config = config
       end
 
-      def device_array
-        UI.user_error!("❌ Expected array of devices") unless @config[:real_devices].kind_of?(Array)
-        @config[:real_devices]
-      end
-
       def create_test_plan
         check_kind
         if @config[:platform].casecmp('ios').zero?
@@ -72,7 +67,7 @@ module Fastlane
             test_suites << {
               'name' => suite_name(test_type).downcase,
               'testOptions' => default_test_options(test_type)
-            }.merge(device_type_values)
+            }.merge('emulators' => emulator)
           end
           test_suites
         end
@@ -86,7 +81,7 @@ module Fastlane
           test_suites << {
             'name' => suite_name("shard #{i + 1}").downcase,
             'testOptions' => default_test_options(suite)
-          }.merge(device_type_values)
+          }.merge('emulators' => emulator)
         end
         test_suites
       end
@@ -94,12 +89,12 @@ module Fastlane
       def shard_real_device_suites
         test_suites = []
         arr = test_distribution_array
-        shards = arr.each_slice((arr.size / @config[:real_devices].size.to_f).round).to_a
+        shards = arr.each_slice((arr.size / @config[:devices].size.to_f).round).to_a
         shards.each_with_index do |suite, i|
           test_suites << {
             'name' => suite_name("shard #{i + 1}").downcase,
             'testOptions' => default_test_options(suite)
-          }.merge(device_type_values(device_array[i]))
+          }.merge(real_device_options(@config[:devices][i]))
         end
         test_suites
       end
@@ -109,41 +104,43 @@ module Fastlane
           shard_real_device_suites
         else
           test_suites = []
-          device_array.each do |device_name|
+          @config[:devices].each do |device_name|
             test_distribution_array.each do |test_type|
               test_suites << {
                 'name' => suite_name(test_type).downcase,
                 'testOptions' => default_test_options(test_type)
-              }.merge(device_type_values(device_name))
+              }.merge(real_device_options(device_name))
             end
           end
           test_suites
         end
       end
 
-      def device_type_values(name = nil)
-        @config[:is_virtual_device] ? virtual_device_options : real_device_options(name)
-      end
-
-      def virtual_device_options
-        { 'emulators' => emulator }
-      end
-
       def emulator
         emulators = []
-        @config[:virtual_device_name].to_ary.each do |emulator|
-          emulators << { 'name' => emulator,
-                         'orientation' => @config[:orientation],
-                         'platformVersions' => %w[10.0 11.0] }
+        @config[:emulators].each do |emulator|
+          emulators << { 'name' => emulator[:name],
+                         'orientation' => emulator[:orientation],
+                         'platformVersions' => emulator[:platform_versions] }
         end
         emulators
       end
 
-      def real_device_options(name)
-        device_type_key = name.include?('_') ? 'id' : 'name'
+      def real_device_options(device)
+        device_type_key = device.key?(:id) ? 'id' : 'name'
+        name = device.key?(:id) ? device[:id] : device[:name]
         { 'devices' => [{
-                          device_type_key => name, 'orientation' => 'portrait'
-                        }.merge('options' => device_type.merge(cloud_type))] }
+                          device_type_key => name,
+                          'orientation' => device[:orientation]
+                        }.merge('options' => device_options(device))] }
+      end
+
+      def device_options(device)
+        {
+          'carrierConnectivity' => device[:carrier_connectivity],
+          'deviceType' => device[:device_type].upcase!,
+          'private' => device[:private]
+        }
       end
 
       def default_test_options(test_type)
@@ -160,21 +157,6 @@ module Fastlane
           'clearPackageData' => @config[:clear_data],
           'useTestOrchestrator' => @config[:use_test_orchestrator]
         }
-      end
-
-      def device_type
-        device_types = %w[ANY TABLET PHONE any tablet phone]
-        unless @config[:device_type].nil? || device_types.include?(@config[:device_type])
-          UI.user_error!("❌ #{@config[:device_type]} is not a recognised device type")
-        end
-
-        device_type = @config[:device_type].nil? ? 'phone' : @config[:device_type]
-        { 'deviceType' => device_type.upcase }
-      end
-
-      def cloud_type
-        type = !(@config[:private].nil? || @config[:private] == false)
-        { 'private' => type }
       end
     end
   end
