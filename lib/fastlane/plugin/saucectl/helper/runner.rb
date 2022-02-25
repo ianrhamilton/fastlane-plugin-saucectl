@@ -11,12 +11,23 @@ module Fastlane
     class Runner
       include FileUtils
       EXECUTABLE = 'saucectl'
+      UI = FastlaneCore::UI unless Fastlane.const_defined?(:UI)
 
       def execute
         unless File.exist?(EXECUTABLE)
           UI.user_error!("❌ sauce labs executable file does not exist! Expected sauce executable file to be located at:'#{Dir.pwd}/#{EXECUTABLE}'")
         end
         system("./#{EXECUTABLE} run")
+      end
+
+      def system(*cmd)
+        Open3.popen2e(*cmd) do |stdin, stdout_stderr, wait_thread|
+          Thread.new do
+            stdout_stderr.each { |out| UI.message(out) }
+          end
+          stdin.close
+          wait_thread.value
+        end
       end
     end
   end

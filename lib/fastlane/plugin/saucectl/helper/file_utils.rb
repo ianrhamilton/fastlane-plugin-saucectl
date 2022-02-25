@@ -1,7 +1,6 @@
 require "open3"
-require "json"
 
-# utility class for helper functions
+# utility module for helper functions
 module FileUtils
   CLASS_NAME_REGEX = /(Spec|Specs|Test|Tests)/.freeze
   FILE_TYPE_REGEX = /(.swift|.kt|.java)/.freeze
@@ -24,15 +23,5 @@ module FileUtils
 
   def syscall(*cmd)
     Open3.capture3(*cmd)
-  end
-
-  def system(*cmd)
-    Open3.popen2e(*cmd) do |stdin, stdout_stderr, wait_thread|
-      Thread.new do
-        stdout_stderr.each { |out| UI.message(out) }
-      end
-      stdin.close
-      wait_thread.value
-    end
   end
 end

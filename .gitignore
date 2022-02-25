@@ -16,3 +16,6 @@ bin
 sauce
 fastlane/README.md
 fastlane/report.xml
+saucectl
+saucectl-report.xml
+artifacts
