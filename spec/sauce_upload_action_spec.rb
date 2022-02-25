@@ -1,7 +1,7 @@
 require_relative "spec_helper"
 require_relative '../spec/utils/mock_api'
 
-describe Fastlane::Actions::UploadToSaucelabsAction do
+describe Fastlane::Actions::SauceUploadAction do
   describe 'Upload to Sauce Labs Storage' do
 
     before do
@@ -15,14 +15,13 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
 
     it "should return application id when successfully uploaded to sauce" do
       upload_id = Fastlane::FastFile.new.parse("lane :test do
-          upload_to_saucelabs({
-                    platform: 'android',
-                    sauce_username: 'foo',
-                    sauce_access_key: 'bar123',
-                    app: 'Android.MyCustomApp.apk',
-                    app_path: 'app/build/outputs/apk/debug/app-debug.apk',
-                    region: 'eu'
-                  })
+          sauce_upload({platform: 'android',
+                        sauce_username: 'foo',
+                        sauce_access_key: 'bar123',
+                        app: 'Android.MyCustomApp.apk',
+                        app_path: 'app/build/outputs/apk/debug/app-debug.apk',
+                        region: 'eu'
+             })
         end").runner.execute(:test)
       expect(upload_id).to eql('1234-1234-1234-1234-1234')
     end
@@ -30,7 +29,7 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
     it "should raise an error when no platform is specified" do
       expect do
         Fastlane::FastFile.new.parse("lane :test do
-          upload_to_saucelabs({
+          sauce_upload({
                     platform: '',
                     sauce_username: 'foo',
                     sauce_access_key: 'bar123',
@@ -45,7 +44,7 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
     it "should raise an error when no application path is specified" do
       expect do
         Fastlane::FastFile.new.parse("lane :test do
-          upload_to_saucelabs({
+          sauce_upload({
                     platform: 'android',
                     sauce_username: 'foo',
                     sauce_access_key: 'bar123',
@@ -61,7 +60,7 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
     it "should raise an error when no app_name is specified" do
       expect do
         Fastlane::FastFile.new.parse("lane :test do
-          upload_to_saucelabs({
+          sauce_upload({
                      platform: 'android',
                      sauce_username: 'foo',
                      sauce_access_key: 'bar',
@@ -77,7 +76,7 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
     it "should raise an error when invalid region is specified" do
       expect do
         Fastlane::FastFile.new.parse("lane :test do
-          upload_to_saucelabs({
+          sauce_upload({
                          platform: 'android',
                          sauce_username: 'foo',
                          sauce_access_key: 'bar',
@@ -93,7 +92,7 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
     it "should raise an error when no sauce username is specified" do
       expect do
         Fastlane::FastFile.new.parse("lane :test do
-          upload_to_saucelabs({
+          sauce_upload({
                      platform: 'android',
                      sauce_username: '',
                      sauce_access_key: 'bar',
@@ -109,7 +108,7 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
     it "should raise an error when no sauce access key is specified" do
       expect do
         Fastlane::FastFile.new.parse("lane :test do
-          upload_to_saucelabs({
+          sauce_upload({
                      platform: 'android',
                      sauce_username: 'foo',
                      sauce_access_key: '',
@@ -120,21 +119,6 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
           end").runner.execute(:test)
 
       end.to raise_error("No sauce labs access key provided, set using: sauce_access_key: '1234' or consider setting your credentials as environment variables.")
-    end
-
-    it "should allow users to set an optional description of application" do
-      app_id = Fastlane::FastFile.new.parse("lane :test do
-          upload_to_saucelabs({
-                    platform: 'android',
-                    sauce_username: 'foo',
-                    sauce_access_key: 'bar123',
-                    app: 'Android.MyCustomApp.apk',
-                    app_path: 'app/build/outputs/apk/debug/app-debug.apk',
-                    region: 'eu',
-                    description: 'this is a test description'
-                  })
-        end").runner.execute(:test)
-      expect(app_id).to eql('1234-1234-1234-1234-1234')
     end
   end
 end

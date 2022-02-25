@@ -10,7 +10,7 @@ module Fastlane
       SAUCE_ACCESS_KEY = :SAUCE_ACCESS_KEY
     end
 
-    class UploadToSaucelabsAction < Action
+    class SauceUploadAction < Action
       @messages = YAML.load_file("#{__dir__}/../strings/messages.yml")
 
       def self.run(params)
@@ -72,11 +72,7 @@ module Fastlane
                                        is_string: true,
                                        verify_block: proc do |value|
                                          UI.user_error!(@messages['sauce_api_key_error']) if value.empty?
-                                       end),
-          FastlaneCore::ConfigItem.new(key: :description,
-                                       description: "A description to distinguish your app",
-                                       optional: true,
-                                       is_string: true)
+                                       end)
         ]
       end
 
@@ -94,7 +90,7 @@ module Fastlane
 
       def self.example_code
         [
-          "upload_to_saucelabs({
+          "sauce_upload({
                     platform: 'android',
                     sauce_username: 'username',
                     sauce_access_key: 'accessKey',
@@ -102,7 +98,7 @@ module Fastlane
                     app_path: 'app/build/outputs/apk/debug/app-debug.apk',
                     region: 'eu'
                   })",
-          "upload_to_saucelabs({
+          "sauce_upload({
                     platform: 'android',
                     sauce_username: 'username',
                     sauce_access_key: 'accessKey',
@@ -111,22 +107,13 @@ module Fastlane
                     region: 'eu',
                     app_description: 'this is a test description'
                   })",
-          "upload_to_saucelabs({
+          "sauce_upload({
                     platform: 'ios',
                     sauce_username: 'username',
                     sauce_access_key: 'accessKey',
                     app_name: 'MyTestApp.ipa',
                     app_path: 'path/to/my/app/MyTestApp.ipa',
                     region: 'eu'
-                  })",
-          "upload_to_saucelabs({
-                    platform: 'ios',
-                    sauce_username: 'username',
-                    sauce_access_key: 'accessKey',
-                    app_name: 'MyTestApp.ipa',
-                    app_path: 'path/to/my/app/MyTestApp.ipa',
-                    region: 'eu',
-                    app_description: 'this is a test description'
                   })"
         ]
       end

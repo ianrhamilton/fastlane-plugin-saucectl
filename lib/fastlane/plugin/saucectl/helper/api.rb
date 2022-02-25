@@ -107,12 +107,7 @@ module Fastlane
       end
 
       def create_form_data
-        [
-          ['payload',
-           "@#{@config[:app_path]}#{@config[:app]}"],
-          ['name', @config[:app],
-           ['description', @config[:description].nil? ? 'uploaded via fastlane-plugin-rsaucectl' : @config[:description]]]
-        ]
+        [['payload', "@#{@config[:app_path]}#{@config[:app]}"], ['name', @config[:app]]]
       end
 
       def base_url(region)
