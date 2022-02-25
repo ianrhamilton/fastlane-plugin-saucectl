@@ -6,7 +6,6 @@ require_relative '../helper/api'
 module Fastlane
   module Actions
     module SharedValues
-      SAUCE_APP_ID = :SAUCE_APP_ID
       SAUCE_USERNAME = :SAUCE_USERNAME
       SAUCE_ACCESS_KEY = :SAUCE_ACCESS_KEY
     end
@@ -17,7 +16,7 @@ module Fastlane
       def self.run(params)
         response = Fastlane::Saucectl::Api.new(params).upload
         body = JSON.parse(response.body)
-        ENV['SAUCE_APP_ID'] = body['items'][0]['id']
+        body['items'][0]['id']
       end
 
       def self.description
@@ -44,8 +43,8 @@ module Fastlane
                                        verify_block: proc do |value|
                                          UI.user_error!(@messages['app_path_error']) unless value && !value.empty?
                                        end),
-          FastlaneCore::ConfigItem.new(key: :app_name,
-                                       description: "Name of your application under test",
+          FastlaneCore::ConfigItem.new(key: :app,
+                                       description: "Name of the application to be uploaded",
                                        optional: false,
                                        is_string: true,
                                        verify_block: proc do |value|
@@ -74,7 +73,7 @@ module Fastlane
                                        verify_block: proc do |value|
                                          UI.user_error!(@messages['sauce_api_key_error']) if value.empty?
                                        end),
-          FastlaneCore::ConfigItem.new(key: :app_description,
+          FastlaneCore::ConfigItem.new(key: :description,
                                        description: "A description to distinguish your app",
                                        optional: true,
                                        is_string: true)
@@ -129,12 +128,6 @@ module Fastlane
                     region: 'eu',
                     app_description: 'this is a test description'
                   })"
-        ]
-      end
-
-      def self.output
-        [
-          ['SAUCE_APP_ID', 'App id of uploaded app.']
         ]
       end
 

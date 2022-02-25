@@ -3,8 +3,6 @@ require_relative "spec_helper"
 describe Fastlane::Saucectl::XCTest do
   before do
     @config = {}
-    @config[:username] = "foo"
-    @config[:access_key] = "123"
   end
 
   it "should read user all tests from ios xctest projects, excluding any skipped tests" do

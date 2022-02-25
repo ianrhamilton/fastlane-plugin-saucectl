@@ -6,14 +6,20 @@ require_relative '../helper/runner'
 
 module Fastlane
   module Actions
-    class SauceRunnerAction < Action
+    class SauceConfigAction < Action
       @messages = YAML.load_file("#{__dir__}/../strings/messages.yml")
 
       def self.run(params)
-        UI.user_error!("❌ Please specify devices or emulators parameter") if params[:emulators].nil? && params[:devices].nil?
+        if params[:platform].eql?('android')
+          UI.user_error!("❌ For android platform you must specify devices or emulators under test in order to execute tests") if params[:emulators].nil? && params[:devices].nil?
+        else
+          if params[:emulators]
+            UI.user_error!("❌ Sauce Labs platform does not currently support virtual device execution for ios apps")
+          end
+          UI.user_error!("❌ For ios platform you must specify devices under test in order to execute tests") if params[:devices].nil?
+        end
 
         Fastlane::Saucectl::ConfigGenerator.new(params).create
-        # Fastlane::Saucectl::Runner.new.execute
       end
 
       def self.description
@@ -47,14 +53,14 @@ module Fastlane
                                        verify_block: proc do |value|
                                          UI.user_error!(@messages['app_path_error']) unless value && !value.empty?
                                        end),
-          FastlaneCore::ConfigItem.new(key: :app_name,
+          FastlaneCore::ConfigItem.new(key: :app,
                                        description: "Name of your application under test",
                                        optional: false,
                                        type: String,
                                        verify_block: proc do |value|
                                          UI.user_error!(@messages['app_name_error']) unless value && !value.empty?
                                        end),
-          FastlaneCore::ConfigItem.new(key: :test_runner_app,
+          FastlaneCore::ConfigItem.new(key: :test_app,
                                        description: "Name of your test runner application",
                                        optional: false,
                                        is_string: true,
@@ -107,7 +113,6 @@ module Fastlane
                                              UI.user_error!("Each device must be represented by a Hash object, #{device.class} found")
                                            end
                                            verify_optional_device_props(device)
-                                           # verify_device_property(device, :platform_versions)
                                            set_default_property(device, :orientation, 'portrait')
                                            set_default_property(device, :device_type, 'phone')
                                            set_default_property(device, :private, true)
@@ -123,9 +128,13 @@ module Fastlane
                                        optional: true,
                                        type: String),
           FastlaneCore::ConfigItem.new(key: :platform_versions,
-                                       description: "Platform versions of the virtual device you wish to test your application on",
+                                       description: "Platform versions of the virtual device you wish to test your application on: Virtual Device only",
                                        optional: true,
                                        type: Array),
+          FastlaneCore::ConfigItem.new(key: :platform_version,
+                                       description: "Platform version of the real device you wish to test your application on: Real device only",
+                                       optional: true,
+                                       type: String),
           FastlaneCore::ConfigItem.new(key: :orientation,
                                        description: "The orientation of the device. Default: portrait",
                                        optional: true,
@@ -171,23 +180,7 @@ module Fastlane
                                        description: "Sets the maximum number of suites to execute at the same time. If the test defines more suites than the max, excess suites are queued and run in order as each suite completes",
                                        optional: true,
                                        type: Integer,
-                                       default_value: 1),
-          FastlaneCore::ConfigItem.new(key: :sauce_username,
-                                       default_value: Actions.lane_context[SharedValues::SAUCE_USERNAME],
-                                       description: "Your sauce labs username in order to authenticate upload requests",
-                                       optional: false,
-                                       is_string: true,
-                                       verify_block: proc do |value|
-                                         UI.user_error!(@messages['sauce_username_error']) if value.empty?
-                                       end),
-          FastlaneCore::ConfigItem.new(key: :sauce_access_key,
-                                       default_value: Actions.lane_context[SharedValues::SAUCE_ACCESS_KEY],
-                                       description: "Your sauce labs access key in order to authenticate upload requests",
-                                       optional: false,
-                                       is_string: true,
-                                       verify_block: proc do |value|
-                                         UI.user_error!(@messages['sauce_api_key_error']) if value.empty?
-                                       end)
+                                       default_value: 1)
         ]
       end
 
@@ -225,7 +218,7 @@ module Fastlane
 
       def self.example_code
         [
-          "sauce_runner({platform: 'android',
+          "sauce_config({platform: 'android',
                          kind: 'espresso',
                          app_path: 'path/to/mymy-demo-app-android',
                          app_name: 'myTestApp.apk',
@@ -235,7 +228,7 @@ module Fastlane
                          test_distribution: 'class',
                          is_virtual_device: true
                        })",
-          "sauce_runner({platform: 'android',
+          "sauce_config({platform: 'android',
                          kind: 'espresso',
                          app_path: 'path/to/my-demo-app-android',
                          app_name: 'myTestApp.apk',
@@ -245,7 +238,7 @@ module Fastlane
                          test_distribution: 'class',
                          real_devices: ['device one', 'device_two']
                        })",
-          "sauce_runner({platform: 'android',
+          "sauce_config({platform: 'android',
                          kind: 'espresso',
                          app_path: 'path/to/mymy-demo-app-android',
                          app_name: 'myTestApp.apk',
@@ -255,7 +248,7 @@ module Fastlane
                          test_distribution: 'testCase',
                          real_devices: ['device one', 'device_two']
           })",
-          "sauce_runner({platform: 'android',
+          "sauce_config({platform: 'android',
                          kind: 'espresso',
                          app_path: 'path/to/my-demo-app-android',
                          app_name: 'myTestApp.apk',
@@ -265,7 +258,7 @@ module Fastlane
                          test_distribution: 'shard',
                          real_devices: ['device one', 'device_two']
           })",
-          "sauce_runner({platform: 'ios',
+          "sauce_config({platform: 'ios',
                          kind: 'xcuitest',
                          app_path: 'path/to/mymy-demo-app-ios',
                          app_name: 'MyTestApp.ipa',
@@ -274,7 +267,7 @@ module Fastlane
                          real_devices: ['iphone one', 'iphone_two'],
                          test_target: 'MyDemoAppUITests'
           })",
-          "sauce_runner({platform: 'ios',
+          "sauce_config({platform: 'ios',
                          kind: 'xcuitest',
                          app_path: 'path/to/mymy-demo-app-ios',
                          app_name: 'MyTestApp.ipa',
@@ -283,7 +276,7 @@ module Fastlane
                          real_devices: ['iphone one', 'iphone_two'],
                          test_target: 'MyDemoAppUITests'
           })",
-          "sauce_runner({platform: 'ios',
+          "sauce_config({platform: 'ios',
                          kind: 'xcuitest',
                          app_path: 'path/to/mymy-demo-app-ios',
                          app_name: 'MyTestApp.ipa',
@@ -293,7 +286,7 @@ module Fastlane
                          test_target: 'MyDemoAppUITests',
                          test_distribution: 'shard',
           })",
-          "sauce_runner({platform: 'ios',
+          "sauce_config({platform: 'ios',
                          kind: 'xcuitest',
                          app_path: 'path/to/mymy-demo-app-ios',
                          app_name: 'MyTestApp.ipa',
@@ -303,7 +296,7 @@ module Fastlane
                          test_target: 'MyDemoAppUITests',
                          test_distribution: 'testCase',
           })",
-          "sauce_runner({platform: 'ios',
+          "sauce_config({platform: 'ios',
                          kind: 'xcuitest',
                          app_path: 'path/to/mymy-demo-app-ios',
                          app_name: 'MyTestApp.ipa',
@@ -312,7 +305,7 @@ module Fastlane
                          real_devices: ['iphone one', 'iphone_two'],
                          test_plan: 'UITests'
           })",
-          "sauce_runner({platform: 'ios',
+          "sauce_config({platform: 'ios',
                          kind: 'xcuitest',
                          app_path: 'path/to/mymy-demo-app-ios',
                          app_name: 'MyTestApp.ipa',
@@ -323,7 +316,7 @@ module Fastlane
                          test_distribution: 'shard'
           })",
           "create real device config.yml file based on xcode test plan using testCase distribution method",
-          "sauce_runner({platform: 'ios',
+          "sauce_config({platform: 'ios',
                          kind: 'xcuitest',
                          app_path: 'path/to/mymy-demo-app-ios',
                          app_name: 'MyTestApp.ipa',

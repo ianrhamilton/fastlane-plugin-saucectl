@@ -67,7 +67,7 @@ module Fastlane
       end
 
       def upload
-        UI.message("⏳ Uploading \"#{@config[:app_name]}\" upload to Sauce Labs.")
+        UI.message("⏳ Uploading \"#{@config[:app]}\" upload to Sauce Labs.")
         path = 'v1/storage/upload'
         https, url = build_http_request_for(path)
         request = Net::HTTP::Post.new(url)
@@ -109,9 +109,9 @@ module Fastlane
       def create_form_data
         [
           ['payload',
-           "@#{@config[:app_path]}#{@config[:app_name]}"],
-          ['name', @config[:app_name],
-           ['description', @config[:app_description].nil? ? 'uploaded via fastlane-plugin-rsaucectl' : @config[:app_description]]]
+           "@#{@config[:app_path]}#{@config[:app]}"],
+          ['name', @config[:app],
+           ['description', @config[:description].nil? ? 'uploaded via fastlane-plugin-rsaucectl' : @config[:description]]]
         ]
       end
 

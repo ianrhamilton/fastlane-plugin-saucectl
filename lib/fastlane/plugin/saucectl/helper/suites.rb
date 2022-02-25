@@ -59,16 +59,17 @@ module Fastlane
       end
 
       def create_virtual_device_suites
+
         if @config[:test_distribution] == 'shard'
           shard_virtual_device_suites
         else
           test_suites = []
-          @config[:emulators].each do |emulator_name|
+          @config[:emulators].each do |emulator|
             test_distribution_array.each do |test_type|
               test_suites << {
                 'name' => suite_name(test_type).downcase,
                 'testOptions' => default_test_options(test_type)
-              }.merge(virtual_device_options(emulator_name))
+              }.merge(virtual_device_options(emulator))
             end
           end
           test_suites
@@ -76,9 +77,10 @@ module Fastlane
       end
 
       def shard_virtual_device_suites
+        UI.user_error!("❌ Cannot split #{@config[:test_distribution]}'s across virtual devices with a single emulator. \nPlease specify a minimum of two devices!") if @config[:emulators].size.eql?(1)
         test_suites = []
         arr = test_distribution_array
-        shards = arr.each_slice((arr.size / @config[:shards].to_f).round).to_a
+        shards = arr.each_slice((arr.size / @config[:emulators].size.to_f).round).to_a
         shards.each_with_index do |suite, i|
           test_suites << {
             'name' => suite_name("shard #{i + 1}").downcase,
@@ -106,12 +108,12 @@ module Fastlane
           shard_real_device_suites
         else
           test_suites = []
-          @config[:devices].each do |device_name|
+          @config[:devices].each do |device|
             test_distribution_array.each do |test_type|
               test_suites << {
                 'name' => suite_name(test_type).downcase,
                 'testOptions' => default_test_options(test_type)
-              }.merge(real_device_options(device_name))
+              }.merge(real_device_options(device))
             end
           end
           test_suites
@@ -126,12 +128,23 @@ module Fastlane
       end
 
       def real_device_options(device)
+        { 'devices' => [rdc_options(device)] }
+      end
+
+      def rdc_options(device)
         device_type_key = device.key?(:id) ? 'id' : 'name'
         name = device.key?(:id) ? device[:id] : device[:name]
-        { 'devices' => [{
-                          device_type_key => name,
-                          'orientation' => device[:orientation]
-                        }.merge('options' => device_options(device))] }
+
+        base_device_hash = {
+          device_type_key => name,
+          'orientation' => device[:orientation]
+        }.merge('options' => device_options(device))
+
+        unless device[:platform_version].nil?
+          base_device_hash = base_device_hash.merge({ 'platformVersion' => device[:platform_version] })
+        end
+
+        base_device_hash
       end
 
       def device_options(device)

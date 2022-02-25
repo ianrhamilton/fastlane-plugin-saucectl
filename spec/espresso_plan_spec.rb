@@ -1,12 +1,10 @@
 require_relative "spec_helper"
-require_relative "../lib/fastlane/plugin/rsaucectl/helper/espresso"
+require_relative "../lib/fastlane/plugin/saucectl/helper/espresso"
 
 describe Fastlane::Saucectl::Espresso do
   describe "espresso test plan" do
     before do
       @config = {}
-      @config[:username] = "foo"
-      @config[:access_key] = "123"
     end
 
     it "should return package, class and test case array" do

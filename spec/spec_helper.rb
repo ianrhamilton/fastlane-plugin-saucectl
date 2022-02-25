@@ -3,8 +3,8 @@ $LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
 require 'simplecov'
 SimpleCov.start do
   add_filter 'spec'
-  add_filter 'lib/fastlane/plugin/rsaucectl/helper/file_utils'
-  add_filter 'lib/fastlane/plugin/rsaucectl/actions'
+  add_filter 'lib/fastlane/plugin/saucectl/helper/file_utils'
+  add_filter 'lib/fastlane/plugin/saucectl/actions'
 end
 
 if ENV['IS_CI']
@@ -15,7 +15,7 @@ end
 require 'webmock/rspec'
 require 'webmock/api'
 require 'fastlane' # to import the Action super class
-require 'fastlane/plugin/rsaucectl' # import the actual plugin
+require 'fastlane/plugin/saucectl' # import the actual plugin
 
 include WebMock::API
 

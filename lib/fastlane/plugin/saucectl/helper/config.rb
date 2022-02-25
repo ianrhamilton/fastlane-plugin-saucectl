@@ -33,8 +33,8 @@ module Fastlane
             }
           },
           (@config[:kind]).to_s => {
-            'app' => "#{@config[:app_path]}/#{@config[:app_name]}",
-            'testApp' => "#{@config[:app_path]}/#{@config[:test_runner_app]}"
+            'app' => "#{@config[:app_path]}/#{@config[:app]}",
+            'testApp' => "#{@config[:app_path]}/#{@config[:test_app]}"
           },
           'artifacts' => {
             'download' => {
@@ -61,9 +61,10 @@ module Fastlane
       end
 
       def create
+        UI.message("Creating saucectl config .....🚕💨")
         file_name = 'config.yml'
         suite = Fastlane::Saucectl::Suites.new(@config)
-        UI.user_error!("❌ Sauce Labs platform does not support virtual device execution for ios apps") if @config[:platform].eql?('ios') && @config[:is_virtual_device]
+        UI.user_error!("❌ Sauce Labs platform does not support virtual device execution for ios apps") if @config[:platform].eql?('ios') && @config[:emulators]
 
         suites = { 'suites' => if @config[:emulators]
                                  suite.create_virtual_device_suites
@@ -76,6 +77,8 @@ module Fastlane
         out_file.close
         creat_sauce_dir
         FileUtils.move(file_name, './.sauce')
+        UI.message("Successfully created saucectl config ✅") if Dir.exist?('.sauce')
+        UI.user_error!("Failed to create saucectl config ❌") unless Dir.exist?('.sauce')
       end
 
       def creat_sauce_dir

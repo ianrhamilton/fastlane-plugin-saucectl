@@ -1,5 +1,5 @@
 require_relative 'spec_helper'
-require_relative '../lib/fastlane/plugin/rsaucectl/helper/suites'
+require_relative '../lib/fastlane/plugin/saucectl/helper/suites'
 
 describe Fastlane::Saucectl::Suites do
   describe 'suites' do
@@ -171,6 +171,24 @@ describe Fastlane::Saucectl::Suites do
       expect(actual_test_options).to eql(expected_test_options)
     end
 
+    it 'should raise an error when user attempts to shard test cases with a single emulator' do
+      @config[:path_to_tests] = File.expand_path("my-demo-app-android/app/src/androidTest")
+      @config[:platform] = 'android'
+      @config[:kind] = 'espresso'
+      @config[:shards] = 5
+      @config[:test_distribution] = 'shard'
+      @config[:path_to_tests] = File.expand_path("my-demo-app-android/app/src/androidTest")
+      @config[:emulators] = [
+        {
+          name: "Android GoogleApi Emulator",
+          platform_versions: %w[11.1 13.0],
+          orientation: 'portrait'
+        }
+      ]
+      expect { Fastlane::Saucectl::Suites.new(@config).create_virtual_device_suites }
+        .to raise_error(StandardError, "❌ Cannot split #{@config[:test_distribution]}'s across virtual devices with a single emulator. \nPlease specify a minimum of two devices!")
+    end
+
     it 'should distribute an array of test cases to virtual devices suites based on number of specified shards' do
       @config[:path_to_tests] = File.expand_path("my-demo-app-android/app/src/androidTest")
       @config[:platform] = 'android'
@@ -181,12 +199,17 @@ describe Fastlane::Saucectl::Suites do
       @config[:emulators] = [
         {
           name: "Android GoogleApi Emulator",
-          platform_versions: %w[12.3 11.1],
+          platform_versions: %w[11.1 11.3],
+          orientation: 'portrait'
+        },
+        {
+          name: "Android GoogleApi Emulator 2",
+          platform_versions: %w[11.1 11.3],
           orientation: 'portrait'
         }
       ]
-      actual_test_options = Fastlane::Saucectl::Suites.new(@config).create_virtual_device_suites
-      expect(actual_test_options.size).to eql(6)
+
+      Fastlane::Saucectl::Suites.new(@config).create_virtual_device_suites
     end
 
     it 'android: should distribute tests based on the number of specified real devices suites' do
@@ -196,7 +219,7 @@ describe Fastlane::Saucectl::Suites do
       @config[:devices] = [
         {
           name: 'Device One',
-          platform_versions: %w[12.3 11.1],
+          platform_version: '11.1',
           orientation: 'portrait',
           device_type: 'phone',
           carrier_connectivity: false,
@@ -215,7 +238,6 @@ describe Fastlane::Saucectl::Suites do
       @config[:platform] = 'android'
       @config[:kind] = 'espresso'
       @config[:test_distribution] = 'shard'
-      @config[:real_devices] = ['Device One', "device_two"]
       @config[:path_to_tests] = File.expand_path("my-demo-app-android/app/src/androidTest")
       actual_test_options = Fastlane::Saucectl::Suites.new(@config).create_real_device_suites
       expect(actual_test_options.size).to eql(2)

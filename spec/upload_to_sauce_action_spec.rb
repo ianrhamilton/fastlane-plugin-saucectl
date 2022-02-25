@@ -14,17 +14,17 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
     end
 
     it "should return application id when successfully uploaded to sauce" do
-      Fastlane::FastFile.new.parse("lane :test do
+      upload_id = Fastlane::FastFile.new.parse("lane :test do
           upload_to_saucelabs({
                     platform: 'android',
                     sauce_username: 'foo',
                     sauce_access_key: 'bar123',
-                    app_name: 'Android.MyCustomApp.apk',
+                    app: 'Android.MyCustomApp.apk',
                     app_path: 'app/build/outputs/apk/debug/app-debug.apk',
                     region: 'eu'
                   })
         end").runner.execute(:test)
-      expect(ENV['SAUCE_APP_ID']).to eql('1234-1234-1234-1234-1234')
+      expect(upload_id).to eql('1234-1234-1234-1234-1234')
     end
 
     it "should raise an error when no platform is specified" do
@@ -34,7 +34,7 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
                     platform: '',
                     sauce_username: 'foo',
                     sauce_access_key: 'bar123',
-                    app_name: 'Android.MyCustomApp.apk',
+                    app: 'Android.MyCustomApp.apk',
                     app_path: 'app/build/outputs/apk/debug/app-debug.apk',
                     region: 'eu'
                   })
@@ -49,7 +49,7 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
                     platform: 'android',
                     sauce_username: 'foo',
                     sauce_access_key: 'bar123',
-                    app_name: 'Android.MyCustomApp.apk',
+                    app: 'Android.MyCustomApp.apk',
                     app_path: '',
                     region: 'eu'
                   })
@@ -65,7 +65,7 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
                      platform: 'android',
                      sauce_username: 'foo',
                      sauce_access_key: 'bar',
-                     app_name: '',
+                     app: '',
                      app_path: 'app/build/outputs/apk/debug/app-debug.apk',
                      region: 'eu'
                    })
@@ -81,7 +81,7 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
                          platform: 'android',
                          sauce_username: 'foo',
                          sauce_access_key: 'bar',
-                         app_name: 'Android.MyCustomApp.apk',
+                         app: 'Android.MyCustomApp.apk',
                          app_path: 'app/build/outputs/apk/debug/app-debug.apk',
                          region: 'foobar'
                        })
@@ -97,7 +97,7 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
                      platform: 'android',
                      sauce_username: '',
                      sauce_access_key: 'bar',
-                     app_name: 'Android.MyCustomApp.apk',
+                     app: 'Android.MyCustomApp.apk',
                      app_path: 'app/build/outputs/apk/debug/app-debug.apk',
                      region: 'eu'
                    })
@@ -113,7 +113,7 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
                      platform: 'android',
                      sauce_username: 'foo',
                      sauce_access_key: '',
-                     app_name: 'Android.MyCustomApp.apk',
+                     app: 'Android.MyCustomApp.apk',
                      app_path: 'app/build/outputs/apk/debug/app-debug.apk',
                      region: 'eu'
                    })
@@ -123,18 +123,18 @@ describe Fastlane::Actions::UploadToSaucelabsAction do
     end
 
     it "should allow users to set an optional description of application" do
-      Fastlane::FastFile.new.parse("lane :test do
+      app_id = Fastlane::FastFile.new.parse("lane :test do
           upload_to_saucelabs({
                     platform: 'android',
                     sauce_username: 'foo',
                     sauce_access_key: 'bar123',
-                    app_name: 'Android.MyCustomApp.apk',
+                    app: 'Android.MyCustomApp.apk',
                     app_path: 'app/build/outputs/apk/debug/app-debug.apk',
                     region: 'eu',
-                    app_description: 'this is a test description'
+                    description: 'this is a test description'
                   })
         end").runner.execute(:test)
-      expect(ENV['SAUCE_APP_ID']).to eql('1234-1234-1234-1234-1234')
+      expect(app_id).to eql('1234-1234-1234-1234-1234')
     end
   end
 end

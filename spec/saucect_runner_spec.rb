@@ -1,7 +1,7 @@
 require 'fileutils'
 require_relative 'spec_helper'
 require_relative 'utils/mock_api'
-require_relative '../lib/fastlane/plugin/rsaucectl/helper/runner'
+require_relative '../lib/fastlane/plugin/saucectl/helper/runner'
 
 describe Fastlane::Saucectl::Runner do
 

@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 require_relative 'utils/mock_api'
-require_relative '../lib/fastlane/plugin/rsaucectl/helper/storage'
+require_relative '../lib/fastlane/plugin/saucectl/helper/storage'
 
 describe Fastlane::Saucectl::Api do
   describe 'api' do
@@ -93,7 +93,7 @@ describe Fastlane::Saucectl::Api do
       @config[:region] = 'eu'
       @config[:platform] = 'android'
       @config[:app_name] = 'test.apk'
-      @config[:app_path] = "#{__dir__}/utils/test.apk"
+      @config[:app] = "#{__dir__}/utils/test.apk"
 
       mock_api = Saucectl::MockApi.new
       mock_api.with(:post,

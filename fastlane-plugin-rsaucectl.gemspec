@@ -1,15 +1,15 @@
 lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'fastlane/plugin/rsaucectl/version'
+require 'fastlane/plugin/saucectl/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'fastlane-plugin-rsaucectl'
-  spec.version       = Fastlane::Rsaucectl::VERSION
+  spec.name          = 'fastlane-plugin-saucectl'
+  spec.version       = Fastlane::Saucectl::VERSION
   spec.author        = 'Ian Hamilton'
   spec.email         = 'ian.ross.hamilton@gmail.com'
 
   spec.summary       = 'Test your iOS and and Android apps at scale using Sauce Labs toolkit.'
-  spec.homepage      = 'https://github.com/ianrhamilton/fastlane-plugin-rsaucectl'
+  spec.homepage      = 'https://github.com/ianrhamilton/fastlane-plugin-saucectl'
   spec.license       = 'MIT'
 
   spec.files         = Dir['lib/**/**/*.rb']
