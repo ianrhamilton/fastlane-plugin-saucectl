@@ -10,11 +10,11 @@ describe Fastlane::Actions::SauceRunnerAction do
     end
 
     after do
-      FileUtils.rm_rf('.sauce')
+      # FileUtils.rm_rf('.sauce')
     end
 
     it 'should create config.yml file for android espresso based on user specified virtual device configurations' do
-      Fastlane::FastFile.new.parse("lane :test do
+      expect do Fastlane::FastFile.new.parse("lane :test do
           sauce_runner({ platform: 'android',
                          kind: 'espresso',
                          app_path: '#{File.expand_path("my-demo-app-android")}',
@@ -22,15 +22,10 @@ describe Fastlane::Actions::SauceRunnerAction do
                          test_runner_app: 'myTestRunner.apk',
                          path_to_tests: '#{File.expand_path("my-demo-app-android/app/src/androidTest")}',
                          region: 'eu',
-                         test_distribution: 'class',
-                         is_virtual_device: true
+                         test_distribution: 'class'
           })
-        end").runner.execute(:test)
-
-      config_folder = File.expand_path("../", "#{__dir__}")
-      config = YAML.load_file("#{config_folder}/.sauce/config.yml")
-      expected_config = {"apiVersion"=>"v1alpha", "kind"=>"espresso", "retries"=>0, "sauce"=>{"region"=>"eu-central-1", "concurrency"=>1, "metadata"=>{"name"=>"unit-test-123", "build"=>"Release "}}, "espresso"=>{"app"=>File.expand_path("my-demo-app-android/myTestApp.apk"), "testApp"=> File.expand_path("my-demo-app-android/myTestRunner.apk")}, "artifacts"=>{"download"=>{"when"=>"always", "match"=>["junit.xml"], "directory"=>"./artifacts/"}}, "reporters"=>{"junit"=>{"enabled"=>true}}, "suites"=>[{"name"=>"unit-test-123-logintest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.LoginTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "emulators"=>[{"name"=>"Android GoogleApi Emulator", "orientation"=>"portrait", "platformVersions"=>["10.0", "11.0"]}]}, {"name"=>"unit-test-123-webviewtest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.WebViewTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "emulators"=>[{"name"=>"Android GoogleApi Emulator", "orientation"=>"portrait", "platformVersions"=>["10.0", "11.0"]}]}]}
-      expect(config).to eql expected_config
+        end").runner.execute(:test).to raise_error('❌ Please specify devices or emulators parameter')
+      end
     end
 
     it 'should create config.yml file for android espresso based on user specified real device configurations' do
@@ -43,13 +38,9 @@ describe Fastlane::Actions::SauceRunnerAction do
                          path_to_tests: '#{File.expand_path("my-demo-app-android/app/src/androidTest")}',
                          region: 'eu',
                          test_distribution: 'class',
-                         real_devices: ['device one', 'device_two']
-          })
+                         emulators: [ {name: 'Android GoogleApi Emulator', platform_versions: %w[10.0 11.0], orientation: 'portrait'}]
+    })
         end").runner.execute(:test)
-      config_folder = File.expand_path("../", "#{__dir__}")
-      config = YAML.load_file("#{config_folder}/.sauce/config.yml")
-      expected_config = {"apiVersion"=>"v1alpha", "kind"=>"espresso", "retries"=>0, "sauce"=>{"region"=>"eu-central-1", "concurrency"=>1, "metadata"=>{"name"=>"unit-test-123", "build"=>"Release "}}, "espresso"=>{"app"=> File.expand_path("my-demo-app-android/myTestApp.apk"), "testApp"=> File.expand_path("my-demo-app-android/myTestRunner.apk")}, "artifacts"=>{"download"=>{"when"=>"always", "match"=>["junit.xml"], "directory"=>"./artifacts/"}}, "reporters"=>{"junit"=>{"enabled"=>true}}, "suites"=>[{"name"=>"unit-test-123-logintest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.LoginTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"name"=>"device one", "orientation"=>"portrait", "options"=>{"deviceType"=>"PHONE", "private"=>false}}]}, {"name"=>"unit-test-123-webviewtest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.WebViewTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"name"=>"device one", "orientation"=>"portrait", "options"=>{"deviceType"=>"PHONE", "private"=>false}}]}, {"name"=>"unit-test-123-logintest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.LoginTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"id"=>"device_two", "orientation"=>"portrait", "options"=>{"deviceType"=>"PHONE", "private"=>false}}]}, {"name"=>"unit-test-123-webviewtest", "testOptions"=>{"class"=>"com.saucelabs.mydemoapp.android.view.activities.WebViewTest", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{"id"=>"device_two", "orientation"=>"portrait", "options"=>{"deviceType"=>"PHONE", "private"=>false}}]}]}
-      expect(config).to eql expected_config
     end
 
     it 'should create real device config.yml file for android platform with test distribution method as testCase' do

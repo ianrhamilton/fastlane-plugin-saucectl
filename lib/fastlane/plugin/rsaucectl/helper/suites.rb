@@ -63,11 +63,13 @@ module Fastlane
           shard_virtual_device_suites
         else
           test_suites = []
-          test_distribution_array.each do |test_type|
-            test_suites << {
-              'name' => suite_name(test_type).downcase,
-              'testOptions' => default_test_options(test_type)
-            }.merge('emulators' => emulator)
+          @config[:emulators].each do |emulator_name|
+            test_distribution_array.each do |test_type|
+              test_suites << {
+                'name' => suite_name(test_type).downcase,
+                'testOptions' => default_test_options(test_type)
+              }.merge(virtual_device_options(emulator_name))
+            end
           end
           test_suites
         end
@@ -81,7 +83,7 @@ module Fastlane
           test_suites << {
             'name' => suite_name("shard #{i + 1}").downcase,
             'testOptions' => default_test_options(suite)
-          }.merge('emulators' => emulator)
+          }.merge(virtual_device_options(@config[:emulators][i]))
         end
         test_suites
       end
@@ -116,14 +118,11 @@ module Fastlane
         end
       end
 
-      def emulator
-        emulators = []
-        @config[:emulators].each do |emulator|
-          emulators << { 'name' => emulator[:name],
-                         'orientation' => emulator[:orientation],
-                         'platformVersions' => emulator[:platform_versions] }
-        end
-        emulators
+      def virtual_device_options(device)
+        platform_versions = device[:platform_versions].reject(&:empty?).join(',')
+        { 'emulators' => [{ 'name' => device[:name],
+                            'orientation' => device[:orientation],
+                            'platformVersions' => platform_versions.split(',') }] }
       end
 
       def real_device_options(device)

@@ -10,8 +10,10 @@ module Fastlane
       @messages = YAML.load_file("#{__dir__}/../strings/messages.yml")
 
       def self.run(params)
+        UI.user_error!("❌ Please specify devices or emulators parameter") if params[:emulators].nil? && params[:devices].nil?
+
         Fastlane::Saucectl::ConfigGenerator.new(params).create
-        Fastlane::Saucectl::Runner.new.execute
+        # Fastlane::Saucectl::Runner.new.execute
       end
 
       def self.description
@@ -105,17 +107,13 @@ module Fastlane
                                              UI.user_error!("Each device must be represented by a Hash object, #{device.class} found")
                                            end
                                            verify_optional_device_props(device)
-                                           verify_device_property(device, :platform_versions)
+                                           # verify_device_property(device, :platform_versions)
                                            set_default_property(device, :orientation, 'portrait')
                                            set_default_property(device, :device_type, 'phone')
                                            set_default_property(device, :private, true)
                                            set_default_property(device, :carrier_connectivity, false)
                                          end
                                        end),
-          FastlaneCore::ConfigItem.new(key: :devices,
-                                       description: "The parent property that defines details for running this suite on virtual devices using an emulator",
-                                       optional: true,
-                                       type: Array),
           FastlaneCore::ConfigItem.new(key: :name,
                                        description: "The name of the device or emulator",
                                        optional: true,
@@ -142,7 +140,7 @@ module Fastlane
                                        description: "Request that the matching device is from your organization's private pool",
                                        optional: true,
                                        is_string: false),
-          FastlaneCore::ConfigItem.new(key: :carrierConnectivity,
+          FastlaneCore::ConfigItem.new(key: :carrier_connectivity,
                                        description: "Request that the matching device is also connected to a cellular network",
                                        optional: true,
                                        is_string: false),
