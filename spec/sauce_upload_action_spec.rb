@@ -10,7 +10,8 @@ describe Fastlane::Actions::SauceUploadAction do
                     'storage/upload',
                     upload_header,
                     'apps_response.json',
-                    200)
+                    201)
+      @file = "#{__dir__}/utils/mocks/app-debug.apk"
     end
 
     it "should return application id when successfully uploaded to sauce" do
@@ -19,7 +20,7 @@ describe Fastlane::Actions::SauceUploadAction do
                         sauce_username: 'foo',
                         sauce_access_key: 'bar123',
                         app: 'Android.MyCustomApp.apk',
-                        app_path: 'app/build/outputs/apk/debug/app-debug.apk',
+                        file: '#{@file}',
                         region: 'eu'
              })
         end").runner.execute(:test)
@@ -34,7 +35,7 @@ describe Fastlane::Actions::SauceUploadAction do
                     sauce_username: 'foo',
                     sauce_access_key: 'bar123',
                     app: 'Android.MyCustomApp.apk',
-                    app_path: 'app/build/outputs/apk/debug/app-debug.apk',
+                    file: '#{@file}',
                     region: 'eu'
                   })
         end").runner.execute(:test)
@@ -49,12 +50,12 @@ describe Fastlane::Actions::SauceUploadAction do
                     sauce_username: 'foo',
                     sauce_access_key: 'bar123',
                     app: 'Android.MyCustomApp.apk',
-                    app_path: '',
+                    file: '',
                     region: 'eu'
                   })
           end").runner.execute(:test)
 
-      end.to raise_error("No App path given, set using: app_path: 'path/to/my/testApp.apk'")
+      end.to raise_error("No file path given, set using: app_path: 'path/to/my/testApp.apk'")
     end
 
     it "should raise an error when no app_name is specified" do
@@ -65,7 +66,7 @@ describe Fastlane::Actions::SauceUploadAction do
                      sauce_username: 'foo',
                      sauce_access_key: 'bar',
                      app: '',
-                     app_path: 'app/build/outputs/apk/debug/app-debug.apk',
+                     file: '#{@file}',
                      region: 'eu'
                    })
           end").runner.execute(:test)
@@ -81,7 +82,7 @@ describe Fastlane::Actions::SauceUploadAction do
                          sauce_username: 'foo',
                          sauce_access_key: 'bar',
                          app: 'Android.MyCustomApp.apk',
-                         app_path: 'app/build/outputs/apk/debug/app-debug.apk',
+                         file: '#{@file}',
                          region: 'foobar'
                        })
           end").runner.execute(:test)
@@ -97,7 +98,7 @@ describe Fastlane::Actions::SauceUploadAction do
                      sauce_username: '',
                      sauce_access_key: 'bar',
                      app: 'Android.MyCustomApp.apk',
-                     app_path: 'app/build/outputs/apk/debug/app-debug.apk',
+                     file: '#{@file}',
                      region: 'eu'
                    })
           end").runner.execute(:test)
@@ -113,7 +114,7 @@ describe Fastlane::Actions::SauceUploadAction do
                      sauce_username: 'foo',
                      sauce_access_key: '',
                      app: 'Android.MyCustomApp.apk',
-                     app_path: 'app/build/outputs/apk/debug/app-debug.apk',
+                     file: '#{@file}',
                      region: 'eu'
                    })
           end").runner.execute(:test)

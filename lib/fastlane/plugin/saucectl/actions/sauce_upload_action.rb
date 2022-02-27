@@ -16,7 +16,7 @@ module Fastlane
       def self.run(params)
         response = Fastlane::Saucectl::Api.new(params).upload
         body = JSON.parse(response.body)
-        body['items'][0]['id']
+        body['item']['id']
       end
 
       def self.description
@@ -36,12 +36,17 @@ module Fastlane
                                        verify_block: proc do |value|
                                          UI.user_error!(@messages['platform_error']) if value.to_s.empty?
                                        end),
-          FastlaneCore::ConfigItem.new(key: :app_path,
-                                       description: "Path to the application under test",
+          FastlaneCore::ConfigItem.new(key: :file,
+                                       description: "File to upload to sauce storage",
                                        optional: false,
                                        is_string: true,
                                        verify_block: proc do |value|
-                                         UI.user_error!(@messages['app_path_error']) unless value && !value.empty?
+                                         UI.user_error!(@messages['file_error']) unless value && !value.empty?
+                                         if value
+                                           UI.user_error!("Could not find file to upload \"#{value}\" ") unless File.exist?(value)
+                                           extname = File.extname(value)
+                                           UI.user_error!("Extension not supported for \"#{value}\" ") unless @messages['accepted_file_types'].include?(extname)
+                                         end
                                        end),
           FastlaneCore::ConfigItem.new(key: :app,
                                        description: "Name of the application to be uploaded",
@@ -58,20 +63,22 @@ module Fastlane
                                          UI.user_error!(@messages['region_error'].gsub!('$region', value)) unless @messages['supported_regions'].include?(value)
                                        end),
           FastlaneCore::ConfigItem.new(key: :sauce_username,
-                                       default_value: Actions.lane_context[SharedValues::SAUCE_USERNAME],
+                                       env_name: "SAUCE_USERNAME",
                                        description: "Your sauce labs username in order to authenticate upload requests",
+                                       default_value: Actions.lane_context[SharedValues::SAUCE_USERNAME],
                                        optional: false,
-                                       is_string: true,
+                                       type: String,
                                        verify_block: proc do |value|
-                                         UI.user_error!(@messages['sauce_username_error']) if value.empty?
+                                         UI.user_error!(@messages['sauce_username_error']) unless value && !value.empty?
                                        end),
           FastlaneCore::ConfigItem.new(key: :sauce_access_key,
-                                       default_value: Actions.lane_context[SharedValues::SAUCE_ACCESS_KEY],
+                                       env_name: "SAUCE_ACCESS_KEY",
                                        description: "Your sauce labs access key in order to authenticate upload requests",
+                                       default_value: Actions.lane_context[SharedValues::SAUCE_ACCESS_KEY],
                                        optional: false,
-                                       is_string: true,
+                                       type: String,
                                        verify_block: proc do |value|
-                                         UI.user_error!(@messages['sauce_api_key_error']) if value.empty?
+                                         UI.user_error!(@messages['sauce_api_key_error']) unless value && !value.empty?
                                        end)
         ]
       end
@@ -94,16 +101,16 @@ module Fastlane
                     platform: 'android',
                     sauce_username: 'username',
                     sauce_access_key: 'accessKey',
-                    app_name: 'Android.MyCustomApp.apk',
-                    app_path: 'app/build/outputs/apk/debug/app-debug.apk',
+                    app: 'Android.MyCustomApp.apk',
+                    file: 'app/build/outputs/apk/debug/app-debug.apk',
                     region: 'eu'
                   })",
           "sauce_upload({
                     platform: 'android',
                     sauce_username: 'username',
                     sauce_access_key: 'accessKey',
-                    app_name: 'Android.MyCustomApp.apk',
-                    app_path: 'app/build/outputs/apk/debug/app-debug.apk',
+                    app: 'Android.MyCustomApp.apk',
+                    file: 'app/build/outputs/apk/debug/app-debug.apk',
                     region: 'eu',
                     app_description: 'this is a test description'
                   })",
@@ -111,8 +118,8 @@ module Fastlane
                     platform: 'ios',
                     sauce_username: 'username',
                     sauce_access_key: 'accessKey',
-                    app_name: 'MyTestApp.ipa',
-                    app_path: 'path/to/my/app/MyTestApp.ipa',
+                    app: 'MyTestApp.ipa',
+                    file: 'path/to/my/app/MyTestApp.ipa',
                     region: 'eu'
                   })"
         ]

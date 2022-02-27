@@ -92,19 +92,19 @@ describe Fastlane::Saucectl::Api do
     it 'should upload applications app' do
       @config[:region] = 'eu'
       @config[:platform] = 'android'
-      @config[:app_name] = 'test.apk'
-      @config[:app] = "#{__dir__}/utils/test.apk"
+      @config[:app] = 'app-debug.apk'
+      @config[:file] = "#{__dir__}/utils/mocks/app-debug.apk"
 
       mock_api = Saucectl::MockApi.new
       mock_api.with(:post,
                     'storage/upload',
                     upload_header,
                     'apps_response.json',
-                    200)
+                    201)
 
       api = Fastlane::Saucectl::Storage.new(@config)
       response = api.upload_app
-      expect(response.code).to eql('200')
+      expect(response.code).to eql('201')
     end
 
     it 'should get available real devices' do

@@ -19,3 +19,4 @@ fastlane/report.xml
 saucectl
 saucectl-report.xml
 artifacts
+e2e

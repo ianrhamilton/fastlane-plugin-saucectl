@@ -72,10 +72,11 @@ module Fastlane
         https, url = build_http_request_for(path)
         request = Net::HTTP::Post.new(url)
         request['Authorization'] = "Basic #{@encoded_auth_string}"
-        request.set_form(create_form_data, 'multipart/form-data')
+        form_data = [['payload', File.open(@config[:file])], ['name', @config[:app]]]
+        request.set_form(form_data, 'multipart/form-data')
         response = https.request(request)
-        UI.success("✅ Successfully uploaded app to sauce labs: \n #{response.body}") if response.kind_of?(Net::HTTPOK)
-        UI.user_error!("❌ Request failed: #{response.code} #{response.message}") unless response.kind_of?(Net::HTTPOK)
+        UI.success("✅ Successfully uploaded app to sauce labs: \n #{response.body}") if response.code.eql?('201')
+        UI.user_error!("❌ Request failed: #{response.code} #{response.message}") unless response.code.eql?('201')
 
         response
       end
@@ -104,10 +105,6 @@ module Fastlane
         https = Net::HTTP.new(url.host, url.port)
         https.use_ssl = true
         [https, url]
-      end
-
-      def create_form_data
-        [['payload', "@#{@config[:app_path]}#{@config[:app]}"], ['name', @config[:app]]]
       end
 
       def base_url(region)
