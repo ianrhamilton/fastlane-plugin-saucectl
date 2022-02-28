@@ -27,14 +27,13 @@ describe Fastlane::Saucectl::ConfigGenerator do
 
     it 'should create config.yml file based on user specified virtual device configurations' do
       @config[:region] = 'us'
-      @config[:path_to_tests] = File.expand_path("my-demo-app-android/app/src/androidTest")
       @config[:platform] = 'android'
       @config[:kind] = 'espresso'
       @config[:path_to_tests] = File.expand_path("my-demo-app-android/app/src/androidTest")
       @config[:clear_data] = true
       @config[:use_test_orchestrator] = true
-      @config[:app] = File.expand_path("my-demo-app-android")
-      @config[:app_name] = 'myTestApp.apk'
+      @config[:app_path] = File.expand_path("my-demo-app-android")
+      @config[:app] = 'myTestApp.apk'
       @config[:test_app] = 'myTestRunner.apk'
       @config[:emulators] = [
         {
@@ -55,8 +54,8 @@ describe Fastlane::Saucectl::ConfigGenerator do
       @config[:path_to_tests] = File.expand_path("my-demo-app-android/app/src/androidTest")
       @config[:clear_data] = true
       @config[:use_test_orchestrator] = true
-      @config[:app] = File.expand_path("my-demo-app-android")
-      @config[:app_name] = 'myTestApp.apk'
+      @config[:app_path] = File.expand_path("my-demo-app-android")
+      @config[:app] = 'myTestApp.apk'
       @config[:test_app] = 'myTestRunner.apk'
       @config[:devices] = [
         {

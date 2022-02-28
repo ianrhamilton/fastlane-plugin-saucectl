@@ -17,6 +17,8 @@ module Fastlane
         unless File.exist?(EXECUTABLE)
           UI.user_error!("❌ sauce labs executable file does not exist! Expected sauce executable file to be located at:'#{Dir.pwd}/#{EXECUTABLE}'")
         end
+
+        system("chmod +x #{EXECUTABLE}")
         system("./#{EXECUTABLE} run")
       end
 

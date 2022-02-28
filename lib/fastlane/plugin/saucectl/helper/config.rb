@@ -32,10 +32,7 @@ module Fastlane
               'build' => "Release #{ENV['CI_COMMIT_SHORT_SHA']}"
             }
           },
-          (@config[:kind]).to_s => {
-            'app' => "#{@config[:app_path]}/#{@config[:app]}",
-            'testApp' => "#{@config[:app_path]}/#{@config[:test_app]}"
-          },
+          (@config[:kind]).to_s => set_apps,
           'artifacts' => {
             'download' => {
               'when' => 'always',
@@ -58,6 +55,13 @@ module Fastlane
         else
           'us-west-1'
         end
+      end
+
+      def set_apps
+        {
+          'app' => @config[:app_path].include?('storage:') ? @config[:app_path] : "#{@config[:app_path]}/#{@config[:app]}",
+          'testApp' => @config[:app_path].include?('storage:') ? @config[:app_path] : "#{@config[:app_path]}/#{@config[:test_app]}"
+        }
       end
 
       def create

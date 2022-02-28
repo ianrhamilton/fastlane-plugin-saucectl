@@ -16,7 +16,7 @@ module Fastlane
         timeout_in_seconds = 30
         Timeout.timeout(timeout_in_seconds) do
           download_saucectl_installer
-          execute_saucectl_binary
+          execute_saucectl_installer
           UI.success("✅ Successfully installed saucectl runner binary 🚀")
         rescue OpenURI::HTTPError => e
           response = e.io
@@ -30,10 +30,21 @@ module Fastlane
         end
       end
 
-      def execute_saucectl_binary
+      def execute_saucectl_installer
         status = system('sh sauce')
         status == 1 ? UI.user_error!("❌ failed to install saucectl: #{stderr}") : status
-        FileUtils.mv('bin', '.sauce') unless Dir.exist?('.sauce')
+        executable = 'saucectl'
+        FileUtils.mv("bin/#{executable}", executable) unless File.exist?(executable)
+      end
+
+      def system(*cmd)
+        Open3.popen2e(*cmd) do |stdin, stdout_stderr, wait_thread|
+          Thread.new do
+            stdout_stderr.each { |out| UI.message(out) }
+          end
+          stdin.close
+          wait_thread.value
+        end
       end
     end
   end

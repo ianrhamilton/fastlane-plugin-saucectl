@@ -9,7 +9,7 @@ describe Fastlane::Actions::SauceUploadAction do
       mock_api.with(:post,
                     'storage/upload',
                     upload_header,
-                    'apps_response.json',
+                    'upload_response.json',
                     201)
       @file = "#{__dir__}/utils/mocks/app-debug.apk"
     end
