@@ -11,22 +11,10 @@ module Fastlane
 
       def self.run(params)
         if params[:group_id].nil?
-          Fastlane::Saucectl::Storage.new(config(params)).delete_app_with_file_id
+          Fastlane::Saucectl::Storage.new(params).delete_app_with_file_id
         else
-          Fastlane::Saucectl::Storage.new(config(params)).delete_all_apps_for_group_id
+          Fastlane::Saucectl::Storage.new(params).delete_all_apps_for_group_id
         end
-      end
-
-      def self.config(params)
-        {
-          region: params[:region],
-          platform: params[:platform],
-          app_name: params[:app_name],
-          sauce_username: params[:sauce_username],
-          sauce_access_key: params[:sauce_access_key],
-          app_id: params[:app_id],
-          group_id: params[:group_id]
-        }
       end
 
       def self.description
@@ -44,32 +32,21 @@ module Fastlane
                                        optional: false,
                                        is_string: true,
                                        verify_block: proc do |value|
-                                         UI.user_error!(@messages['region_error'].gsub!('$region', value)) unless @messages['supported_regions'].include?(value)
+                                         UI.user_error!(@messages['region_error'].gsub!('$region', value)) if value.empty? || !@messages['supported_regions'].include?(value)
                                        end),
-          FastlaneCore::ConfigItem.new(key: :platform,
-                                       description: "application under test platform (ios or android)",
-                                       optional: false,
-                                       is_string: true,
-                                       verify_block: proc do |value|
-                                         UI.user_error!(@messages['platform_error']) if value.to_s.empty?
-                                       end),
-          FastlaneCore::ConfigItem.new(key: :app_name,
-                                       description: "Name of your application under test",
-                                       optional: false,
-                                       is_string: true,
-                                       verify_block: proc do |value|
-                                         UI.user_error!(@messages['app_name_error']) unless value && !value.empty?
-                                       end),
-
           FastlaneCore::ConfigItem.new(key: :sauce_username,
-                                       description: "Your sauce labs username in order to authenticate upload requests",
+                                       env_name: "SAUCE_USERNAME",
+                                       description: "Your sauce labs username in order to authenticate delete file from app storage",
+                                       default_value: Actions.lane_context[SharedValues::SAUCE_USERNAME],
                                        optional: false,
                                        is_string: true,
                                        verify_block: proc do |value|
                                          UI.user_error!(@messages['sauce_username_error']) if value.empty?
                                        end),
           FastlaneCore::ConfigItem.new(key: :sauce_access_key,
-                                       description: "Your sauce labs access key in order to authenticate upload requests",
+                                       env_name: "SAUCE_ACCESS_KEY",
+                                       description: "Your sauce labs access key in order to authenticate delete file from app storage",
+                                       default_value: Actions.lane_context[SharedValues::SAUCE_ACCESS_KEY],
                                        optional: false,
                                        is_string: true,
                                        verify_block: proc do |value|
@@ -100,18 +77,14 @@ module Fastlane
 
       def self.example_code
         [
-          "delete_from_storage",
           "delete_from_storage(
             region: 'eu',
-            app_name: 'Android.MyCustomApp.apk',
             sauce_username: 'sauce username',
             sauce_access_key: 'sauce api name',
             app_id: '1234-1234-1234-1234'
           )",
-          "delete_from_storage",
           "delete_from_storage(
             region: 'eu',
-            app_name: 'Android.MyCustomApp.apk',
             sauce_username: 'sauce username',
             sauce_access_key: 'sauce api name',
             group_id: '123456789'

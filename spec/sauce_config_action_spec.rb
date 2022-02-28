@@ -24,8 +24,8 @@ describe Fastlane::Actions::SauceConfigAction do
                          path_to_tests: '#{File.expand_path("my-demo-app-android/app/src/androidTest")}',
                          region: 'eu'
           })
-        end").runner.execute(:test).to raise_error('❌ For android platform you must specify devices or emulators under test in order to execute tests')
-      end
+        end").runner.execute(:test)
+      end.to raise_error('❌ For android platform you must specify devices or emulators under test in order to execute tests')
     end
 
     it 'should raise an error when user does not specify devices on ios platform' do
@@ -38,8 +38,8 @@ describe Fastlane::Actions::SauceConfigAction do
                          test_app: 'myTestRunner.ipa',
                          region: 'eu'
           })
-        end").runner.execute(:test).to raise_error('❌ For ios platform you must specify devices under tests in order to execute tests')
-      end
+        end").runner.execute(:test)
+      end.to raise_error('❌ For ios platform you must specify devices under test in order to execute tests')
     end
 
     it 'should create config.yml file for android espresso based on user specified virtual device configurations' do
