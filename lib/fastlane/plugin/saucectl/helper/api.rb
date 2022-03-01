@@ -32,12 +32,12 @@ module Fastlane
         response = https.request(request)
         UI.user_error!("❌ Request failed: #{response.code} #{response.message}") unless response.kind_of?(Net::HTTPOK)
 
-        response
+        JSON.parse(response.body)
       end
 
       def fetch_ios_devices
         devices = []
-        get_devices = available_devices.body.split
+        get_devices = available_devices
         get_devices.each do |device|
           devices << device if device =~ /iPhone_.*/ || device =~ /iPad_.*/
         end
@@ -46,7 +46,7 @@ module Fastlane
 
       def fetch_android_devices
         devices = []
-        get_devices = available_devices.body.split(',')
+        get_devices = available_devices
         get_devices.each do |device|
           devices << device unless device =~ /iPhone_.*/ || device =~ /iPad_.*/
         end
@@ -54,8 +54,8 @@ module Fastlane
       end
 
       def retrieve_all_apps
-        UI.message("retrieving all apps for \"#{@config[:app_name]}\".")
-        path = "v1/storage/files?q=#{@config[:app_name]}&kind=#{@config[:platform]}"
+        UI.message("retrieving all apps for \"#{@config[:query]}\".")
+        path = "v1/storage/files?q=#{@config[:query]}&kind=#{@config[:platform]}"
         https, url = build_http_request_for(path)
         request = Net::HTTP::Get.new(url)
         request['Authorization'] = "Basic #{@encoded_auth_string}"

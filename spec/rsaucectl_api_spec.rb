@@ -34,7 +34,7 @@ describe Fastlane::Saucectl::Api do
     it 'should get sauce labs apps' do
       @config[:region] = 'eu'
       @config[:platform] = 'android'
-      @config[:app_name] = 'test.apk'
+      @config[:query] = 'test.apk'
       mock_api = Saucectl::MockApi.new
       mock_api.with(:get,
                     'storage/files?kind=android&q=test.apk',
@@ -116,7 +116,8 @@ describe Fastlane::Saucectl::Api do
 
       api = Fastlane::Saucectl::Api.new(@config)
       response = api.available_devices
-      expect(response.code).to eql('200')
+      expect(response.to_s).to include('Samsung_Galaxy_S9_real')
+      expect(response.to_s).to include('iPhone_12_15_beta_real')
     end
 
     it 'should get available ios devices' do

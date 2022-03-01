@@ -9,3 +9,4 @@ sauce_username_error: "No sauce labs username provided, set using: sauce_usernam
 sauce_api_key_error: "No sauce labs access key provided, set using: sauce_access_key: '1234' or consider setting your credentials as environment variables."
 supported_regions: ['us', 'eu']
 accepted_file_types: ['.apk', '.aab', '.ipa', '.zip']
+missing_file_name: "Please specify the name of the app that you wish to query on sauce storage"

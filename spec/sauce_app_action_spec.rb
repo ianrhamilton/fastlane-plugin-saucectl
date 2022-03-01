@@ -7,9 +7,6 @@ describe Fastlane::Actions::SauceAppsAction do
   end
 
   it "should return application list of applications for platform by platform" do
-    @config[:region] = 'eu'
-    @config[:platform] = 'android'
-    @config[:app_name] = 'test.apk'
     mock_api = Saucectl::MockApi.new
     mock_api.with(:get,
                   'storage/files?kind=android&q=test.apk',
@@ -20,10 +17,10 @@ describe Fastlane::Actions::SauceAppsAction do
     response = Fastlane::FastFile.new.parse("lane :test do
           sauce_apps({
                     platform: 'android',
+                    query: 'test.apk',
+                    region: 'eu',
                     sauce_username: 'foo',
                     sauce_access_key: 'bar123',
-                    app_name: 'test.apk',
-                   region: 'eu'
                   })
         end").runner.execute(:test)
     expect(response.code).to eql('200')
