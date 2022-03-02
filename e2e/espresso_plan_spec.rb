@@ -70,4 +70,62 @@ describe "run tests" do
 
   end
 
+  it "should get all android devices" do
+
+    response = Fastlane::FastFile.new.parse("lane :test do
+          sauce_devices({platform: 'android',
+                         region: 'eu'})
+        end").runner.execute(:test)
+
+    p response
+
+  end
+
+  it "should get all ios devices" do
+
+    response = Fastlane::FastFile.new.parse("lane :test do
+          sauce_devices({platform: 'ios',
+                         region: 'eu'})
+        end").runner.execute(:test)
+
+    p response
+
+  end
+
+  it "should get all devices" do
+
+    response = Fastlane::FastFile.new.parse("lane :test do
+          sauce_devices({region: 'eu'})
+        end").runner.execute(:test)
+
+    p response
+
+  end
+
+  it "should get all android apps" do
+
+    response = Fastlane::FastFile.new.parse("lane :test do
+          sauce_apps({
+                    platform: 'android',
+                    query: 'Emirates-staging-debug.apk',
+                    region: 'eu'})
+        end").runner.execute(:test)
+
+    p response.body
+
+  end
+
+  it "should get all ios apps" do
+
+    response = Fastlane::FastFile.new.parse("lane :test do
+          sauce_apps({
+                    platform: 'ios',
+                    query: 'Emirates-staging-debug.apk',
+                    region: 'eu'})
+        end").runner.execute(:test)
+
+    p response.body
+
+  end
+
 end
