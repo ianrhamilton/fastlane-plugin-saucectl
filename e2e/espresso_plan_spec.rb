@@ -107,20 +107,7 @@ describe "run tests" do
     response = Fastlane::FastFile.new.parse("lane :test do
           sauce_apps({
                     platform: 'android',
-                    query: 'Emirates-staging-debug.apk',
-                    region: 'eu'})
-        end").runner.execute(:test)
-
-    p response.body
-
-  end
-
-  it "should get all ios apps" do
-
-    response = Fastlane::FastFile.new.parse("lane :test do
-          sauce_apps({
-                    platform: 'ios',
-                    query: 'Emirates-staging-debug.apk',
+                    query: 'mda-1.0.10-12.apk',
                     region: 'eu'})
         end").runner.execute(:test)
 
