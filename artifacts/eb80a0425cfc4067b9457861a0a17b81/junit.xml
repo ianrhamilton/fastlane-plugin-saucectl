@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<testsuite name="testing/ios-ui-test-quarantine-15-productdetailstest" tests="20" failures="1" skipped="0" timestamp="2022-03-03T08:08:05.459Z" time="84.98" package="com.saucelabs.mydemoapp.ios">
+    <testcase name="testNavigateFromCartToCatalog" classname="My_Demo_AppUITests.NavigationTest" time="3.466"/>
+    <testcase name="testProductDetailsColorsSwitch" classname="My_Demo_AppUITests.ProductDetailsTest" time="3.116"/>
+    <testcase name="testProductListingPageAddItemToCart" classname="My_Demo_AppUITests.ProductListingPageTest" time="4.39"/>
+    <testcase name="testProductDetailsDecreaseNumberOfItems" classname="My_Demo_AppUITests.ProductDetailsTest" time="3.118"/>
+    <testcase name="testNavigateMoreToDrawing" classname="My_Demo_AppUITests.NavigationTest" time="4.184"/>
+    <testcase name="testNavigateCartToCatalog" classname="My_Demo_AppUITests.NavigationTest" time="4.294"/>
+    <testcase name="testProductDetails" classname="My_Demo_AppUITests.ProductDetailsTest" time="2.469"/>
+    <testcase name="testProductDetailsDefaultColor" classname="My_Demo_AppUITests.ProductDetailsTest" time="2.5"/>
+    <testcase name="testNavigateMoreToGeoLocation" classname="My_Demo_AppUITests.NavigationTest" time="4.188"/>
+    <testcase name="testProductDetailsAddToCart" classname="My_Demo_AppUITests.ProductDetailsTest" time="3.353"/>
+    <testcase name="testProductListingPageAddMultipleItemsToCart" classname="My_Demo_AppUITests.ProductListingPageTest" time="7.474"/>
+    <testcase name="testProductDetailsPrice" classname="My_Demo_AppUITests.ProductDetailsTest" time="2.493"/>
+    <testcase name="testNavigateMoreToQRCode" classname="My_Demo_AppUITests.NavigationTest" time="5.053">
+        <failure>file: /Users/runner/work/my-demo-app-ios/my-demo-app-ios/My Demo AppUITests/Tests/NavigationTest.swift
+line: 33
+error: Failed to synthesize event: Application for "More-tab-item" Button is not foreground and does not allow background interaction.</failure>
+    </testcase>
+    <testcase name="testNavigateToMore" classname="My_Demo_AppUITests.NavigationTest" time="2.645"/>
+    <testcase name="testNavigateMoreToWebview" classname="My_Demo_AppUITests.NavigationTest" time="4.198"/>
+    <testcase name="testProductDetailsHighlights" classname="My_Demo_AppUITests.ProductDetailsTest" time="2.503"/>
+    <testcase name="testProductDetailsIncreaseNumberOfItems" classname="My_Demo_AppUITests.ProductDetailsTest" time="3.282"/>
+    <testcase name="testNavigateToCart" classname="My_Demo_AppUITests.NavigationTest" time="2.484"/>
+    <testcase name="testNavigateMoreToAbout" classname="My_Demo_AppUITests.NavigationTest" time="4.206"/>
+    <testcase name="testProductDetailsRatesSelection" classname="My_Demo_AppUITests.ProductDetailsTest" time="3.125"/>
+</testsuite>

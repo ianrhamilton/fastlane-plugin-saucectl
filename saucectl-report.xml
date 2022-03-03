@@ -1,0 +1,8 @@
+<testsuites>
+  <testsuite name="testing/ios-ui-test-quarantine-15-navigationtest" tests="0" time="15">
+    <properties>
+      <property name="url" value="https://app.eu-central-1.saucelabs.com/tests/9fc8fb2d007e4fedb43d127e23e9368a"></property>
+      <property name="device" value="iPhone_13_mini_15_real"></property>
+    </properties>
+  </testsuite>
+</testsuites>

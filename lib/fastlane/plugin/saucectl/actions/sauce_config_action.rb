@@ -46,22 +46,15 @@ module Fastlane
                                        verify_block: proc do |value|
                                          UI.user_error!(@messages['platform_error']) if value.to_s.empty?
                                        end),
-          FastlaneCore::ConfigItem.new(key: :app_path,
-                                       description: "Path to the application under test",
-                                       optional: false,
-                                       type: String,
-                                       verify_block: proc do |value|
-                                         UI.user_error!(@messages['app_path_error']) unless value && !value.empty?
-                                       end),
           FastlaneCore::ConfigItem.new(key: :app,
-                                       description: "Name of your application under test",
+                                       description: "The path to the app",
                                        optional: false,
                                        type: String,
                                        verify_block: proc do |value|
                                          UI.user_error!(@messages['app_name_error']) unless value && !value.empty?
                                        end),
           FastlaneCore::ConfigItem.new(key: :test_app,
-                                       description: "Name of your test runner application",
+                                       description: "The path to the testing app",
                                        optional: false,
                                        is_string: true,
                                        verify_block: proc do |value|
@@ -74,11 +67,6 @@ module Fastlane
                                        verify_block: proc do |value|
                                          UI.user_error!(@messages['region_error'].gsub!('$region', value)) unless @messages['supported_regions'].include?(value)
                                        end),
-          FastlaneCore::ConfigItem.new(key: :concurrency,
-                                       description: "Controls how many suites are executed at the same time",
-                                       optional: true,
-                                       type: Integer,
-                                       default_value: 1),
           FastlaneCore::ConfigItem.new(key: :retries,
                                        description: "Sets the number of times to retry a failed suite",
                                        optional: true,

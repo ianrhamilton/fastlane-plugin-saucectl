@@ -7,21 +7,14 @@ describe Fastlane::Saucectl::XCTest do
 
   it "should read user all tests from ios xctest projects, excluding any skipped tests" do
     @config[:test_target] = "MyDemoAppUITests"
-    test_array = %w[testProductListingPageAddItemToCart testProductListingPageAddMultipleItemsToCart
-                      testProductListingPageDefault testProductDetails testProductDetailsPrice testProductDetailsHighlights
-                      testProductDetailsDecreaseNumberOfItems testProductDetailsIncreaseNumberOfItems testProductDetailsDefaultColor
-                      testProductDetailsColorsSwitch testProductDetailsRatesSelection testProductDetailsAddToCart
-                      testProductDetailsProceedToCheckout testNavigateToCart testNavigateToMore testNavigateMoreToWebview
-                      testNavigateMoreToAbout testNavigateMoreToQRCode testNavigateMoreToGeoLocation
-                      testNavigateMoreToDrawing testNavigateFromCartToCatalog testNavigateCartToCatalog]
+    test_array = %w[testNavigateToCart testNavigateToMore testNavigateMoreToWebview testNavigateMoreToAbout testNavigateMoreToQRCode testNavigateMoreToGeoLocation testNavigateMoreToDrawing testNavigateFromCartToCatalog testNavigateCartToCatalog]
     test_plan = Fastlane::Saucectl::XCTest.new(@config).test_data.first
-
-    expect(test_plan[:class]).to eq("My_Demo_AppUITests")
+    expect(test_plan[:class]).to eq("NavigationTest")
     expect(test_plan[:tests]).to eq test_array
   end
 
   it "should fetch tests by test class" do
-    expected_classes = %w[MyDemoAppUITests.My_Demo_AppUITests MyDemoAppUITests.My_Demo_OtherTests]
+    expected_classes = %w[MyDemoAppUITests.NavigationTest MyDemoAppUITests.ProductDetailsTest MyDemoAppUITests.ProductListingPageTest]
     @config[:test_target] = "MyDemoAppUITests"
     @config[:test_distribution] = "class"
     test_plan = Fastlane::Saucectl::XCTest.new(@config)
@@ -30,69 +23,16 @@ describe Fastlane::Saucectl::XCTest do
   end
 
   it "should fetch tests by test case in executable format" do
-    test_array = %w[MyDemoAppUITests.My_Demo_AppUITests/testProductListingPageAddItemToCart
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductListingPageAddMultipleItemsToCart
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductListingPageDefault
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetails
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsPrice
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsHighlights
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsDecreaseNumberOfItems
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsIncreaseNumberOfItems
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsDefaultColor
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsColorsSwitch
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsRatesSelection
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsAddToCart
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsProceedToCheckout
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateToCart
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateToMore
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToWebview
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToAbout
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToQRCode
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToGeoLocation
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToDrawing
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateFromCartToCatalog
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateCartToCatalog
-                      MyDemoAppUITests.My_Demo_OtherTests/testOne
-                      MyDemoAppUITests.My_Demo_OtherTests/testTwo
-                      MyDemoAppUITests.My_Demo_OtherTests/testThree
-                      MyDemoAppUITests.My_Demo_OtherTests/testFour
-                      MyDemoAppUITests.My_Demo_OtherTests/testFive]
+    test_array = %w[MyDemoAppUITests.NavigationTest/testNavigateToCart MyDemoAppUITests.NavigationTest/testNavigateToMore MyDemoAppUITests.NavigationTest/testNavigateMoreToWebview MyDemoAppUITests.NavigationTest/testNavigateMoreToAbout MyDemoAppUITests.NavigationTest/testNavigateMoreToQRCode MyDemoAppUITests.NavigationTest/testNavigateMoreToGeoLocation MyDemoAppUITests.NavigationTest/testNavigateMoreToDrawing MyDemoAppUITests.NavigationTest/testNavigateFromCartToCatalog MyDemoAppUITests.NavigationTest/testNavigateCartToCatalog MyDemoAppUITests.ProductDetailsTest/testProductDetails MyDemoAppUITests.ProductDetailsTest/testProductDetailsPrice MyDemoAppUITests.ProductDetailsTest/testProductDetailsHighlights MyDemoAppUITests.ProductDetailsTest/testProductDetailsDecreaseNumberOfItems MyDemoAppUITests.ProductDetailsTest/testProductDetailsIncreaseNumberOfItems MyDemoAppUITests.ProductDetailsTest/testProductDetailsDefaultColor MyDemoAppUITests.ProductDetailsTest/testProductDetailsColorsSwitch MyDemoAppUITests.ProductDetailsTest/testProductDetailsRatesSelection MyDemoAppUITests.ProductDetailsTest/testProductDetailsAddToCart MyDemoAppUITests.ProductListingPageTest/testProductListingPageAddItemToCart MyDemoAppUITests.ProductListingPageTest/testProductListingPageAddMultipleItemsToCart]
     @config[:test_target] = "MyDemoAppUITests"
     @config[:test_distribution] = "testCase"
     test_plan = Fastlane::Saucectl::XCTest.new(@config)
     test_cases = test_plan.test_distribution
-
     expect(test_cases).to eql(test_array)
   end
 
   it "should fetch tests by test case when sharding" do
-    test_array = %w[MyDemoAppUITests.My_Demo_AppUITests/testProductListingPageAddItemToCart
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductListingPageAddMultipleItemsToCart
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductListingPageDefault
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetails
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsPrice
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsHighlights
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsDecreaseNumberOfItems
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsIncreaseNumberOfItems
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsDefaultColor
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsColorsSwitch
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsRatesSelection
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsAddToCart
-                      MyDemoAppUITests.My_Demo_AppUITests/testProductDetailsProceedToCheckout
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateToCart
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateToMore
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToWebview
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToAbout
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToQRCode
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToGeoLocation
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateMoreToDrawing
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateFromCartToCatalog
-                      MyDemoAppUITests.My_Demo_AppUITests/testNavigateCartToCatalog
-                      MyDemoAppUITests.My_Demo_OtherTests/testOne
-                      MyDemoAppUITests.My_Demo_OtherTests/testTwo
-                      MyDemoAppUITests.My_Demo_OtherTests/testThree
-                      MyDemoAppUITests.My_Demo_OtherTests/testFour
-                      MyDemoAppUITests.My_Demo_OtherTests/testFive]
+    test_array = %w[MyDemoAppUITests.NavigationTest/testNavigateToCart MyDemoAppUITests.NavigationTest/testNavigateToMore MyDemoAppUITests.NavigationTest/testNavigateMoreToWebview MyDemoAppUITests.NavigationTest/testNavigateMoreToAbout MyDemoAppUITests.NavigationTest/testNavigateMoreToQRCode MyDemoAppUITests.NavigationTest/testNavigateMoreToGeoLocation MyDemoAppUITests.NavigationTest/testNavigateMoreToDrawing MyDemoAppUITests.NavigationTest/testNavigateFromCartToCatalog MyDemoAppUITests.NavigationTest/testNavigateCartToCatalog MyDemoAppUITests.ProductDetailsTest/testProductDetails MyDemoAppUITests.ProductDetailsTest/testProductDetailsPrice MyDemoAppUITests.ProductDetailsTest/testProductDetailsHighlights MyDemoAppUITests.ProductDetailsTest/testProductDetailsDecreaseNumberOfItems MyDemoAppUITests.ProductDetailsTest/testProductDetailsIncreaseNumberOfItems MyDemoAppUITests.ProductDetailsTest/testProductDetailsDefaultColor MyDemoAppUITests.ProductDetailsTest/testProductDetailsColorsSwitch MyDemoAppUITests.ProductDetailsTest/testProductDetailsRatesSelection MyDemoAppUITests.ProductDetailsTest/testProductDetailsAddToCart MyDemoAppUITests.ProductListingPageTest/testProductListingPageAddItemToCart MyDemoAppUITests.ProductListingPageTest/testProductListingPageAddMultipleItemsToCart]
     @config[:test_target] = "MyDemoAppUITests"
     @config[:test_distribution] = "shard"
     test_plan = Fastlane::Saucectl::XCTest.new(@config)

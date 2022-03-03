@@ -59,8 +59,8 @@ module Fastlane
 
       def set_apps
         {
-          'app' => @config[:app_path].include?('storage:') ? @config[:app_path] : "#{@config[:app_path]}/#{@config[:app]}",
-          'testApp' => @config[:app_path].include?('storage:') ? @config[:app_path] : "#{@config[:app_path]}/#{@config[:test_app]}"
+          'app' => @config[:app],
+          'testApp' => @config[:test_app]
         }
       end
 

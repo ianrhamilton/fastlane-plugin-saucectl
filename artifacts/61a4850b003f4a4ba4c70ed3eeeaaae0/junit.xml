@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<testsuite name="testing/ios-ui-test-quarantine-15-productlistingpagetest" tests="20" failures="0" skipped="0" timestamp="2022-03-03T08:05:04.199Z" time="83.558" package="com.saucelabs.mydemoapp.ios">
+    <testcase name="testNavigateFromCartToCatalog" classname="My_Demo_AppUITests.NavigationTest" time="3.422"/>
+    <testcase name="testProductDetailsColorsSwitch" classname="My_Demo_AppUITests.ProductDetailsTest" time="3.152"/>
+    <testcase name="testProductListingPageAddItemToCart" classname="My_Demo_AppUITests.ProductListingPageTest" time="4.299"/>
+    <testcase name="testProductDetailsDecreaseNumberOfItems" classname="My_Demo_AppUITests.ProductDetailsTest" time="3.131"/>
+    <testcase name="testNavigateMoreToDrawing" classname="My_Demo_AppUITests.NavigationTest" time="4.139"/>
+    <testcase name="testNavigateCartToCatalog" classname="My_Demo_AppUITests.NavigationTest" time="4.314"/>
+    <testcase name="testProductDetails" classname="My_Demo_AppUITests.ProductDetailsTest" time="2.523"/>
+    <testcase name="testProductDetailsDefaultColor" classname="My_Demo_AppUITests.ProductDetailsTest" time="2.535"/>
+    <testcase name="testNavigateMoreToGeoLocation" classname="My_Demo_AppUITests.NavigationTest" time="4.177"/>
+    <testcase name="testProductDetailsAddToCart" classname="My_Demo_AppUITests.ProductDetailsTest" time="3.307"/>
+    <testcase name="testProductListingPageAddMultipleItemsToCart" classname="My_Demo_AppUITests.ProductListingPageTest" time="7.554"/>
+    <testcase name="testProductDetailsPrice" classname="My_Demo_AppUITests.ProductDetailsTest" time="2.448"/>
+    <testcase name="testNavigateMoreToQRCode" classname="My_Demo_AppUITests.NavigationTest" time="5.079"/>
+    <testcase name="testNavigateToMore" classname="My_Demo_AppUITests.NavigationTest" time="2.623"/>
+    <testcase name="testNavigateMoreToWebview" classname="My_Demo_AppUITests.NavigationTest" time="4.193"/>
+    <testcase name="testProductDetailsHighlights" classname="My_Demo_AppUITests.ProductDetailsTest" time="2.447"/>
+    <testcase name="testProductDetailsIncreaseNumberOfItems" classname="My_Demo_AppUITests.ProductDetailsTest" time="3.312"/>
+    <testcase name="testNavigateToCart" classname="My_Demo_AppUITests.NavigationTest" time="2.492"/>
+    <testcase name="testNavigateMoreToAbout" classname="My_Demo_AppUITests.NavigationTest" time="4.089"/>
+    <testcase name="testProductDetailsRatesSelection" classname="My_Demo_AppUITests.ProductDetailsTest" time="3.199"/>
+</testsuite>
