@@ -30,7 +30,7 @@ describe Fastlane::Saucectl::Suites do
     end
 
     it 'should optionally instruct saucectl execute user specified test classes' do
-      @config[:test_distribution] = %w[com.test.SomeClass1 com.test.SomeClass2 com.test.SomeClass3]
+      @config[:test_class] = %w[com.test.SomeClass1 com.test.SomeClass2 com.test.SomeClass3]
       @config[:platform] = 'android'
       expected_class_arr = %w[com.test.SomeClass1 com.test.SomeClass2 com.test.SomeClass3]
       actual_class_arr = Fastlane::Saucectl::Suites.new(@config).test_distribution_array

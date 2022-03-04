@@ -174,7 +174,6 @@ describe Fastlane::Actions::SauceConfigAction do
       config_folder = File.expand_path("../", "#{__dir__}")
       config = YAML.load_file("#{config_folder}/.sauce/config.yml")
       expected_config = {"apiVersion"=>"v1alpha", "kind"=>"xcuitest", "retries"=>0, "sauce"=>{"region"=>"eu-central-1", "concurrency"=>1, "metadata"=>{"name"=>"unit-test-123", "build"=>"Release "}}, "xcuitest"=>{"app"=> File.expand_path("my-demo-app-ios/MyTestApp.ipa"), "testApp"=> File.expand_path("my-demo-app-ios/MyTestAppRunner.ipa")}, "artifacts"=>{"download"=>{"when"=>"always", "match"=>["junit.xml"], "directory"=>"./artifacts/"}}, "reporters"=>{"junit"=>{"enabled"=>true}}, "suites"=>[{ "name"=>"unit-test-123-shard 1", "testOptions"=>{"class"=> %w[MyDemoAppUITests.NavigationTest/testNavigateToCart MyDemoAppUITests.NavigationTest/testNavigateToMore MyDemoAppUITests.NavigationTest/testNavigateMoreToWebview MyDemoAppUITests.NavigationTest/testNavigateMoreToAbout MyDemoAppUITests.NavigationTest/testNavigateMoreToQRCode MyDemoAppUITests.NavigationTest/testNavigateMoreToGeoLocation MyDemoAppUITests.NavigationTest/testNavigateMoreToDrawing MyDemoAppUITests.NavigationTest/testNavigateFromCartToCatalog MyDemoAppUITests.NavigationTest/testNavigateCartToCatalog MyDemoAppUITests.ProductDetailsTest/testProductDetails] }, "devices"=>[{ "name"=>"iPhone RDC One", "orientation"=>"portrait", "options"=>{ "carrierConnectivity"=>false, "deviceType"=>"PHONE", "private"=>true}}]}, { "name"=>"unit-test-123-shard 2", "testOptions"=>{ "class"=> %w[MyDemoAppUITests.ProductDetailsTest/testProductDetailsPrice MyDemoAppUITests.ProductDetailsTest/testProductDetailsHighlights MyDemoAppUITests.ProductDetailsTest/testProductDetailsDecreaseNumberOfItems MyDemoAppUITests.ProductDetailsTest/testProductDetailsIncreaseNumberOfItems MyDemoAppUITests.ProductDetailsTest/testProductDetailsDefaultColor MyDemoAppUITests.ProductDetailsTest/testProductDetailsColorsSwitch MyDemoAppUITests.ProductDetailsTest/testProductDetailsRatesSelection MyDemoAppUITests.ProductDetailsTest/testProductDetailsAddToCart MyDemoAppUITests.ProductListingPageTest/testProductListingPageAddItemToCart MyDemoAppUITests.ProductListingPageTest/testProductListingPageAddMultipleItemsToCart] }, "devices"=>[{ "id"=>"iphone_rdc_two", "orientation"=>"portrait", "options"=>{ "carrierConnectivity"=>false, "deviceType"=>"PHONE", "private"=>true}}]}]}
-      p expected_config
       expect(config).to eql expected_config
     end
 
@@ -231,7 +230,26 @@ describe Fastlane::Actions::SauceConfigAction do
       expect(config).to eql expected_config
     end
 
-    it 'should raise an error when user specifies virtual device option' do
+    it 'should allow users to specify an array of classes to execute' do
+      Fastlane::FastFile.new.parse("lane :test do
+          sauce_config({ platform: 'android',
+                         kind: 'espresso',
+                         app: '#{File.expand_path("my-demo-app-android")}/myTestApp.apk',
+                         test_app: '#{File.expand_path("my-demo-app-android")}/myTestRunner.apk',
+                         path_to_tests: '#{File.expand_path("my-demo-app-android/app/src/androidTest")}',
+                         region: 'eu',
+                         devices: [ {name: 'iPhone RDC One'}],
+                         test_class: ['com.some.package.testing.SomeClassOne', 'com.some.package.testing.SomeClassTwo', 'com.some.package.testing.SomeClassThree', 'com.some.package.testing.SomeClassFour']
+          })
+        end").runner.execute(:test)
+      config_folder = File.expand_path("../", "#{__dir__}")
+      config = YAML.load_file("#{config_folder}/.sauce/config.yml")
+
+      expected_config = {"apiVersion"=>"v1alpha", "kind"=>"espresso", "retries"=>0, "sauce"=>{"region"=>"eu-central-1", "concurrency"=>1, "metadata"=>{"name"=>"unit-test-123", "build"=>"Release "}}, "espresso"=>{"app"=> File.expand_path("my-demo-app-android/myTestApp.apk"), "testApp"=> File.expand_path("my-demo-app-android/myTestRunner.apk")}, "artifacts"=>{"download"=>{"when"=>"always", "match"=>["junit.xml"], "directory"=>"./artifacts/"}}, "reporters"=>{"junit"=>{"enabled"=>true}}, "suites"=>[{ "name"=>"unit-test-123-someclassfour\"]", "testOptions"=>{ "class"=> %w[com.some.package.testing.SomeClassOne com.some.package.testing.SomeClassTwo com.some.package.testing.SomeClassThree com.some.package.testing.SomeClassFour], "clearPackageData"=>true, "useTestOrchestrator"=>true}, "devices"=>[{ "name"=>"iPhone RDC One", "orientation"=>"portrait", "options"=>{ "carrierConnectivity"=>false, "deviceType"=>"PHONE", "private"=>true}}]}]}
+      expect(config).to eql expected_config
+    end
+
+    it 'should raise an error when user specifies virtual device option for ios platform' do
       expect do
         Fastlane::FastFile.new.parse("lane :test do
           sauce_config({ platform: 'ios',

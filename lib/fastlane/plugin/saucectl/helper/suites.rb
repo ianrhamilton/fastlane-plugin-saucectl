@@ -43,11 +43,7 @@ module Fastlane
       end
 
       def test_distribution_array
-        if @config[:test_distribution].kind_of?(Array)
-          @config[:test_distribution]
-        else
-          create_test_plan.test_distribution
-        end
+        @config[:test_class] || create_test_plan.test_distribution
       end
 
       def suite_name(test_type)
@@ -113,11 +109,24 @@ module Fastlane
         test_suites
       end
 
+      def rdc_custom_test_class
+        test_suites = []
+        @config[:devices].each do |device|
+          test_suites << {
+            'name' => suite_name(@config[:test_class].to_s).downcase,
+            'testOptions' => default_test_options(@config[:test_class])
+          }.merge(real_device_options(device))
+        end
+        test_suites
+      end
+
       def create_real_device_suites
         if !@config[:test_plan].nil? && @config[:test_distribution].eql?('class')
           test_plan_suites
         elsif @config[:test_distribution] == 'shard'
           shard_real_device_suites
+        elsif @config[:test_class].kind_of?(Array)
+          rdc_custom_test_class
         else
           test_suites = []
           @config[:devices].each do |device|
