@@ -87,7 +87,7 @@ module Fastlane
           "sauce_devices({region: 'us',
                           sauce_username: 'foo',
                           sauce_access_key: 'bar123',
-                       })",
+                       })"
         ]
       end
 
