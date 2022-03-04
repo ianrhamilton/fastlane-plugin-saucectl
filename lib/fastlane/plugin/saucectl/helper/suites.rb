@@ -59,7 +59,6 @@ module Fastlane
       end
 
       def create_virtual_device_suites
-
         if @config[:test_distribution] == 'shard'
           shard_virtual_device_suites
         else
@@ -103,8 +102,21 @@ module Fastlane
         test_suites
       end
 
+      def test_plan_suites
+        test_suites = []
+        @config[:devices].each do |device|
+          test_suites << {
+            'name' => suite_name(@config[:test_plan].to_s).downcase,
+            'testOptions' => default_test_options(test_distribution_array)
+          }.merge(real_device_options(device))
+        end
+        test_suites
+      end
+
       def create_real_device_suites
-        if @config[:test_distribution] == 'shard'
+        if !@config[:test_plan].nil? && @config[:test_distribution].eql?('class')
+          test_plan_suites
+        elsif @config[:test_distribution] == 'shard'
           shard_real_device_suites
         else
           test_suites = []
@@ -156,7 +168,7 @@ module Fastlane
       end
 
       def default_test_options(test_type)
-        test_option_type = @config[:test_distribution] == 'package' ? 'package' : 'class'
+        test_option_type = @config[:test_distribution].eql?('package') ? 'package' : 'class'
         if @config[:platform] == 'android'
           { test_option_type => test_type }.merge(android_test_options)
         else

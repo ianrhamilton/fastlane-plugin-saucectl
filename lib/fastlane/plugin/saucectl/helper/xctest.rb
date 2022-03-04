@@ -59,14 +59,16 @@ module Fastlane
       def test_distribution
         test_distribution_check
         tests_arr = []
-        case @config[:test_distribution]
-        when "class"
+
+        test_distribution = @config[:test_plan].nil? ? @config[:test_distribution] : 'testPlan'
+        case test_distribution
+        when 'testCase', 'shard', 'testPlan'
           test_data.each do |type|
-            tests_arr << "#{test_target}.#{type[:class]}"
+            type[:tests].each { |test| tests_arr << "#{test_target}.#{type[:class]}/#{test}" }
           end
         else
           test_data.each do |type|
-            type[:tests].each { |test| tests_arr << "#{test_target}.#{type[:class]}/#{test}" }
+            tests_arr << "#{test_target}.#{type[:class]}"
           end
         end
         tests_arr.uniq
@@ -84,8 +86,8 @@ module Fastlane
       def fetch_selected_tests
         ui_tests = []
         fetch_test_plan["selectedTests"].each do |test|
-          test_class = test[%r{[^/]+}]
-          ui_tests << { class: test_class.to_s, tests: "#{test_target}.#{test.gsub(/[()]/, '')}" }
+          test_case = test.gsub('/', ' ').split
+          ui_tests << { class: test_case[0], tests: [test_case[1].gsub(/[()]/, "").to_s] }
         end
         ui_tests
       end

@@ -1,9 +1,7 @@
 require_relative "spec_helper"
 
 describe "run tests" do
-
   it "should return package, class and test case array for android virtual devices" do
-
     # upload apps and get ids
     upload_id = Fastlane::FastFile.new.parse("lane :test do
           sauce_upload({platform: 'android',
@@ -66,15 +64,13 @@ describe "run tests" do
         end").runner.execute(:test)
 
     puts "deleted app with id #{response_2}"
-
   end
 
   # ______________________
   # IOS
   # ______________________
   it "should return package, class and test case array for ios real devices" do
-
-    # upload apps and get ids
+    # # upload apps and get ids
     # upload_id = Fastlane::FastFile.new.parse("lane :test do
     #       sauce_upload({platform: 'ios',
     #                     app: 'SauceLabs-Demo-App.ipa',
@@ -84,7 +80,7 @@ describe "run tests" do
     #     end").runner.execute(:test)
     #
     # puts "UPLOAD ID WAS #{upload_id}"
-
+    #
     # runner_id = Fastlane::FastFile.new.parse("lane :test do
     #       sauce_upload({platform: 'ios',
     #                     app: 'SauceLabs-Demo-App-Runner.XCUITest.ipa',
@@ -142,43 +138,35 @@ describe "run tests" do
     #     end").runner.execute(:test)
     #
     # puts "deleted app with id #{response_2}"
-
   end
 
   it "should get all android devices" do
-
     response = Fastlane::FastFile.new.parse("lane :test do
           sauce_devices({platform: 'android',
                          region: 'eu'})
         end").runner.execute(:test)
 
     p response
-
   end
 
   it "should get all ios devices" do
-
     response = Fastlane::FastFile.new.parse("lane :test do
           sauce_devices({platform: 'ios',
                          region: 'eu'})
         end").runner.execute(:test)
 
     p response
-
   end
 
   it "should get all devices" do
-
     response = Fastlane::FastFile.new.parse("lane :test do
           sauce_devices({region: 'eu'})
         end").runner.execute(:test)
 
     p response
-
   end
 
   it "should get all android apps" do
-
     response = Fastlane::FastFile.new.parse("lane :test do
           sauce_apps({
                     platform: 'android',
@@ -187,7 +175,5 @@ describe "run tests" do
         end").runner.execute(:test)
 
     p response.body
-
   end
-
 end

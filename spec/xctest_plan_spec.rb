@@ -67,11 +67,11 @@ describe Fastlane::Saucectl::XCTest do
   end
 
   it "should get enabled tests from test plan" do
-    enabled_tests = [{ :class => "SomeSpec", :tests => "MyDemoAppUITests.SomeSpec/testOne" },
-                     { :class => "SomeSpec", :tests => "MyDemoAppUITests.SomeSpec/testTwo" },
-                     { :class => "SomeSpec", :tests => "MyDemoAppUITests.SomeSpec/testThree" },
-                     { :class => "SomeSpec", :tests => "MyDemoAppUITests.SomeSpec/testFour" },
-                     { :class => "SomeSpec", :tests => "MyDemoAppUITests.SomeSpec/testFive" }]
+    enabled_tests = [{ :class => "SomeSpec", :tests => ["testOne"] },
+                     { :class => "SomeSpec", :tests => ["testTwo"] },
+                     { :class => "SomeSpec", :tests => ["testThree"] },
+                     { :class => "SomeSpec", :tests => ["testFour"] },
+                     { :class => "SomeSpec", :tests => ["testFive"] }]
     @config[:test_plan] = "EnabledUITests"
     test_plan = Fastlane::Saucectl::XCTest.new(@config).test_data
     expect(test_plan).to eql(enabled_tests)

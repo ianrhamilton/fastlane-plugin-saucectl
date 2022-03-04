@@ -51,18 +51,7 @@ Lint/UselessAssignment:
   Exclude:
   - "**/spec/**/*"
 Require/MissingRequireStatement:
-  Exclude:
-  - "**/spec/**/*.rb"
-  - "**/spec_helper.rb"
-  - "**/Fastfile"
-  - "**/*.gemspec"
-  - rakelib/**/*
-  - "**/*.rake"
-  - "**/Rakefile"
-  - '**/lib/fastlane/plugin/rsaucectl/actions/**'
-  - '**/lib/fastlane/plugin/rsaucectl/helper/**'
-  - fastlane/**/*
-  - supply/**/*
+  Enabled: false
 Layout/FirstHashElementIndentation:
   Enabled: false
 Layout/HashAlignment:
