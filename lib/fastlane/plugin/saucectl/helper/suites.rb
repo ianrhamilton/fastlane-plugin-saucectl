@@ -57,6 +57,8 @@ module Fastlane
       def create_virtual_device_suites
         if @config[:test_distribution] == 'shard'
           shard_virtual_device_suites
+        elsif @config[:test_class]
+          custom_test_classes
         else
           test_suites = []
           @config[:emulators].each do |emulator|
@@ -109,13 +111,16 @@ module Fastlane
         test_suites
       end
 
-      def rdc_custom_test_class
+      def custom_test_classes
         test_suites = []
-        @config[:devices].each do |device|
+        devices = @config[:devices].nil? ? @config[:emulators] : @config[:devices]
+        devices.each do |device|
+          device_options = @config[:devices].nil? ? virtual_device_options(device) : real_device_options(device)
+          test_classes = @config[:test_class].reject(&:empty?).join(',')
           test_suites << {
             'name' => suite_name(@config[:test_class].to_s).downcase,
-            'testOptions' => default_test_options(@config[:test_class])
-          }.merge(real_device_options(device))
+            'testOptions' => default_test_options(test_classes.split(','))
+          }.merge(device_options)
         end
         test_suites
       end
@@ -126,7 +131,7 @@ module Fastlane
         elsif @config[:test_distribution] == 'shard'
           shard_real_device_suites
         elsif @config[:test_class].kind_of?(Array)
-          rdc_custom_test_class
+          custom_test_classes
         else
           test_suites = []
           @config[:devices].each do |device|
