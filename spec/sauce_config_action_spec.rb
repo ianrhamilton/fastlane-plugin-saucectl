@@ -10,7 +10,7 @@ describe Fastlane::Actions::SauceConfigAction do
     end
 
     after do
-      # FileUtils.rm_rf('.sauce')
+      FileUtils.rm_rf('.sauce')
     end
 
     it 'should raise an error when user does not specify devices or virtual devices on android platform' do
