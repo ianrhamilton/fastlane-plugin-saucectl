@@ -24,8 +24,6 @@ This page defines each of the configuration parameters that is required, or opti
 | Type     | ***String***       |
 | Options  | ***ios, android*** |
 
-_______________________________________
-
 ## `kind`
 > Specifies which framework is associated with the automation tests configured in this specification
 
@@ -33,23 +31,17 @@ _______________________________________
 | Type     | ***String***       |
 | Options  | ***espresso, xcuitest*** |
 
-_______________________________________
-
 ## `app`
 > The path to the application under test
 
 | Required | ***true***         |
 | Type     | ***String***       |
 
-_______________________________________
-
 ## `test_app`
 > The path to the testing application (test runner)
 
 | Required | ***true***         |
 | Type     | ***String***       |
-
-_______________________________________
 
 ## `region`
 > Data Center region (us or eu), set using: region: 'eu'
@@ -58,15 +50,11 @@ _______________________________________
 | Type     | ***String***       |
 | Options  | ***us, eu***       |
 
-_______________________________________
-
 ## `retries`
 > Sets the number of times to retry a failed suite
 
 | Optional | ***true***         |
 | Type     | ***Integer***      |
-
-_______________________________________
 
 ## `test_distribution`
 > Test run distribution method. 
@@ -107,8 +95,6 @@ The plugin will then instruct saucectl to treat each specified option as a suite
 
 Default: `class`
 
-_______________________________________
-
 ## `test_class`
 > Instructs saucectl to only run the specified classes for this test suite.
 
@@ -118,8 +104,6 @@ _______________________________________
 **Example**
 
     test_class: ['com.some.package.testing.SomeClassOne', 'com.some.package.testing.SomeClassTwo', 'com.some.package.testing.SomeClassThree', 'com.some.package.testing.SomeClassFour']
-
-_______________________________________
 
 ## `emulators`
 > The parent property that defines details for running this suite on [virtual devices](https://docs.saucelabs.com/mobile-apps/automated-testing/espresso-xcuitest/espresso/#emulators) using an emulator. NOTE: only supported on the android platform.
@@ -141,8 +125,6 @@ Optional parameter for virtual devices:
 `orientation`
 > The screen orientation to use while executing this test suite on this virtual device. Valid values are portrait or landscape.
 
-_______________________________________
-
 ## `devices`
 
 > The parent property that defines details for running this suite on [real devices](https://docs.saucelabs.com/mobile-apps/automated-testing/espresso-xcuitest/espresso/#devices). You can request a specific device using its ID, or you can specify a set of criteria to choose the first available device that matches the specifications.
@@ -156,7 +138,7 @@ When an ID is specified, it supersedes the other settings.
 > Request a specific device for this test suite by its ID.
 
 | Optional | ***true***         |
-| Type     | ***String***        |
+| Type     | ***String***       |
 
 **Example**
 
@@ -166,7 +148,7 @@ When an ID is specified, it supersedes the other settings.
 > Find a device for this test suite that matches the device name or portion of the name, which may provide a larger pool of available devices of the type you want.
 
 | Optional | ***true***         |
-| Type     | ***String***        |
+| Type     | ***String***       |
 
 **Example** 
 
@@ -216,9 +198,7 @@ Pattern Matching:
 
     devices: [ {name: 'Google Pixel.*', platformVersion: 8.0, carrier_connectivity: true } ]
 
-_______________________________________
-
-## `test_target`
+## `test_target` (ios only)
 
 > **iOS only**: Name of the Xcode test target name in order to scan for test classes and test cases to execute via your chosen test distribution method
 
@@ -229,7 +209,7 @@ _______________________________________
 
     test_target: 'NameOfMyUITests'
 
-## `test_plan`
+## `test_plan` (ios only)
 
 > **iOS only**: Name of the Xcode test plan containing the tests that you wish to test/skip via your chosen test distribution method.
 
@@ -242,12 +222,232 @@ _______________________________________
 
 ** Note: You must specify a test plan or test target.
 
-_____________________________________________________________
-
-## `path_to_tests`
-
+## `path_to_tests` (android only)
+> Path to your espresso tests. Default: `currentDir/app/src/androidTest/`. This directory will be scanned and will collect tests based on your chosen test distribution method.
 
 
+| Optional | ***false***        |
+| Type     | ***String***       |
 
+**Example**
 
+    test_plan: 'NameOfMyTestPlan'
 
+## `clear_data` (android only)
+> Clear package data from device between suites (or test distribution method). Default: true
+
+| Optional | ***true***          |
+| Type     | ***Boolean***       |
+
+**Example**
+
+    clear_data: false
+
+## `use_test_orchestrator` (android only)
+> User Android test orchestrator. Default: true
+
+| Optional | ***true***          |
+| Type     | ***Boolean***       |
+
+**Example**
+
+    use_test_orchestrator: false
+
+## `max_concurrency_size`
+> Sets the maximum number of suites to execute at the same time. If the test defines more suites than the max, excess suites are queued and run in order as each suite completes.
+
+Default: 1
+
+| Optional | ***true***          |
+| Type     | ***Integer***       |
+
+**Example**
+
+    max_concurrency_size: 20
+
+Example actions
+
+Create a config.yml file for android espresso based on user specified virtual device configurations
+```ruby
+
+lane :create_config do
+    sauce_config({platform: 'android',
+                  kind: 'espresso',
+                  app: '#{File.expand_path("my-demo-app-android")}/myTestApp.apk',
+                  test_app: '#{File.expand_path("my-demo-app-android")}/myTestRunner.apk',
+                  path_to_tests: '#{File.expand_path("my-demo-app-android/app/src/androidTest")}',
+                  region: 'eu',
+                  emulators: [ {name: 'Android GoogleApi Emulator', platform_versions: %w[10.0 11.0], orientation: 'portrait'}]
+             })
+end
+```
+
+Create config.yml file for android espresso based on user specified real device configurations
+
+```ruby
+lane :create_config do
+    sauce_config({platform: 'android',
+                  kind: 'espresso',
+                  app: '#{File.expand_path("my-demo-app-android")}/myTestApp.apk',
+                  test_app: '#{File.expand_path("my-demo-app-android")}/myTestRunner.apk',
+                  path_to_tests: '#{File.expand_path("my-demo-app-android/app/src/androidTest")}',
+                  region: 'eu',
+                  test_distribution: 'testCase',
+                  devices: [ {name: 'RDC One', orientation: 'portrait', platform_version: '11.0'}]
+               })
+end 
+```
+
+Create config.yml file for android espresso based on user specified real device configurations
+
+```ruby
+lane :create_config do
+    sauce_config({platform: 'android',
+                  kind: 'espresso',
+                  app: '#{File.expand_path("my-demo-app-android")}/myTestApp.apk',
+                  test_app: '#{File.expand_path("my-demo-app-android")}/myTestRunner.apk',
+                  path_to_tests: '#{File.expand_path("my-demo-app-android/app/src/androidTest")}',
+                  region: 'eu',
+                  test_distribution: 'testCase',
+                  devices: [ {name: 'RDC One', orientation: 'portrait', platform_version: '11.0'}]
+               })
+end 
+```
+
+Create real device config.yml file for android platform with test distribution method as shard
+```ruby
+lane :create_config do
+    sauce_config({platform: 'android',
+                  kind: 'espresso',
+                  app: '#{File.expand_path("my-demo-app-android")}/myTestApp.apk',
+                  test_app: '#{File.expand_path("my-demo-app-android")}/myTestRunner.apk',
+                  path_to_tests: '#{File.expand_path("my-demo-app-android/app/src/androidTest")}',
+                  region: 'eu',
+                  test_distribution: 'shard',
+                  devices: [ {name: 'RDC One', orientation: 'portrait', platform_version: '11.0'}]
+                 })
+end 
+```
+
+Create config.yml file for real ios devices using xcode test target
+```ruby
+lane :create_config do
+    sauce_config({platform: 'ios',
+                  kind: 'xcuitest',
+                  app: '#{File.expand_path("my-demo-app-ios")}/MyTestApp.ipa',
+                  test_app: '#{File.expand_path("my-demo-app-ios")}/MyTestAppRunner.ipa',
+                  region: 'eu',
+                  devices: [ {name: 'iPhone RDC One'}, {id: 'iphone_rdc_two'} ],
+                  test_target: 'MyDemoAppUITests'
+                 })
+end 
+```
+
+Create real device config.yml file for ios real devices using xcode test target and distribution method set as shard
+```ruby
+lane :create_config do
+    sauce_config({platform: 'ios',
+                  kind: 'xcuitest',
+                  app: '#{File.expand_path("my-demo-app-ios")}/MyTestApp.ipa',
+                  test_app: '#{File.expand_path("my-demo-app-ios")}/MyTestAppRunner.ipa',
+                  region: 'eu',
+                  devices: [ {name: 'iPhone RDC One'}, {id: 'iphone_rdc_two'} ],
+                  test_target: 'MyDemoAppUITests',
+                  test_distribution: 'shard',
+                 })
+end 
+```
+
+Create real device config.yml file for ios real devices using xcode test target and distribution method set as testCase
+
+```ruby
+lane :create_config do
+      sauce_config({platform: 'ios',
+                    kind: 'xcuitest',
+                    app: '#{File.expand_path("my-demo-app-ios")}/MyTestApp.ipa',
+                    test_app: '#{File.expand_path("my-demo-app-ios")}/MyTestAppRunner.ipa',
+                    region: 'eu',
+                    devices: [ {name: 'iPhone RDC One'}, {id: 'iphone_rdc_two'} ],
+                    test_target: 'MyDemoAppUITests',
+                    test_distribution: 'testCase'
+          })
+end 
+```
+
+Create real device config.yml file based on xcode test plan using sharding distribution method
+
+```ruby
+lane :create_config do
+    sauce_config({platform: 'ios',
+                  kind: 'xcuitest',
+                  app: '#{File.expand_path("my-demo-app-ios")}/MyTestApp.ipa',
+                  test_app: '#{File.expand_path("my-demo-app-ios")}/MyTestAppRunner.ipa',
+                  region: 'eu',
+                  devices: [ {name: 'iPhone RDC One'}, {id: 'iphone_rdc_two'} ],
+                  test_plan: 'EnabledUITests',
+                  test_distribution: 'shard'
+                 })
+end 
+```
+
+Create real device config.yml file based on xcode test plan using testCase distribution method
+
+```ruby
+lane :create_config do
+    sauce_config({platform: 'ios',
+                  kind: 'xcuitest',
+                  app: '#{File.expand_path("my-demo-app-ios")}/MyTestApp.ipa',
+                  test_app: '#{File.expand_path("my-demo-app-ios")}/MyTestAppRunner.ipa',
+                  region: 'eu',
+                  devices: [ {name: 'iPhone RDC One'}, {id: 'iphone_rdc_two'} ],
+                  test_plan: 'UITests'
+                 })
+end 
+```
+
+Specify an array of classes to execute on rdc
+
+```ruby
+lane :create_config do
+    sauce_config({platform: 'android',
+                  kind: 'espresso',
+                  app: '#{File.expand_path("my-demo-app-android")}/myTestApp.apk',
+                  test_app: '#{File.expand_path("my-demo-app-android")}/myTestRunner.apk',
+                  path_to_tests: '#{File.expand_path("my-demo-app-android/app/src/androidTest")}',
+                  region: 'eu',
+                  devices: [ {name: 'iPhone RDC One'}],
+                  test_class: ['com.some.package.testing.SomeClassOne', 'com.some.package.testing.SomeClassTwo', 'com.some.package.testing.SomeClassThree', 'com.some.package.testing.SomeClassFour']
+                })
+end 
+```
+
+Specify an array of classes to execute on virtual devices
+
+```ruby
+lane :create_config do
+    sauce_config({platform: 'android',
+                  kind: 'espresso',
+                  app: '#{File.expand_path("my-demo-app-android")}/myTestApp.apk',
+                  test_app: '#{File.expand_path("my-demo-app-android")}/myTestRunner.apk',
+                  path_to_tests: '#{File.expand_path("my-demo-app-android/app/src/androidTest")}',
+                  region: 'eu',
+                  emulators: [ {name: 'iPhone RDC One', platform_versions: ['11.0']}, {name: 'iPhone RDC Two', platform_versions: ['11.0']}],
+                  test_class: ['com.some.package.testing.SomeClassOne', 'com.some.package.testing.SomeClassTwo', 'com.some.package.testing.SomeClassThree', 'com.some.package.testing.SomeClassFour']
+                 })
+end 
+```
+
+Specify an array of classes to execute on ios rdc
+
+```ruby
+lane :create_config do
+    sauce_config({platform: 'ios',
+                  kind: 'xcuitest',
+                  app: '#{File.expand_path("my-demo-app-ios")}/myTestApp.app',
+                  test_app: '#{File.expand_path("my-demo-app-ios")}/myTestRunner.app',
+                  region: 'eu',
+                  devices: [ {name: 'iPhone RDC One'}],
+                  test_class: ['MyDemoAppUITests.SomeClassOne', 'MyDemoAppUITests.SomeClassTwo', 'MyDemoAppUITests.SomeClassThree', 'MyDemoAppUITests.SomeClassFour']
+                 })
+end 
+```

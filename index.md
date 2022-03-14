@@ -7,9 +7,14 @@ layout: home
 # **fastlane-plugin-saucectl**
 > Continuously test your applications at scale using the [Sauce Labs](https://docs.saucelabs.com/) cloud platform 🚀
 
-To get started with this plugin, you must already have an account with Sauce Labs in order to obtain an username and access key. These credentials are used to authenticate each request to the Sauce Labs API.
+### What You'll Need
+1. A Sauce Labs account ([Log in](https://accounts.saucelabs.com/am/XUI/#login/) or [sign up](https://saucelabs.com/sign-up) for a free trial license)
+2. Your Sauce Labs Username and Access Key
+> ❕***credentials should stored as [environment variables](https://docs.saucelabs.com/basics/environment-variables/) on local machine and continuous integration environments.***
 
-# Getting started
-1. Upload to Storage
-2. Do that.
-3. Done.
+For example:
+```bash
+  export SAUCE_USERNAME=myUsername
+  export SAUCE_ACCESS_KEY=12ab12c3-4567-8d9e-1011-fgh12i13j145
+```
+
