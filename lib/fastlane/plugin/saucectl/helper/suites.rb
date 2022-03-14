@@ -118,7 +118,7 @@ module Fastlane
           device_options = @config[:devices].nil? ? virtual_device_options(device) : real_device_options(device)
           test_classes = @config[:test_class].reject(&:empty?).join(',')
           test_suites << {
-            'name' => suite_name.downcase,
+            'name' => suite_name(device[:name]).downcase,
             'testOptions' => default_test_options(test_classes.split(','))
           }.merge(device_options)
         end
