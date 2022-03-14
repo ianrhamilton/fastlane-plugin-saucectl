@@ -78,13 +78,13 @@ module Fastlane
       def self.example_code
         [
           "sauce_apps({platform: 'android',
-                       file: 'test.apk',
+                       query: 'test.apk',
                        region: 'eu',
                        sauce_username: 'foo',
                        sauce_access_key: 'bar123',
                      })",
-          "sauce_apps({platform: 'ips',
-                       file: 'test.app',
+          "sauce_apps({platform: 'ios',
+                       query: 'test.app',
                        region: 'eu',
                        sauce_username: 'foo',
                        sauce_access_key: 'bar123',
@@ -93,7 +93,7 @@ module Fastlane
       end
 
       def self.return_value
-        "Returns the application id of the app uploaded"
+        "Returns the set of files that have been uploaded to Sauce Storage by the requestor."
       end
     end
   end

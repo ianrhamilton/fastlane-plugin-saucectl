@@ -1,4 +1,4 @@
-# rsaucectl plugin
+# fastlane-plugin-saucectl
 
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-rsaucectl)
 [![codecov](https://codecov.io/gh/ianrhamilton/fastlane-plugin-rsaucectl/branch/main/graph/badge.svg?token=NSVhqgYFYv)](https://codecov.io/gh/ianrhamilton/fastlane-plugin-rsaucectl)
@@ -10,7 +10,7 @@ This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To 
 fastlane add_plugin rsaucectl
 ```
 
-## About rsaucectl
+## About saucectl
 
 Test your iOS and and Android apps at scale using Sauce Labs toolkit.
 

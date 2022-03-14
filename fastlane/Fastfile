@@ -1,3 +1,51 @@
-lane :test do
+lane :upload_apps do
+    @upload_id = sauce_upload({platform: 'android',
+                  app: 'mda-1.0.10-12.apk',
+                  file: '/path/to/my/app/mda-1.0.10-12.apk',
+                  region: 'eu'})
+
+     @runner_id = sauce_upload({platform: 'android',
+                   app: 'mda-androidTest-1.0.10-12.apk',
+                   file: '/path/to/my/testrunner/mda-androidTest-1.0.10-12.apk',
+                   region: 'eu'})
+end
+
+lane :install_toolkit do
   install_toolkit()
+end
+
+lane :create_config do
+    sauce_config({ platform: 'android',
+                         kind: 'espresso',
+                         app: "storage:#{@upload_id}",
+                         test_app: "storage:#{@runner_id}",
+                         path_to_tests: 'path/to/app/src/androidTest',
+                         region: 'eu',
+                         emulators: [ {name: 'Android GoogleApi Emulator', platform_versions: %w[10.0 11.0], orientation: 'portrait'}]
+      })
+end
+
+lane :execute_tests do
+    sauce_runner
+end
+
+lane :delete_apk do
+      delete_from_storage({region: 'eu',
+                           platform: 'android',
+                           app_name: 'Android.MyCustomApp.apk',
+                           app_id: "#{@upload_id}"
+                  })
+end
+
+lane :delete_apk do
+      delete_from_storage({region: 'eu',
+                           platform: 'android',
+                           app_name: 'Android.MyCustomApp.apk',
+                           app_id: "#{@upload_id}"
+                  })
+end
+
+lane :disabled_tests do
+      disabled_tests({platform: 'android',
+                      path_to_tests: 'my-demo-app-android/app/src/androidTest'})
 end

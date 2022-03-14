@@ -74,7 +74,6 @@ module Fastlane
 
       def self.example_code
         [
-          "disabled_tests",
           "disabled_tests({ platform: 'android',
                             path_to_tests: 'my-demo-app-android/app/src/androidTest'
           })",
@@ -87,14 +86,8 @@ module Fastlane
         ]
       end
 
-      def self.output
-        [
-          ['SAUCE_APP_ID', 'App id of uploaded app.']
-        ]
-      end
-
       def self.return_value
-        "Returns the application id of the app uploaded"
+        "Returns an array of disabled tests"
       end
     end
   end
