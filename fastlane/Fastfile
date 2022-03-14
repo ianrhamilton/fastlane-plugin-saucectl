@@ -49,3 +49,50 @@ lane :disabled_tests do
       disabled_tests({platform: 'android',
                       path_to_tests: 'my-demo-app-android/app/src/androidTest'})
 end
+
+lane :get_available_devices
+    sauce_devices({region: 'us',
+                   sauce_username: 'foo',
+                   sauce_access_key: 'bar123',
+                   })
+end
+
+lane :get_available_ios_devices
+    sauce_devices({platform: 'ios',
+                   region: 'eu',
+                   sauce_username: 'foo',
+                   sauce_access_key: 'bar123',
+                   })
+end
+
+lane :get_available_android_devices
+    sauce_devices({platform: 'android',
+                   region: 'eu',
+                   sauce_username: 'foo',
+                   sauce_access_key: 'bar123',
+                   })
+end
+
+lane :get_apps do
+          sauce_apps({platform: 'android',
+                      query: 'test.apk',
+                      region: 'eu',
+                      sauce_username: 'foo',
+                      sauce_access_key: 'bar123',
+                     })
+end
+
+lane :get_uploaded_ios_apps do
+  sauce_apps({platform: 'ios',
+              query: 'test.app',
+              region: 'eu',
+              sauce_username: 'foo',
+              sauce_access_key: 'bar123',
+             })
+end
+
+lane :get_uploaded_android_apps do
+  sauce_apps({platform: 'android',
+              query: 'test.apk',
+              region: 'eu'})
+end
