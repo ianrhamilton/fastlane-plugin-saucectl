@@ -14,7 +14,16 @@ fastlane add_plugin rsaucectl
 
 Test your iOS and and Android apps at scale using Sauce Labs toolkit.
 
-**Note to author:** Add a more detailed description about this plugin here. If your plugin contains multiple actions, make sure to mention them here.
+| Available Actions   | Description |
+|---------------------|-------------|
+| install_toolkit     |             |
+| sauce_apps          |             | 
+| disabled_tests      |             | 
+| sauce_devices       |             | 
+| delete_from_storage |             | 
+| sauce_upload        |             | 
+| sauce_runner        |             | 
+| sauce_config        |             |
 
 ## Example
 

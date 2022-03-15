@@ -16,3 +16,5 @@ bin
 sauce
 fastlane/README.md
 fastlane/report.xml
+.sass-cache
+_site
