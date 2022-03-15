@@ -1,13 +1,13 @@
 # fastlane-plugin-saucectl
 
-[![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-rsaucectl)
-[![codecov](https://codecov.io/gh/ianrhamilton/fastlane-plugin-rsaucectl/branch/main/graph/badge.svg?token=NSVhqgYFYv)](https://codecov.io/gh/ianrhamilton/fastlane-plugin-rsaucectl)
+[![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-saucectl)
+[![codecov](https://codecov.io/gh/ianrhamilton/fastlane-plugin-rsaucectl/branch/main/graph/badge.svg?token=NSVhqgYFYv)](https://codecov.io/gh/ianrhamilton/fastlane-plugin-saucectl)
 ## Getting Started
 
-This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To get started with `fastlane-plugin-rsaucectl`, add it to your project by running:
+This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To get started with `fastlane-plugin-saucectl`, add it to your project by running:
 
 ```bash
-fastlane add_plugin rsaucectl
+fastlane add_plugin saucectl
 ```
 
 ## About saucectl
