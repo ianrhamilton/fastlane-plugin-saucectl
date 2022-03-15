@@ -28,10 +28,8 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
-      - name: Pull Submodules
-        run: git submodule init && git submodule update
-      - name: Run tests
-        run: bundle exec rake spec
+      - name: Run tests and rubocop
+        run: bundle exec rake
         env:
           CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
       - name: Simplecov Report

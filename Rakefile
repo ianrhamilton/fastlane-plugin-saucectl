@@ -6,4 +6,10 @@ RSpec::Core::RakeTask.new
 require 'rubocop/rake_task'
 RuboCop::RakeTask.new(:rubocop)
 
-task(default: [:spec, :rubocop])
+desc "Initialize git submodules"
+task :init do
+  system "git submodule init"
+  system "git submodule update"
+end
+
+task(default: [:init, :spec, :rubocop])

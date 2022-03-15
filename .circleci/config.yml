@@ -17,16 +17,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Pull Submodules"
-          command: |
-            git submodule init
-            git submodule update
-      - run:
           name: Instal deps
           command: bundle install
       - run:
-          name: Run tests
-          command: bundle exec rake test
+          name: Run specs and rubocop
+          command: bundle exec rake
 workflows:
   sample: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
