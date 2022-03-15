@@ -29,11 +29,7 @@ module Fastlane
       end
 
       def self.description
-        "Returns set of disabled ui test cases"
-      end
-
-      def self.details
-        "Returns set of disabled ui test cases, for android searches for @Ignore tests, and for ios skipped tests within an xcode test plan"
+        "Fetches any disabled ui test cases (for android searches for @Ignore tests, and for ios skipped tests within an xcode test plan). Will be used in future for generating pretty HTML reports"
       end
 
       def self.available_options

@@ -11,7 +11,7 @@ module Fastlane
       end
 
       def self.description
-        "Install sauce labs toolkit binary"
+        "Installs the Sauce Labs saucectl cli binary"
       end
 
       def self.authors

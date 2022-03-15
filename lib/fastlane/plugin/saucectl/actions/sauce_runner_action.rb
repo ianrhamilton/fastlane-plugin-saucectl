@@ -10,7 +10,7 @@ module Fastlane
       end
 
       def self.description
-        "Execute automated tests on sauce labs platform via saucectl binary"
+        "Execute automated tests on sauce labs platform via saucectl binary for specified configuration"
       end
 
       def self.available_options

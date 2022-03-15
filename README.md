@@ -10,20 +10,27 @@ This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To 
 fastlane add_plugin saucectl
 ```
 
-## About saucectl
+## About fastlane-plugin-saucectl
 
-Test your iOS and and Android apps at scale using Sauce Labs toolkit.
+The purpose of this plugin is to simplify the set up, configuration, upload, and execution of espresso and xcuitests via the [Sauce Labs](https://saucelabs.com/) platform by utilizing fastlane which will enable you to test your iOS and and Android apps at scale using [Sauce Labs CLI](https://docs.saucelabs.com/dev/cli/saucectl/).
 
 | Available Actions   | Description |
 |---------------------|-------------|
-| install_toolkit     |             |
-| sauce_apps          |             | 
-| disabled_tests      |             | 
-| sauce_devices       |             | 
-| delete_from_storage |             | 
-| sauce_upload        |             | 
-| sauce_runner        |             | 
-| sauce_config        |             |
+| install_toolkit     | Installs the Sauce Labs saucectl cli binary            |
+| sauce_upload        | Upload test artifacts to sauce labs storage            | 
+| sauce_config        | Create SauceLabs configuration file for test execution based on given parameters            |
+| sauce_runner        | Execute automated tests on sauce labs platform via saucectl binary for specified configuration             | 
+| delete_from_storage | Delete test artifacts from sauce labs storage by storage id or group id            |
+| sauce_apps          | Returns the set of files by specific app id that have been uploaded to Sauce Storage by the requester             |
+| sauce_devices       | Returns a list of Device IDs for all devices in the data center that are currently free for testing.            |
+| disabled_tests      | Fetches any disabled ui test cases (for android searches for @Ignore tests, and for ios skipped tests within an xcode test plan). Plan is to use this in the future for generating pretty HTML reports             | 
+
+An order of which you may utilize the above actions in your continuous integration platform could be:
+1. Install the saucectl binary via `install_toolkit`
+2. Upload your test artifacts to Sauce Labs storage (for example app apk, and test runner apk)
+3. Create config.yml for given parameters via `sauce_config` 
+4. Execute test based on specified config via `sauce_runner`
+5. Delete test artifacts via `delete_from_storage` so that your storage does not fill up (if you're executing tests on every PR, for example)
 
 ## Example
 
@@ -36,7 +43,7 @@ Check out the [example `Fastfile`](fastlane/Fastfile) to see how to use this plu
 To run both the tests, and code style validation, run
 
 ```
-rake
+rake spec
 ```
 
 To automatically fix many of the styling issues, use
