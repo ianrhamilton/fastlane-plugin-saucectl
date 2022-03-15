@@ -1,52 +1,63 @@
 ---
 layout: page
-title: Sauce Labs applications
+title: Get applications
 permalink: /apps/
 ---
 
-### Get App Storage Files
+# Get App Storage Files
+
 Returns the set of files by specific app id that have been uploaded to Sauce Storage by the requester
 
+# Help
+Information and help for the `sauce_apps` action can be printed out by executed the following command:
+```sh
+fastlane action sauce_apps
+
+```
+
+---------------------------------------------------------------------------
 ## `platform`
-> Device platform that you wish to query
 
-| Required | ***true***         |
-| Type     | ***String***       |
-| Options  | ***ios, android*** |
-___________________________________________________________________________
+| Required | Type     | Description                            | Options         |
+|----------|----------|----------------------------------------|-----------------|
+| `true`   | `String` | Device platform that you wish to query | `ios`,`android` |   
 
+---------------------------------------------------------------------------
 ## `query`
-> Any search term (such as build number or file name) by which you want to filter results
 
-| Required | ***true***         |
-| Type     | ***String***       |
+| Required | Type     | Description                                                                             | 
+|----------|----------|-----------------------------------------------------------------------------------------|
+| `true`   | `String` | Any search term (such as build number or file name) by which you want to filter results |  
+
 ___________________________________________________________________________
-
 ## `region`
-> Data Center you wish to query
 
-| Required | ***true***         |
-| Type     | ***String***       |
-| Options  | ***us, eu***       |
-___________________________________________________________________________
+| Required | Type     | Description                   | Options    |
+|----------|----------|-------------------------------|------------|
+| `true`   | `String` | Data Center you wish to query | `us`, `eu` |
+
+---------------------------------------------------------------------------------
 ## `sauce_username`
-> Your sauce labs username in order to authenticate requests
 
-If this parameter is not set the plugin expects there to be an `SAUCE_USERNAME` environment variable set. 
+| Required  | Type     | Description                                                | 
+|-----------|----------|------------------------------------------------------------|
+| `false` | `String` | Your sauce labs username in order to authenticate requests |
 
-| Required | ***false***        |
-| Type     | ***String***       |
+**If this parameter is not set the plugin expects there to be an `SAUCE_USERNAME` environment variable set.**
+
 ___________________________________________________________________________
 ## `sauce_access_key`
-> Your sauce labs access key in order to authenticate requests
 
-If this parameter is not set the plugin expects there to be an `SAUCE_ACCESS_KEY` environment variable set.
+| Required | Type     | Description                                                  | 
+|----------|----------|--------------------------------------------------------------|
+| `false`  | `String` | Your sauce labs access key in order to authenticate requests |
 
-| Required | ***false***        |
-| Type     | ***String***       |
-___________________________________________________________________________
+**If this parameter is not set the plugin expects there to be an `SAUCE_ACCESS_KEY` environment variable set.**
 
-Example actions
+__________________________________________________________________________
+
+# Example actions
+
 ```ruby
 lane :get_apps do
           sauce_apps({platform: 'android',
@@ -87,7 +98,7 @@ Response
             "id": "1234-1234-1234-1234-1234",
             "owner": {
                 "id": "1234-1234-1234-1234-1234",
-                "org_id": "1234-1234-1234-1234-1234"
+                "org_id": "1235-1236"
             },
             "name": "test.apk",
             "upload_timestamp": 1636368973,
@@ -108,7 +119,7 @@ Response
             },
             "access": {
                 "team_ids": [
-                    "1234-1234-1234-1234-1234"
+                  "1235-1236"
                 ],
                 "org_ids": []
             },

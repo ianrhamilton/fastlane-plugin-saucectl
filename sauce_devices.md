@@ -1,45 +1,58 @@
 ---
 layout: page
-title: Sauce Labs real Devices
+title: Get available RDC Devices
 permalink: /devices/
 ---
 
-### Sauce Devices
+# Sauce Devices
+
 Use the Real Device Cloud (RDC) API methods to look up device types and availability in your data center.
 
+# Help
+Information and help for the `sauce_devices` action can be printed out by executed the following command:
+```sh
+  fastlane action sauce_devices
+```
+
+
+
+---------------------------------------------------------------------------
 ## `platform`
-> Device platform that you wish to query
 
-| Required | ***true***         |
-| Type     | ***String***       |
-| Options  | ***ios, android*** |
+| Required | Type     | Description                            | Options         |
+|----------|----------|----------------------------------------|-----------------|
+| `true`   | `String` | Device platform that you wish to query | `ios`,`android` |   
 
+---------------------------------------------------------------------------
 ## `region`
-> Data Center you wish to query
 
-| Required | ***true***         |
-| Type     | ***String***       |
-| Options  | ***us, eu***       |
+| Required | Type     | Description                   | Options    |
+|----------|----------|-------------------------------|------------|
+| `true`   | `String` | Data Center you wish to query | `us`, `eu` |
 
+---------------------------------------------------------------------------
 ## `sauce_username`
-> Your sauce labs username in order to authenticate requests
 
-If this parameter is not set the plugin expects there to be an `SAUCE_USERNAME` environment variable set. 
+| Required | Type     | Description                                                | 
+|----------|----------|------------------------------------------------------------|
+| `false`  | `String` | Your sauce labs username in order to authenticate requests |
 
-| Required | ***false***        |
-| Type     | ***String***       |
+**If this parameter is not set the plugin expects there to be an `SAUCE_USERNAME` environment variable set.**
 
+___________________________________________________________________________
 ## `sauce_access_key`
-> Your sauce labs access key in order to authenticate requests
 
-If this parameter is not set the plugin expects there to be an `SAUCE_ACCESS_KEY` environment variable set.
+| Required | Type     | Description                                                  | 
+|----------|----------|--------------------------------------------------------------|
+| `false`  | `String` | Your sauce labs access key in order to authenticate requests |
 
-| Required | ***false***        |
-| Type     | ***String***       |
+**If this parameter is not set the plugin expects there to be an `SAUCE_ACCESS_KEY` environment variable set.**
 
-Example actions
+__________________________________________________________________________
 
-Get android only devices
+# Example actions
+
+### Get Android devices
 
 ```ruby
 lane :get_android_devices do
@@ -49,13 +62,13 @@ lane :get_android_devices do
                         sauce_access_key: 'bar123'})
 end
 
-lane :get_ios_devices do
-         sauce_devices({platform: 'ios',
+lane :get_android_devices do
+         sauce_devices({platform: 'android',
                         region: 'eu'})
 end 
 ```
 
-Example Response
+# Example Response
 ```json
 [
   "Samsung_Galaxy_S21_Plus_5G_real",
@@ -212,7 +225,7 @@ Example Response
 ]
 ```
 
-Get ios only devices
+### Get ios only devices
 
 ```ruby
          sauce_devices({platform: 'ios',

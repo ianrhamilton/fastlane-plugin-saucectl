@@ -8,28 +8,33 @@ permalink: /execute-tests/
 Execute automated tests on sauce labs platform via saucectl binary
 
 ## `sauce_username`
-> Your sauce labs username in order to authenticate requests
 
-If this parameter is not set the plugin expects there to be an `SAUCE_USERNAME` environment variable set.
+| Required | Type     | Description                                                | 
+|----------|----------|------------------------------------------------------------|
+| `false`  | `String` | Your sauce labs username in order to authenticate requests |
 
-| Required | ***false***        |
-| Type     | ***String***       |
+**If this parameter is not set the plugin expects there to be an `SAUCE_USERNAME` environment variable set.**
 
+___________________________________________________________________________
 ## `sauce_access_key`
-> Your sauce labs access key in order to authenticate requests
 
-If this parameter is not set the plugin expects there to be an `SAUCE_ACCESS_KEY` environment variable set.
+| Required | Type     | Description                                                  | 
+|----------|----------|--------------------------------------------------------------|
+| `false`  | `String` | Your sauce labs access key in order to authenticate requests |
 
-| Required | ***false***        |
-| Type     | ***String***       |
+**If this parameter is not set the plugin expects there to be an `SAUCE_ACCESS_KEY` environment variable set.**
 
-If you have environment variables set for username and access key
+__________________________________________________________________________
+# Example action
 
 ```ruby
-    sauce_runner
+lane :execute_tests do
+  sauce_runner
+end
+
 ```
 
-Set authentication parameters
+### Set authentication parameters
 ```ruby
 lane :execute_tests do
     sauce_runner(sauce_username: 'myUsername',
@@ -37,5 +42,4 @@ lane :execute_tests do
 end 
 
 ```
-
-
+__________________________________________________________________

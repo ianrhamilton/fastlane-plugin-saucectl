@@ -4,60 +4,75 @@ title: Configuration
 permalink: /config/
 ---
 
-### Sauce Config
-Sauce Labs uses its framework agnostic test orchestrator saucectl in order to execute Espresso and XCUITest tests based on one or more configuration files. Saucectl relies on a YAML specification file to determine exactly which tests to run and how to run them. 
+# Sauce Config action
+Sauce Labs uses its framework agnostic test orchestrator saucectl in order to execute Espresso and XCUITest tests based on one or more configuration files. Saucectl relies on a YAML specification file to determine exactly which tests to run and how to run them. Using this plugin you can automatically generate the required configuration file using the `sauce_config` action.
 
-Using this plugin you can automatically generate the required configuration file using the `sauce_config` action.
+***Please NOTE*** in order for you to use this plugin to execute UI tests, your test class names must proceed with `Spec`, `Specs`, `Tests`, or `Test`, for example `ExampleSpec`, `ExampleSpecs`, `ExampleTest`, `ExampleTests` Some. And test case names **must** begin with `test`, for example `testIDoSomething`, `testIDoSomethingElse`. 
+This is so that the functions that search for tests are able to first find the test classes, and then proceed to search for test cases within these classes.
+**Failure to do this will result in missing test classes and test cases from your test run**.
 
 This page defines each of the configuration parameters that is required, or optionally properties specific to running tests.
 
-### Supported test frameworks
+# Supported test frameworks
     1. Espresso
     2. XCUITest
 
-### Configuring Tests using `sauce_config`
+# Help
+Information and help for the `sauce_config` action can be printed out by executed the following command:
+```sh
+fastlane action sauce_config
+```
+
+--------------------------------------------------------------------
+# Parameters
 
 ## `platform`
-> Application under test platform
 
-| Required | ***true***         |
-| Type     | ***String***       |
-| Options  | ***ios, android*** |
+| Required   | Type     | Description                     | Options         |
+|------------|----------|---------------------------------|-----------------|
+| ***true*** | `String` | Application under test platform | `ios`,`android` |   
 
+---------------------------------------------------------------------
 ## `kind`
-> Specifies which framework is associated with the automation tests configured in this specification
 
-| Required | ***true***         |
-| Type     | ***String***       |
-| Options  | ***espresso, xcuitest*** |
+| Required   | Type     | Description                                                                                        | Options               |
+|------------|----------|----------------------------------------------------------------------------------------------------|-----------------------|
+| ***true*** | `String` | Specifies which framework is associated with the automation tests configured in this specification | `espresso`,`xcuitest` |   
 
+---------------------------------------------------------------------
 ## `app`
-> The path to the application under test
 
-| Required | ***true***         |
-| Type     | ***String***       |
+| Required   | Type     | Description                            | 
+|------------|----------|----------------------------------------|
+| ***true*** | `String` | The path to the application under test |
 
+---------------------------------------------------------------------
 ## `test_app`
-> The path to the testing application (test runner)
 
-| Required | ***true***         |
-| Type     | ***String***       |
+| Required   | Type     | Description                                       | 
+|------------|----------|---------------------------------------------------|
+| ***true*** | `String` | The path to the testing application (test runner) |
 
+---------------------------------------------------------------------
 ## `region`
-> Data Center region (us or eu), set using: region: 'eu'
 
-| Required | ***true***         |
-| Type     | ***String***       |
-| Options  | ***us, eu***       |
+| Required   | Type     | Description                                            | Options   |
+|------------|----------|--------------------------------------------------------|-----------|
+| ***true*** | `String` | Data Center region (us or eu), set using: region: 'eu' | `us`,`eu` |   
 
+---------------------------------------------------------------------
 ## `retries`
-> Sets the number of times to retry a failed suite
 
-| Optional | ***true***         |
-| Type     | ***Integer***      |
+| Required    | Type      | Description                                      | 
+|-------------|-----------|--------------------------------------------------|
+| ***false*** | `Integer` | Sets the number of times to retry a failed suite |
 
+---------------------------------------------------------------------
 ## `test_distribution`
-> Test run distribution method. 
+
+| Required    | Type     | Description                   | Default Method |
+|-------------|----------|-------------------------------|----------------|
+| ***false*** | `String` | Test run distribution method. | `class`        |
 
 ### Why distribute tests?
 One of the main drawbacks of the native sauce platform is the long running test run or suite videos. Long running videos make it difficult to debug failures,
@@ -69,10 +84,12 @@ If you distribute suites by test case it may take slightly longer, however you w
 The Saucectl plugin will scan the specified path to tests for test classes, test cases, or packages. 
 The plugin will then instruct saucectl to treat each specified option as a suite per specified device(s) or virtual device(s).
 
-| class    | Considers 1 test class to 1 suite per device or virtual device under test        |
-| testCase | Considers 1 test case equal to 1 suite per device or virtual device under test       |
-| package  | Considers 1 package equal to 1 suite per device or virtual device under test |
-| shard    | Distributes test cases evenly between number of devices or emulators |
+| Distribution method       | Description                                                                    | 
+|---------------------------|--------------------------------------------------------------------------------|
+| `class`                   | Considers 1 test class to 1 suite per device or virtual device under test      |
+| `testCase`                | Considers 1 test case equal to 1 suite per device or virtual device under test |
+| `package`                 | Considers 1 package equal to 1 suite per device or virtual device under test   |
+ | `shard`                   | Distributes test cases evenly between number of devices or emulators           |
 
 **Example**
 
@@ -85,9 +102,12 @@ Default: `class`
 The Saucectl plugin has the capabilities to either read a user specified Test Plan, or scan a UI Test target for test classes, and test cases. 
 The plugin will then instruct saucectl to treat each specified option as a suite per specified real device(s).
 
-| class     | Considers 1 class equal to 1 suite per device or virtual device under test      |
-| testCase  | Considers 1 test case equal to 1 suite per device or virtual device under test  |
-| shard     | Distributes test cases evenly between number of real devices  |
+
+| Distribution method       | Description                                                                    | 
+|---------------------------|--------------------------------------------------------------------------------|
+| `class`                   | Considers 1 test class to 1 suite per device or virtual device under test      |
+| `testCase`                | Considers 1 test case equal to 1 suite per device or virtual device under test |
+| `shard`                   | Distributes test cases evenly between number of devices or emulators           |
 
 **Example**
     
@@ -95,26 +115,31 @@ The plugin will then instruct saucectl to treat each specified option as a suite
 
 Default: `class`
 
+---------------------------------------------------------------------
 ## `test_class`
-> Instructs saucectl to only run the specified classes for this test suite.
 
-| Optional | ***true***         |
-| Type     | ***Array***        |
+| Required   | Description                                                                    | 
+|------------|--------------------------------------------------------------------------------|
+| `false`    | Instructs saucectl to only run the specified classes for this test suite.      |
 
 **Example**
 
     test_class: ['com.some.package.testing.SomeClassOne', 'com.some.package.testing.SomeClassTwo', 'com.some.package.testing.SomeClassThree', 'com.some.package.testing.SomeClassFour']
 
+---------------------------------------------------------------------
 ## `emulators`
-> The parent property that defines details for running this suite on [virtual devices](https://docs.saucelabs.com/mobile-apps/automated-testing/espresso-xcuitest/espresso/#emulators) using an emulator. NOTE: only supported on the android platform.
 
-| Optional | ***true***         |
-| Type     | ***Array***        |
+| Required | Type    | Description                                                                                                                                                                                                                                           | 
+|----------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `false`  | `Array` | The parent property that defines details for running this suite on [virtual devices](https://docs.saucelabs.com/mobile-apps/automated-testing/espresso-xcuitest/espresso/#emulators) using an emulator. NOTE: only supported on the android platform. |
 
 Required parameters for virtual devices:
 
-| name                  | name of the virtual device | ***String***       |
-| platform_versions     | platform version(s)        | ***Array***        |
+| Parameter         | Type     | Description                |
+|-------------------|----------|----------------------------|
+| name              | `String` | name of the virtual device |
+| platform_versions | `Array`  | platform version(s)        |
+
 
 **Example**
 
@@ -125,12 +150,14 @@ Optional parameter for virtual devices:
 `orientation`
 > The screen orientation to use while executing this test suite on this virtual device. Valid values are portrait or landscape.
 
+---------------------------------------------------------------------
 ## `devices`
 
-> The parent property that defines details for running this suite on [real devices](https://docs.saucelabs.com/mobile-apps/automated-testing/espresso-xcuitest/espresso/#devices). You can request a specific device using its ID, or you can specify a set of criteria to choose the first available device that matches the specifications.
 
-| Optional | ***true***         |
-| Type     | ***Array***        |
+| Required | Type    | Description                                                                                                                                                                                                                                                                                                                                 | 
+|----------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `false`  | `Array` | The parent property that defines details for running this suite on [real devices](https://docs.saucelabs.com/mobile-apps/automated-testing/espresso-xcuitest/espresso/#devices). You can request a specific device using its ID, or you can specify a set of criteria to choose the first available device that matches the specifications. |
+
 
 When an ID is specified, it supersedes the other settings.
 
@@ -171,7 +198,7 @@ Pattern Matching:
     devices: [ {name: 'Google Pixel.*', platformVersion: 8.0} ]
 
 `orientation`
-> The orientation of the device. Default: portrait
+> The orientation of the device. Default: `portrait`
 
 **Example**
 
@@ -198,74 +225,76 @@ Pattern Matching:
 
     devices: [ {name: 'Google Pixel.*', platformVersion: 8.0, carrier_connectivity: true } ]
 
+---------------------------------------------------------------------
 ## `test_target` (ios only)
 
-> **iOS only**: Name of the Xcode test target name in order to scan for test classes and test cases to execute via your chosen test distribution method
-
-| Optional | ***true***         |
-| Type     | ***String***       |
+| Required    | Type     | Description                                                                                                                             | 
+|-------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| ***false*** | `String` | Name of the Xcode test target name in order to scan for test classes and test cases to execute via your chosen test distribution method |
 
 **Example**
 
     test_target: 'NameOfMyUITests'
 
+---------------------------------------------------------------------
 ## `test_plan` (ios only)
 
-> **iOS only**: Name of the Xcode test plan containing the tests that you wish to test/skip via your chosen test distribution method.
-
-| Optional | ***true***         |
-| Type     | ***String***       |
+| Required    | Type     |     | Description                                                                                                           | 
+|-------------|----------|:----|-----------------------------------------------------------------------------------------------------------------------|
+| ***false*** | `String` |     | Name of the Xcode test plan containing the tests that you wish to test/skip via your chosen test distribution method. |
 
 **Example**
 
     test_plan: 'NameOfMyTestPlan'
 
-** Note: You must specify a test plan or test target.
+**Note: You must specify a test plan or test target.**
 
+---------------------------------------------------------------------
 ## `path_to_tests` (android only)
-> Path to your espresso tests. Default: `currentDir/app/src/androidTest/`. This directory will be scanned and will collect tests based on your chosen test distribution method.
 
-
-| Optional | ***false***        |
-| Type     | ***String***       |
+| Required   | Type     |     | Description                                                                                                                                                                   | 
+|------------|----------|:----|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ***true*** | `String` |     | Path to your espresso tests. Default: `currentDir/app/src/androidTest/`. This directory will be scanned and will collect tests based on your chosen test distribution method. |
 
 **Example**
 
     test_plan: 'NameOfMyTestPlan'
 
+---------------------------------------------------------------------
 ## `clear_data` (android only)
-> Clear package data from device between suites (or test distribution method). Default: true
 
-| Optional | ***true***          |
-| Type     | ***Boolean***       |
+| Required    | Type      | Description                                                                                  | 
+|-------------|-----------|----------------------------------------------------------------------------------------------|
+| ***false*** | `Boolean` | Clear package data from device between suites (or test distribution method). Default: `true` |
 
 **Example**
 
     clear_data: false
 
+---------------------------------------------------------------------
 ## `use_test_orchestrator` (android only)
-> User Android test orchestrator. Default: true
 
-| Optional | ***true***          |
-| Type     | ***Boolean***       |
+| Required    | Type      | Description                                     | 
+|-------------|-----------|-------------------------------------------------|
+| ***false*** | `Boolean` | User Android test orchestrator. Default: `true` |
 
 **Example**
 
     use_test_orchestrator: false
 
+---------------------------------------------------------------------
 ## `max_concurrency_size`
-> Sets the maximum number of suites to execute at the same time. If the test defines more suites than the max, excess suites are queued and run in order as each suite completes.
 
-Default: 1
-
-| Optional | ***true***          |
-| Type     | ***Integer***       |
+| Required    | Type      | Description                                  | 
+|-------------|-----------|----------------------------------------------|
+| ***false*** | `Integer` | User Android test orchestrator. Default: `1` |
 
 **Example**
 
     max_concurrency_size: 20
 
-Example actions
+---------------------------------------------------------------------
+# Example actions
 
 Create a config.yml file for android espresso based on user specified virtual device configurations
 ```ruby
@@ -282,6 +311,7 @@ lane :create_config do
 end
 ```
 
+---------------------------------------------------------------------
 Create config.yml file for android espresso based on user specified real device configurations
 
 ```ruby
@@ -298,6 +328,7 @@ lane :create_config do
 end 
 ```
 
+---------------------------------------------------------------------
 Create config.yml file for android espresso based on user specified real device configurations
 
 ```ruby
@@ -314,6 +345,7 @@ lane :create_config do
 end 
 ```
 
+---------------------------------------------------------------------
 Create real device config.yml file for android platform with test distribution method as shard
 ```ruby
 lane :create_config do
@@ -329,6 +361,7 @@ lane :create_config do
 end 
 ```
 
+---------------------------------------------------------------------
 Create config.yml file for real ios devices using xcode test target
 ```ruby
 lane :create_config do
@@ -343,6 +376,7 @@ lane :create_config do
 end 
 ```
 
+---------------------------------------------------------------------
 Create real device config.yml file for ios real devices using xcode test target and distribution method set as shard
 ```ruby
 lane :create_config do
@@ -358,6 +392,7 @@ lane :create_config do
 end 
 ```
 
+---------------------------------------------------------------------
 Create real device config.yml file for ios real devices using xcode test target and distribution method set as testCase
 
 ```ruby
@@ -374,6 +409,7 @@ lane :create_config do
 end 
 ```
 
+---------------------------------------------------------------------
 Create real device config.yml file based on xcode test plan using sharding distribution method
 
 ```ruby
@@ -390,6 +426,7 @@ lane :create_config do
 end 
 ```
 
+---------------------------------------------------------------------
 Create real device config.yml file based on xcode test plan using testCase distribution method
 
 ```ruby
@@ -405,6 +442,7 @@ lane :create_config do
 end 
 ```
 
+---------------------------------------------------------------------
 Specify an array of classes to execute on rdc
 
 ```ruby
@@ -421,6 +459,7 @@ lane :create_config do
 end 
 ```
 
+---------------------------------------------------------------------
 Specify an array of classes to execute on virtual devices
 
 ```ruby
@@ -437,6 +476,7 @@ lane :create_config do
 end 
 ```
 
+---------------------------------------------------------------------
 Specify an array of classes to execute on ios rdc
 
 ```ruby
@@ -451,3 +491,5 @@ lane :create_config do
                  })
 end 
 ```
+
+---------------------------------------------------------------------

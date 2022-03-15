@@ -1,50 +1,62 @@
 ---
 layout: page
-title: Delete Sauce Labs apps
+title: Delete apps from storage
 permalink: /delete-apps/
 ---
 
-### Delete an App Storage File
+# Delete an App Storage File
 Deletes the specified file from Sauce Storage.
 
+# Help
+Information and help for the `delete_from_storage` action can be printed out by executed the following command:
+```sh
+fastlane action delete_from_storage
+
+```
+-----------------------------------------------------------------------
+
 ## `region`
-> Data Center you wish to query
 
-| Required | ***true***         |
-| Type     | ***String***       |
-| Options  | ***us, eu***       |
-___________________________________________________________________________
+| Required | Type     | Description                   | 
+|----------|----------|-------------------------------|
+| `true`   | `String` | Data Center you wish to query |
+
+---------------------------------------------------------------------------------
 ## `sauce_username`
-> Your sauce labs username in order to authenticate requests
 
-If this parameter is not set the plugin expects there to be an `SAUCE_USERNAME` environment variable set. 
+| Required  | Type     | Description                                                | 
+|-----------|----------|------------------------------------------------------------|
+| `false` | `String` | Your sauce labs username in order to authenticate requests |
 
-| Required | ***false***        |
-| Type     | ***String***       |
+**If this parameter is not set the plugin expects there to be an `SAUCE_USERNAME` environment variable set.**
+
 ___________________________________________________________________________
 ## `sauce_access_key`
-> Your sauce labs access key in order to authenticate requests
 
-If this parameter is not set the plugin expects there to be an `SAUCE_ACCESS_KEY` environment variable set.
+| Required | Type     | Description                                                  | 
+|----------|----------|--------------------------------------------------------------|
+| `false`  | `String` | Your sauce labs access key in order to authenticate requests |
 
-| Required | ***false***        |
-| Type     | ***String***       |
-___________________________________________________________________________
+**If this parameter is not set the plugin expects there to be an `SAUCE_ACCESS_KEY` environment variable set.**
+
+__________________________________________________________________________
 ## `app_id`
-> The application id from sauce labs storage
 
-| Required | ***false***        |
-| Type     | ***String***       |
+| Required | Type     | Description                                | 
+|----------|----------|--------------------------------------------|
+| `false`  | `String` | The application id from sauce labs storage |
 
 ____________________________________________________________________________
 ## `group_id`
-> The group id for sauce labs storage
 
-| Required | ***false***        |
-| Type     | ***String***       |
+| Required | Type     | Description                         | 
+|----------|----------|-------------------------------------|
+| `false`  | `String` | The group id for sauce labs storage |
+
 ____________________________________________________________________________
 
-Example actions
+# Example actions
+
 ### Delete by app_id
 ```ruby
     lane :delete_by_app_id do
@@ -55,6 +67,8 @@ Example actions
                           })
       end 
 ```
+
+---------------------------------------------------------------------
 ### Delete by group_id
 ```ruby
   lane :delete_by_group_id do
@@ -65,3 +79,5 @@ Example actions
                         })
     end
 ```
+
+---------------------------------------------------------------------
