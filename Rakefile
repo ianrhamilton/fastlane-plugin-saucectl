@@ -12,4 +12,4 @@ task :init do
   system "git submodule update"
 end
 
-task(default: [:init, :spec, :rubocop])
+task(default: [:init, :spec])

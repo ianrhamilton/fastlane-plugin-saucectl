@@ -20,7 +20,7 @@ jobs:
           name: Instal deps
           command: bundle install
       - run:
-          name: Run specs and rubocop
+          name: Run specs
           command: bundle exec rake
 workflows:
   sample: # This is the name of the workflow, feel free to change it to better match your workflow.

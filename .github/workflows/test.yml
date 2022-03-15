@@ -23,7 +23,7 @@ jobs:
           bundler-cache: true
       - name: Install dpendencies
         run: bundle install
-      - name: Run tests and rubocop
+      - name: Run tests
         run: bundle exec rake
         env:
           CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
