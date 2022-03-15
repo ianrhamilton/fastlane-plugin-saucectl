@@ -91,10 +91,6 @@ module Fastlane
                      })"
         ]
       end
-
-      def self.return_value
-        "Returns the set of files that have been uploaded to Sauce Storage by the requestor."
-      end
     end
   end
 end

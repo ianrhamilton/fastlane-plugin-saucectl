@@ -85,10 +85,6 @@ module Fastlane
           })"
         ]
       end
-
-      def self.return_value
-        "Returns an array of disabled tests"
-      end
     end
   end
 end

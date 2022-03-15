@@ -90,10 +90,6 @@ module Fastlane
                        })"
         ]
       end
-
-      def self.return_value
-        "Returns a list of Device IDs for all devices in the data center that are currently free for testing."
-      end
     end
   end
 end

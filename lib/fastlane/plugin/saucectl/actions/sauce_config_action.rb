@@ -227,7 +227,7 @@ module Fastlane
                          test_distribution: 'testCase',
                          devices: [ {name: 'RDC One', orientation: 'portrait', platform_version: '11.0'}]
           })",
-          "sauce_config({ platform: 'android',
+          "sauce_config({platform: 'android',
                          kind: 'espresso',
                          app: 'path/to/myTestApp.apk',
                          test_app: 'path/to/myTestRunner.apk',
@@ -236,7 +236,7 @@ module Fastlane
                          test_distribution: 'shard',
                          devices: [ {name: 'RDC One', orientation: 'portrait', platform_version: '11.0'}]
           })",
-          "sauce_config({ platform: 'ios',
+          "sauce_config({platform: 'ios',
                          kind: 'xcuitest',
                          app: 'path/to/MyTestApp.ipa',
                          test_app: 'path/to/MyTestAppRunner.ipa',
@@ -244,7 +244,7 @@ module Fastlane
                          devices: [ {name: 'iPhone RDC One'}, {id: 'iphone_rdc_two'} ],
                          test_target: 'MyDemoAppUITests'
           })",
-          "sauce_config({ platform: 'ios',
+          "sauce_config({platform: 'ios',
                          kind: 'xcuitest',
                          app: 'path/to/MyTestApp.ipa',
                          test_app: 'path/to/MyTestAppRunner.ipa',
@@ -253,7 +253,7 @@ module Fastlane
                          test_target: 'MyDemoAppUITests',
                          test_distribution: 'shard',
           })",
-          " sauce_config({ platform: 'ios',
+          " sauce_config({platform: 'ios',
                          kind: 'xcuitest',
                          app: 'path/to/MyTestApp.ipa',
                          test_app: 'path/to/MyTestAppRunner.ipa',
@@ -262,7 +262,7 @@ module Fastlane
                          test_target: 'MyDemoAppUITests',
                          test_distribution: 'testCase'
           })",
-          "sauce_config({ platform: 'ios',
+          "sauce_config({platform: 'ios',
                          kind: 'xcuitest',
                          app: 'path/to/MyTestApp.ipa',
                          test_app: 'path/to/MyTestAppRunner.ipa',
@@ -271,7 +271,7 @@ module Fastlane
                          test_plan: 'EnabledUITests',
                          test_distribution: 'shard'
           })",
-          "sauce_config({ platform: 'ios',
+          "sauce_config({platform: 'ios',
                          kind: 'xcuitest',
                          app: 'path/to/MyTestApp.ipa',
                          test_app: 'path/to/MyTestAppRunner.ipa',
@@ -279,7 +279,7 @@ module Fastlane
                          devices: [ {name: 'iPhone RDC One'}, {id: 'iphone_rdc_two'} ],
                          test_plan: 'UITests'
           })",
-          "sauce_config({ platform: 'android',
+          "sauce_config({platform: 'android',
                          kind: 'espresso',
                          app: 'path/to/myTestApp.apk',
                          test_app: 'path/to/myTestRunner.apk',
@@ -288,7 +288,7 @@ module Fastlane
                          devices: [ {name: 'iPhone RDC One'}],
                          test_class: ['com.some.package.testing.SomeClassOne', 'com.some.package.testing.SomeClassTwo', 'com.some.package.testing.SomeClassThree', 'com.some.package.testing.SomeClassFour']
           })",
-          "sauce_config({ platform: 'android',
+          "sauce_config({platform: 'android',
                          kind: 'espresso',
                          app: 'path/to/myTestApp.apk',
                          test_app: 'path/to/myTestRunner.apk',
@@ -297,7 +297,7 @@ module Fastlane
                          emulators: [ {name: 'iPhone RDC One', platform_versions: ['11.0']}, {name: 'iPhone RDC Two', platform_versions: ['11.0']}],
                          test_class: ['com.some.package.testing.SomeClassOne', 'com.some.package.testing.SomeClassTwo', 'com.some.package.testing.SomeClassThree', 'com.some.package.testing.SomeClassFour']
           })",
-          "sauce_config({ platform: 'ios',
+          "sauce_config({platform: 'ios',
                          kind: 'xcuitest',
                          app: 'path/to/myTestApp.app',
                          test_app: 'path/to/myTestRunner.app',
