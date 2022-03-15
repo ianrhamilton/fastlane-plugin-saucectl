@@ -1,8 +1,8 @@
 source('https://rubygems.org')
 
 gem 'codecov', require: false, group: :test
-gem 'simplecov', require: false, group: :test
 gem 'rubocop-rspec', require: false, group: :test
+gem 'simplecov', require: false, group: :test
 
 gemspec
 
