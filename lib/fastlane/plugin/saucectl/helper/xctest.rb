@@ -108,11 +108,19 @@ module Fastlane
       def fetch_disabled_tests
         skipped = fetch_test_plan["skippedTests"]
         ui_tests = []
-        skipped.each do |test|
-          test_case = test.gsub('/', ' ').split
-          ui_tests << { class: test_case[0], tests: test_case[1].gsub(/[()]/, "").to_s }
+        skipped.each do |item|
+          if item.include?('/')
+            test_case = item.gsub('/', ' ').split
+            ui_tests << sort_ui_tests(test_case[0], test_case[1])
+          else
+            ui_tests << scan_test_class(item)
+          end
         end
         ui_tests
+      end
+
+      def sort_ui_tests(cls, test_case)
+        { class: cls, tests: test_case.gsub(/[()]/, "").to_s }
       end
 
       def all_tests
@@ -120,6 +128,18 @@ module Fastlane
         test_dir = Dir["**/#{test_target}"][0]
         search_retrieve_test_classes(test_dir).each do |f|
           next unless File.basename(f) =~ CLASS_NAME_REGEX
+
+          test_details << { class: File.basename(f).gsub(FILE_TYPE_REGEX, ""), tests: tests_from(f) }
+        end
+
+        strip_empty(test_details)
+      end
+
+      def scan_test_class(cls)
+        test_details = []
+        test_dir = Dir["**/#{test_target}"][0]
+        search_retrieve_test_classes(test_dir).each do |f|
+          next unless File.basename(f) =~ /#{cls}/
 
           test_details << { class: File.basename(f).gsub(FILE_TYPE_REGEX, ""), tests: tests_from(f) }
         end

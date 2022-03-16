@@ -82,4 +82,10 @@ describe Fastlane::Saucectl::XCTest do
     test_plan = Fastlane::Saucectl::XCTest.new(@config).fetch_disabled_tests
     expect(test_plan).to eql([{ :class => "My_Demo_AppUITests", :tests => "testNavigateCartToCatalog" }, { :class => "My_Demo_OtherTests", :tests => "testOne" }, { :class => "My_Demo_OtherTests", :tests => "testTwo" }, { :class => "My_Demo_OtherTests", :tests => "testThree" }])
   end
+
+  it "should get a mixture of test classes and test cases from test plans" do
+    @config[:test_plan] = "MixedUITests"
+    test_plan = Fastlane::Saucectl::XCTest.new(@config).scan_test_class('NavigationTest')
+    expect(test_plan).to eql([{:class=>"NavigationTest", :tests=> %w[testNavigateToCart testNavigateToMore testNavigateMoreToWebview testNavigateMoreToAbout testNavigateMoreToQRCode testNavigateMoreToGeoLocation testNavigateMoreToDrawing testNavigateFromCartToCatalog testNavigateCartToCatalog] }])
+  end
 end
