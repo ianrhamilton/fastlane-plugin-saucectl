@@ -1,8 +1,6 @@
 [submodule "my-demo-app-android"]
 	path = my-demo-app-android
 	url = https://github.com/ianrhamilton/my-demo-app-android.git
-	branch = main
 [submodule "my-demo-app-ios"]
 	path = my-demo-app-ios
 	url = https://github.com/ianrhamilton/my-demo-app-ios.git
-	branch = main
