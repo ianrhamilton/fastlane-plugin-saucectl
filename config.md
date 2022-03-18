@@ -5,10 +5,13 @@ permalink: /config/
 ---
 
 # Sauce Config action
-Sauce Labs uses its framework agnostic test orchestrator saucectl in order to execute Espresso and XCUITest tests based on one or more configuration files. Saucectl relies on a YAML specification file to determine exactly which tests to run and how to run them. Using this plugin you can automatically generate the required configuration file using the `sauce_config` action.
+Sauce Labs uses its framework agnostic test orchestrator saucectl in order to execute Espresso and XCUITest tests based on one or more configuration files. Saucectl relies on a YAML specification file to determine exactly which tests to run and how to run them.
 
-***Please NOTE*** in order for you to use this plugin to execute UI tests, your test class names must proceed with `Spec`, `Specs`, `Tests`, or `Test`, for example `ExampleSpec`, `ExampleSpecs`, `ExampleTest`, `ExampleTests` Some. And test case names **must** begin with `test`, for example `testIDoSomething`, `testIDoSomethingElse`. 
-This is so that the functions that search for tests are able to first find the test classes, and then proceed to search for test cases within these classes.
+Using this plugin you can automatically generate the required configuration file using the fastlane `sauce_config` action.
+
+**Please NOTE in order for you to use this plugin to execute UI tests, your test class names must proceed with `Spec`, `Specs`, `Tests`, or `Test`**, for example `ExampleSpec`, `ExampleSpecs`, `ExampleTest`, `ExampleTests`. 
+**Your test case names must also begin with `test`**, for example `testIDoSomething`, `testIDoSomethingElse`. This is so that the the plugin can search for test classes and their included test cases.
+
 **Failure to do this will result in missing test classes and test cases from your test run**.
 
 This page defines each of the configuration parameters that is required, or optionally properties specific to running tests.
@@ -75,13 +78,13 @@ fastlane action sauce_config
 | ***false*** | `String` | Test run distribution method. | `class`        |
 
 ### Why distribute tests?
-One of the main drawbacks of the native sauce platform is the long running test run or suite videos. Long running videos make it difficult to debug failures,
+One of the only drawbacks of the native sauce platform is the long running test runs or suite videos. Long running videos make it difficult to debug failures,
 for example; if you have a single suite of tests that takes 10 minutes to execute, and that execution contains a single failure, you would need need scroll through a ten minute video in order to view the test failure. This can be quite frustrating!
 If you distribute suites by test case it may take slightly longer, however you will save far more time debugging failures, and can save and share a short video of the exact failure.
 
 ## Espresso Test distribution options
 
-The Saucectl plugin will scan the specified path to tests for test classes, test cases, or packages. 
+The saucectl plugin will scan the specified path to tests for test classes, test cases, or packages. 
 The plugin will then instruct saucectl to treat each specified option as a suite per specified device(s) or virtual device(s).
 
 | Distribution method       | Description                                                                    | 
@@ -89,13 +92,121 @@ The plugin will then instruct saucectl to treat each specified option as a suite
 | `class`                   | Considers 1 test class to 1 suite per device or virtual device under test      |
 | `testCase`                | Considers 1 test case equal to 1 suite per device or virtual device under test |
 | `package`                 | Considers 1 package equal to 1 suite per device or virtual device under test   |
- | `shard`                   | Distributes test cases evenly between number of devices or emulators           |
+ | `shard`                   | Distributes test cases evenly between n number of devices or emulators         |
 
 **Example**
 
     test_distribution: 'testCase'
 
-Default: `class`
+`testCase`
+
+![testCase distribution for virtual devices](assets/saucectl_test_case.drawio.png?raw=true "testCase")
+
+**Please note**, this is only recommended when executing tests via **virtual devices**. The reason for this is because they can be scaled based on your `max_concurrency`. This is of course unless you're lucky enough to have multiple of the same device and OS combinations that you can execute at scale.
+
+For example, given your project has three test cases, and I create a config with the following config:
+
+```ruby
+lane :create_config do
+    sauce_config(platform: 'android',
+                 kind: 'espresso',
+                 app: 'path/to/myTestApp.apk',
+                 test_app: 'path/to/myTestRunner.apk',
+                 path_to_tests: 'my-demo-app-android/app/src/androidTest',
+                 max_concurrency: 3,
+                 test_distribution: 'testCase',
+                 region: 'eu',
+                 emulators: [ {name: 'Android GoogleApi Emulator', platform_versions: ['11.0']}]
+             )
+end
+```
+
+Would produce:
+```yaml
+---
+apiVersion: v1alpha
+kind: espresso
+retries: 0
+sauce:
+  region: eu-central-1
+  concurrency: 3
+  metadata:
+    name: testing/somebuild-name-15
+    build: 'Release '
+espresso:
+  app: path/to/myTestApp.apk
+  testApp: path/to/myTestRunner.apk
+artifacts:
+  download:
+    when: always
+    match:
+    - junit.xml
+    directory: "./artifacts/"
+reporters:
+  junit:
+    enabled: true
+suites:
+- name: testing/somebuild-name-15-testClass#testCaseOne
+  testOptions:
+    class: com.my.project.TestClass#testCaseOne
+    clearPackageData: true
+    useTestOrchestrator: true
+  emulators:
+  - name: Android GoogleApi Emulator
+    orientation: portrait
+    platformVersions:
+    - '11.0'
+- name: testing/somebuild-name-15-testClass#testCaseTwo
+  testOptions:
+    class: com.my.project.TestClass#testCaseTwo
+    clearPackageData: true
+    useTestOrchestrator: true
+  emulators:
+    - name: Android GoogleApi Emulator
+      orientation: portrait
+      platformVersions:
+        - '11.0'
+- name: testing/somebuild-name-15-testClass#testCaseThree
+  testOptions:
+    class: com.my.project.TestClass#testCaseThree
+    clearPackageData: true
+    useTestOrchestrator: true
+  emulators:
+    - name: Android GoogleApi Emulator
+      orientation: portrait
+      platformVersions:
+        - '11.0'
+```
+
+`class`
+
+![test class distribution](assets/saucectl_test_class.drawio.png?raw=true "testCase")
+
+For example, given your project has three test classes, and I create a config with the following config:
+
+```ruby
+lane :create_config do
+    sauce_config(platform: 'android',
+                 kind: 'espresso',
+                 app: 'path/to/myTestApp.apk',
+                 test_app: 'path/to/myTestRunner.apk',
+                 path_to_tests: 'my-demo-app-android/app/src/androidTest',
+                 max_concurrency: 3,
+                 test_distribution: 'class',
+                 region: 'eu',
+                 emulators: [ {name: 'Android GoogleApi Emulator', platform_versions: ['11.0']}]
+             )
+end
+```
+
+The saucectl plugin will gather all test classes and distribute them to your specified DUT (devices/emulators under test) and produce the following config:
+
+```yaml
+
+```
+
+
+
 
 ## XCUITest Test distribution options
 
