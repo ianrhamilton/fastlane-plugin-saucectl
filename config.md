@@ -94,11 +94,9 @@ The plugin will then instruct saucectl to treat each specified option as a suite
 | `package`                 | Considers 1 package equal to 1 suite per device or virtual device under test   |
  | `shard`                   | Distributes test cases evenly between n number of devices or emulators         |
 
-**Example**
+##Example
 
-    test_distribution: 'testCase'
-
-`testCase`
+###`test_distribution: 'testCase'`
 
 ![testCase distribution for virtual devices](assets/saucectl_test_case.drawio.png?raw=true "testCase")
 
@@ -178,7 +176,7 @@ suites:
         - '11.0'
 ```
 
-`class`
+##`test_distribution: 'class'`
 
 ![test class distribution](assets/saucectl_test_class.drawio.png?raw=true "testCase")
 
@@ -199,14 +197,88 @@ lane :create_config do
 end
 ```
 
-The saucectl plugin will gather all test classes and distribute them to your specified DUT (devices/emulators under test) and produce the following config:
+The saucectl plugin will gather all test classes and distribute them to your specified DUT (devices/emulators under test) based on specified `max_concurrency` and produce the following config:
 
 ```yaml
+---
+apiVersion: v1alpha
+kind: espresso
+retries: 0
+sauce:
+  region: eu-central-1
+  concurrency: 3
+  metadata:
+    name: testing/somebuild-name-15
+    build: 'Release '
+espresso:
+  app: path/to/myTestApp.apk
+  testApp: path/to/myTestRunner.apk
+artifacts:
+  download:
+    when: always
+    match:
+    - junit.xml
+    directory: "./artifacts/"
+reporters:
+  junit:
+    enabled: true
+suites:
+- name: testing/somebuild-name-15-testClassOne
+  testOptions:
+    class: com.some.test.TestClassOne
+    clearPackageData: true
+    useTestOrchestrator: true
+  emulators:
+  - name: Android GoogleApi Emulator
+    orientation: portrait
+    platformVersions:
+    - '11.0'
+- name: testing/somebuild-name-15-testClassTwo
+  testOptions:
+    class: com.some.test.TestClassTwo
+    clearPackageData: true
+    useTestOrchestrator: true
+  emulators:
+    - name: Android GoogleApi Emulator
+      orientation: portrait
+      platformVersions:
+        - '11.0'
+- name: testing/somebuild-name-15-testClassThree
+  testOptions:
+    class: com.some.test.TestClassThree
+    clearPackageData: true
+    useTestOrchestrator: true
+  emulators:
+    - name: Android GoogleApi Emulator
+      orientation: portrait
+      platformVersions:
+        - '11.0'
+```
+
+##`test_distribution: 'shard'`
+
+![test class distribution](assets/saucectl_test_shard.drawio.png?raw=true "testCase")
+
+Espresso and Sauce Labs have their own implementation of test sharding for parallel execution, this is **not the same**. The fastlane-plugin-saucectl supports cross platform sharding, and this implementation will gather test classes and distribute evenly between specified devices or virtual devices. 
+For example, given your project has six test classes, and I create a config with the following config:
+
+```ruby
+lane :create_config do
+ sauce_config(platform: 'android',
+              kind: 'espresso',
+              app: 'path/to/myTestApp.apk',
+              test_app: 'path/to/myTestRunner.apk',
+              path_to_tests: 'my-demo-app-android/app/src/androidTest',
+              max_concurrency: 3,
+              test_distribution: 'class',
+              region: 'eu',
+              emulators: [ {name: 'Android GoogleApi Emulator', platform_versions: ['11.0']}]
+ )
+end
 
 ```
 
-
-
+--------------------------------------------------------------------
 
 ## XCUITest Test distribution options
 
