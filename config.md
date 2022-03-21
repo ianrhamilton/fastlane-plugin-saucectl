@@ -378,6 +378,8 @@ suites:
       private: true
 ```
 
+## `test_distribution: 'shard'`
+
 ---------------------------------------------------------------------
 ## `emulators`
 
