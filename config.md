@@ -178,7 +178,7 @@ suites:
 
 ##`test_distribution: 'class'`
 
-![test class distribution](assets/saucectl_test_class.drawio.png?raw=true "testCase")
+![test class distribution](assets/saucectl_test_class.drawio.png?raw=true "class")
 
 For example, given your project has three test classes, and I create a config with the following config:
 
@@ -197,7 +197,7 @@ lane :create_config do
 end
 ```
 
-The saucectl plugin will gather all test classes and distribute them to your specified DUT (devices/emulators under test) based on specified `max_concurrency` and produce the following config:
+The saucectl plugin will gather all test classes and **will create a suite for each class**. 
 
 ```yaml
 ---
@@ -255,11 +255,13 @@ suites:
         - '11.0'
 ```
 
+Therefore the test run will be limited to each class, hence shortening the length of test suites and video recordings. 
+
 ##`test_distribution: 'shard'`
 
 ![test class distribution](assets/saucectl_test_shard.drawio.png?raw=true "testCase")
 
-Espresso and Sauce Labs have their own implementation of test sharding for parallel execution, this is **not the same**. The fastlane-plugin-saucectl supports cross platform sharding, and this implementation will gather test classes and distribute evenly between specified devices or virtual devices. 
+Espresso and Sauce Labs have their [own implementation of test sharding](https://docs.saucelabs.com/mobile-apps/automated-testing/espresso-xcuitest/espresso/#numshards) for parallel execution, this is **not the same**. The fastlane-plugin-saucectl supports cross platform sharding, and this implementation will gather test classes and distribute evenly between specified devices or virtual devices. 
 For example, given your project has six test classes, and I create a config with the following config:
 
 ```ruby
@@ -278,6 +280,8 @@ end
 
 ```
 
+The above config will enable parallel execution based on the given number of test classes and `devices` or `emulators`. In the above case it will distribute 6 classes across 3 emulators (6 / 3), therefore generating 3 suites.
+
 --------------------------------------------------------------------
 
 ## XCUITest Test distribution options
@@ -288,26 +292,91 @@ The plugin will then instruct saucectl to treat each specified option as a suite
 
 | Distribution method       | Description                                                                    | 
 |---------------------------|--------------------------------------------------------------------------------|
-| `class`                   | Considers 1 test class to 1 suite per device or virtual device under test      |
 | `testCase`                | Considers 1 test case equal to 1 suite per device or virtual device under test |
+| `class`                   | Considers 1 test class to 1 suite per device or virtual device under test      |
 | `shard`                   | Distributes test cases evenly between number of devices or emulators           |
 
-**Example**
-    
-    test_distribution: 'testCase'
+## `test_distribution: 'testCase'`
 
-Default: `class`
+![testCase distribution](assets/saucectl_test_ios_testcase.drawio.png?raw=true "testCase")
 
----------------------------------------------------------------------
-## `test_class`
+**Please note**, although this distribution method is available, it is **not recommended** for long running test suites. Hopefully in the future Sauce Labs will support virtual device testing for XCUITest, at that point this option will be useful as you can utilize your VM capacity. For now you can consider this as an experimental feature.
 
-| Required   | Description                                                                    | 
-|------------|--------------------------------------------------------------------------------|
-| `false`    | Instructs saucectl to only run the specified classes for this test suite.      |
+## `test_distribution: 'class'`
 
-**Example**
+![testCase distribution](assets/saucectl_test_ios_testclass.drawio.png?raw=true "testCase")
 
-    test_class: ['com.some.package.testing.SomeClassOne', 'com.some.package.testing.SomeClassTwo', 'com.some.package.testing.SomeClassThree', 'com.some.package.testing.SomeClassFour']
+For example, given your project has three test classes, and I create a config with the following config:
+
+```ruby
+lane :create_config do
+    sauce_config({platform: 'ios',
+                  kind: 'xcuitest',
+                  app: 'path/to/MyTestApp.ipa',
+                  test_app: 'path/to/MyTestAppRunner.ipa',
+                  region: 'eu',
+                  devices: [ {name: 'iPhone 11'} ],
+                  test_target: 'MyDemoAppUITests'
+                 })
+end 
+```
+
+Would generate the following config that **creates a suite for each class**:
+
+```yaml
+apiVersion: v1alpha
+kind: xcuitest
+retries: 0
+sauce:
+  region: eu-central-1
+  concurrency: 3
+  metadata:
+    name: testing/somebuild-name-15
+    build: 'Release '
+xcuitest:
+  app: path/to/MyTestApp.ipa
+  testApp: path/to/MyTestAppRunner.ipa
+artifacts:
+  download:
+    when: always
+    match:
+    - junit.xml
+    directory: "./artifacts/"
+reporters:
+  junit:
+    enabled: true
+suites:
+- name: testing/somebuild-name-15-firstSpec
+  testOptions:
+    class: EmiratesUITests.FirstSpec
+  devices:
+  - name: 'iPhone 11'
+    orientation: portrait
+    options:
+      carrierConnectivity: false
+      deviceType: PHONE
+      private: true
+- name: testing/somebuild-name-15-secondSpec
+  testOptions:
+   class: EmiratesUITests.SecondSpec
+  devices:
+   - name: 'iPhone 11'
+     orientation: portrait
+     options:
+      carrierConnectivity: false
+      deviceType: PHONE
+      private: true
+- name: testing/somebuild-name-15-thirdSpec
+  testOptions:
+   class: EmiratesUITests.ThirdSpec
+  devices:
+   - name: 'iPhone 11'
+     orientation: portrait
+     options:
+      carrierConnectivity: false
+      deviceType: PHONE
+      private: true
+```
 
 ---------------------------------------------------------------------
 ## `emulators`
