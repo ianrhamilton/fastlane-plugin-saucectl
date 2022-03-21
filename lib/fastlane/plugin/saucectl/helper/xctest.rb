@@ -62,7 +62,7 @@ module Fastlane
 
         test_distribution = @config[:test_plan].nil? ? @config[:test_distribution] : 'testPlan'
         case test_distribution
-        when 'testCase', 'shard', 'testPlan'
+        when 'testCase', 'testPlan'
           test_data.each do |type|
             type[:tests].each { |test| tests_arr << "#{test_target}.#{type[:class]}/#{test}" }
           end

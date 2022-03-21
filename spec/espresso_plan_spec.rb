@@ -48,13 +48,9 @@ describe Fastlane::Saucectl::Espresso do
       expect(test_cases).to eql(expected_test_cases)
     end
 
-    it "should fetch tests by test case in executable format when sharding" do
-      expected_test_cases = %w[com.saucelabs.mydemoapp.android.view.activities.LoginTest#noCredentialLoginTest
-                               com.saucelabs.mydemoapp.android.view.activities.LoginTest#noUsernameLoginTest
-                               com.saucelabs.mydemoapp.android.view.activities.LoginTest#noPasswordLoginTest
-                               com.saucelabs.mydemoapp.android.view.activities.LoginTest#succesfulLoginTest
-                               com.saucelabs.mydemoapp.android.view.activities.WebViewTest#withoutUrlTest
-                               com.saucelabs.mydemoapp.android.view.activities.WebViewTest#webViewTest]
+    it "should fetch tests by test class in executable format when sharding" do
+      expected_test_cases = %w[com.saucelabs.mydemoapp.android.view.activities.LoginTest
+                               com.saucelabs.mydemoapp.android.view.activities.WebViewTest]
       @config[:path_to_tests] = File.expand_path("my-demo-app-android/app/src/androidTest")
       @config[:test_distribution] = "shard"
       test_plan = Fastlane::Saucectl::Espresso.new(@config)

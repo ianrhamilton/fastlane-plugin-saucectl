@@ -37,7 +37,7 @@ module Fastlane
         case @config[:test_distribution]
         when "package"
           test_data.each { |type| tests_arr << type[:package] }
-        when "class"
+        when 'class', 'shard'
           test_data.each { |type| tests_arr << "#{type[:package]}.#{type[:class]}" }
         else
           test_data.each do |type|

@@ -31,8 +31,8 @@ describe Fastlane::Saucectl::XCTest do
     expect(test_cases).to eql(test_array)
   end
 
-  it "should fetch tests by test case when sharding" do
-    test_array = %w[MyDemoAppUITests.NavigationTest/testNavigateToCart MyDemoAppUITests.NavigationTest/testNavigateToMore MyDemoAppUITests.NavigationTest/testNavigateMoreToWebview MyDemoAppUITests.NavigationTest/testNavigateMoreToAbout MyDemoAppUITests.NavigationTest/testNavigateMoreToQRCode MyDemoAppUITests.NavigationTest/testNavigateMoreToGeoLocation MyDemoAppUITests.NavigationTest/testNavigateMoreToDrawing MyDemoAppUITests.NavigationTest/testNavigateFromCartToCatalog MyDemoAppUITests.NavigationTest/testNavigateCartToCatalog MyDemoAppUITests.ProductDetailsTest/testProductDetails MyDemoAppUITests.ProductDetailsTest/testProductDetailsPrice MyDemoAppUITests.ProductDetailsTest/testProductDetailsHighlights MyDemoAppUITests.ProductDetailsTest/testProductDetailsDecreaseNumberOfItems MyDemoAppUITests.ProductDetailsTest/testProductDetailsIncreaseNumberOfItems MyDemoAppUITests.ProductDetailsTest/testProductDetailsDefaultColor MyDemoAppUITests.ProductDetailsTest/testProductDetailsColorsSwitch MyDemoAppUITests.ProductDetailsTest/testProductDetailsRatesSelection MyDemoAppUITests.ProductDetailsTest/testProductDetailsAddToCart MyDemoAppUITests.ProductListingPageTest/testProductListingPageAddItemToCart MyDemoAppUITests.ProductListingPageTest/testProductListingPageAddMultipleItemsToCart]
+  it "should fetch tests by test class when sharding" do
+    test_array = %w[MyDemoAppUITests.NavigationTest MyDemoAppUITests.ProductDetailsTest MyDemoAppUITests.ProductListingPageTest]
     @config[:test_target] = "MyDemoAppUITests"
     @config[:test_distribution] = "shard"
     test_plan = Fastlane::Saucectl::XCTest.new(@config)
