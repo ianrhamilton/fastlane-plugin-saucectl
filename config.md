@@ -302,6 +302,77 @@ The plugin will then instruct saucectl to treat each specified option as a suite
 
 **Please note**, although this distribution method is available, it is **not recommended** for long running test suites. Hopefully in the future Sauce Labs will support virtual device testing for XCUITest, at that point this option will be useful as you can utilize your VM capacity. For now you can consider this as an experimental feature.
 
+```ruby
+lane :create_config do
+      sauce_config(platform: 'ios',
+                   kind: 'xcuitest',
+                   app: 'path/to/MyTestApp.ipa',
+                   test_app: 'path/to/MyTestAppRunner.ipa',
+                   region: 'eu',
+                   devices: [ {name: 'iPhone 11'} ],
+                   test_plan: 'EnabledUITests',
+                   test_distribution: 'testCase'
+                 )
+end 
+```
+
+Would generate the following config that **creates a suite for each test case**:
+
+```yaml
+apiVersion: v1alpha
+kind: xcuitest
+retries: 0
+sauce:
+  region: eu-central-1
+  concurrency: 3
+  metadata:
+    name: testing/somebuild-name-15
+    build: 'Release '
+xcuitest:
+  app: path/to/MyTestApp.ipa
+  testApp: path/to/MyTestAppRunner.ipa
+artifacts:
+  download:
+    when: always
+    match:
+    - junit.xml
+    directory: "./artifacts/"
+reporters:
+  junit:
+    enabled: true
+suites:
+- name: testing/somebuild-name-15-firstSpec
+  testOptions:
+    class: EmiratesUITests.FirstSpec
+  devices:
+  - name: 'iPhone 11'
+    orientation: portrait
+    options:
+      carrierConnectivity: false
+      deviceType: PHONE
+      private: true
+- name: testing/somebuild-name-15-secondSpec
+  testOptions:
+   class: EmiratesUITests.SecondSpec
+  devices:
+   - name: 'iPhone 11'
+     orientation: portrait
+     options:
+      carrierConnectivity: false
+      deviceType: PHONE
+      private: true
+- name: testing/somebuild-name-15-thirdSpec
+  testOptions:
+   class: EmiratesUITests.ThirdSpec
+  devices:
+   - name: 'iPhone 11'
+     orientation: portrait
+     options:
+      carrierConnectivity: false
+      deviceType: PHONE
+      private: true
+```
+
 ## `test_distribution: 'class'`
 
 ![testCase distribution](assets/saucectl_test_ios_testclass.drawio.png?raw=true "testCase")
@@ -310,14 +381,15 @@ For example, given your project has three test classes, and I create a config wi
 
 ```ruby
 lane :create_config do
-    sauce_config({platform: 'ios',
-                  kind: 'xcuitest',
-                  app: 'path/to/MyTestApp.ipa',
-                  test_app: 'path/to/MyTestAppRunner.ipa',
-                  region: 'eu',
-                  devices: [ {name: 'iPhone 11'} ],
-                  test_target: 'MyDemoAppUITests'
-                 })
+      sauce_config(platform: 'ios',
+                   kind: 'xcuitest',
+                   app: 'path/to/MyTestApp.ipa',
+                   test_app: 'path/to/MyTestAppRunner.ipa',
+                   region: 'eu',
+                   devices: [ {name: 'iPhone 11'} ],
+                   test_plan: 'EnabledUITests',
+                   test_distribution: 'class'
+                 )
 end 
 ```
 
