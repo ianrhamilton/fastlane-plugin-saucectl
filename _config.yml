@@ -4,7 +4,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   Test your iOS and and Android apps at scale using Sauce Labs toolkit.
 remote_theme: just-the-docs/just-the-docs
 baseurl: ""
-url: "/fastlane-plugin-saucectl"
+url: ""
 color_scheme: "dark"
 permalink: pretty
 search_enabled: true
