@@ -382,7 +382,7 @@ suites:
 
 ## `test_distribution: 'shard'`
 
-There are two options fpr sharding XCUITests.
+There are two options for sharding XCUITests.
 1. TestPlan
 2. TestTarget
 
