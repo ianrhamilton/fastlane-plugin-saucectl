@@ -14,8 +14,6 @@ Information and help for the `sauce_devices` action can be printed out by execut
   fastlane action sauce_devices
 ```
 
-
-
 ---------------------------------------------------------------------------
 ## `platform`
 
@@ -56,15 +54,15 @@ __________________________________________________________________________
 
 ```ruby
 lane :get_android_devices do
-         sauce_devices({platform: 'android',
-                        region: 'eu',
-                        sauce_username: 'foo',
-                        sauce_access_key: 'bar123'})
+         sauce_devices(platform: 'android',
+                       region: 'eu',
+                       sauce_username: 'foo',
+                       sauce_access_key: 'bar123')
 end
 
 lane :get_android_devices do
-         sauce_devices({platform: 'android',
-                        region: 'eu'})
+         sauce_devices(platform: 'android',
+                       region: 'eu')
 end 
 ```
 
@@ -228,13 +226,13 @@ end
 ### Get ios only devices
 
 ```ruby
-         sauce_devices({platform: 'ios',
-                        region: 'eu',
-                        sauce_username: 'foo',
-                        sauce_access_key: 'bar123'})
+         sauce_devices(platform: 'ios',
+                       region: 'eu',
+                       sauce_username: 'foo',
+                       sauce_access_key: 'bar123')
 
-        sauce_devices({platform: 'ios',
-                       region: 'eu'})
+        sauce_devices(platform: 'ios',
+                      region: 'eu')
 ```
 
 Example Response

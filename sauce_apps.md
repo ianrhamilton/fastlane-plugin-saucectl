@@ -12,7 +12,6 @@ Returns the set of files by specific app id that have been uploaded to Sauce Sto
 Information and help for the `sauce_apps` action can be printed out by executed the following command:
 ```sh
 fastlane action sauce_apps
-
 ```
 
 ---------------------------------------------------------------------------
@@ -60,33 +59,31 @@ __________________________________________________________________________
 
 ```ruby
 lane :get_apps do
-          sauce_apps({platform: 'android',
-                      query: 'test.apk',
-                      region: 'eu',
-                      sauce_username: 'foo',
-                      sauce_access_key: 'bar123',
-                     })
+          sauce_apps(platform: 'android',
+                     query: 'test.apk',
+                     region: 'eu',
+                     sauce_username: 'foo',
+                     sauce_access_key: 'bar123')
 end
 
 lane :get_apps do
-  sauce_apps({platform: 'android',
-              query: 'test.apk',
-              region: 'eu'})
+  sauce_apps(platform: 'android',
+             query: 'test.apk',
+             region: 'eu')
 end
 
 lane :get_apps do
-  sauce_apps({platform: 'ios',
-              query: 'test.app',
-              region: 'eu',
-              sauce_username: 'foo',
-              sauce_access_key: 'bar123',
-             })
+  sauce_apps(platform: 'ios',
+             query: 'test.app',
+             region: 'eu',
+             sauce_username: 'foo',
+             sauce_access_key: 'bar123')
 end
 
 lane :get_apps do
-  sauce_apps({platform: 'android',
-              query: 'test.apk', 
-              region: 'eu'})
+  sauce_apps(platform: 'android',
+             query: 'test.apk', 
+             region: 'eu')
 end 
 ```
 
