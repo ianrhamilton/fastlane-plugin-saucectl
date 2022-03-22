@@ -2,6 +2,7 @@
 
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-saucectl)
 [![codecov](https://codecov.io/gh/ianrhamilton/fastlane-plugin-rsaucectl/branch/main/graph/badge.svg?token=NSVhqgYFYv)](https://codecov.io/gh/ianrhamilton/fastlane-plugin-saucectl)
+
 ## Getting Started
 
 This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To get started with `fastlane-plugin-saucectl`, add it to your project by running:
@@ -13,6 +14,9 @@ fastlane add_plugin saucectl
 ## About fastlane-plugin-saucectl
 
 The purpose of this plugin is to simplify the set up, configuration, upload, and execution of espresso and xcuitests via the [Sauce Labs](https://saucelabs.com/) platform by utilizing fastlane which will enable you to test your iOS and and Android apps at scale using [Sauce Labs CLI](https://docs.saucelabs.com/dev/cli/saucectl/).
+
+**To get started and for a detailed introduction to each of the actions available within this plugin, please see the [documentation](https://ianrhamilton.github.io/fastlane-plugin-saucectl/#fastlane-plugin-saucectl)**.
+
 
 | Available Actions   | Description                                                                                                                                                                                            |
 |---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -66,3 +70,5 @@ For more information about how the `fastlane` plugin system works, check out the
 ## About _fastlane_
 
 _fastlane_ is the easiest way to automate beta deployments and releases for your iOS and Android apps. To learn more, check out [fastlane.tools](https://fastlane.tools).
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ianrhamilton)
