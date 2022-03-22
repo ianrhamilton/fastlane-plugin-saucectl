@@ -3,8 +3,8 @@ email: ian.ross.hamilton@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Test your iOS and and Android apps at scale using Sauce Labs toolkit.
 remote_theme: just-the-docs/just-the-docs
-baseurl: "https://ianrhamilton.github.io/fastlane-plugin-saucectl"
-url: ""
+baseurl: "https://ianrhamilton.github.io"
+url: "/fastlane-plugin-saucectl"
 color_scheme: "dark"
 permalink: pretty
 search_enabled: true
