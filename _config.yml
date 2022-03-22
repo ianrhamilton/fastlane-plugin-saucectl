@@ -5,10 +5,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   Test your iOS and and Android apps at scale using Sauce Labs toolkit.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://ianrhamilton.github.io/fastlane-plugin-saucectl" # the base hostname & protocol for your site, e.g. http://example.com
-remote_theme: pmarsceill/just-the-docs
-theme: "just-the-docs"
-plugins:
-  - jekyll-remote-theme
+remote_theme: just-the-docs/just-the-docs
 permalink: pretty
 
 search_enabled: true
