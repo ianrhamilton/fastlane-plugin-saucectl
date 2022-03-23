@@ -8,10 +8,9 @@ Gem::Specification.new do |spec|
   spec.author        = 'Ian Hamilton'
   spec.email         = 'ian.ross.hamilton@gmail.com'
 
-  spec.summary       = 'Test your iOS and and Android apps at scale using Sauce Labs toolkit.'
+  spec.summary       = 'Simplify the set up, configuration, upload, and execution of espresso and XCUITest on the Sauce Labs platform by utilizing fastlane which will enable you to test your iOS and Android apps at scale'
   spec.homepage      = 'https://github.com/ianrhamilton/fastlane-plugin-saucectl'
   spec.license       = 'MIT'
-
   spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']

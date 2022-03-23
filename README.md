@@ -13,7 +13,7 @@ fastlane add_plugin saucectl
 
 ## About fastlane-plugin-saucectl
 
-The purpose of this plugin is to simplify the set up, configuration, upload, and execution of espresso and xcuitests via the [Sauce Labs](https://saucelabs.com/) platform by utilizing fastlane which will enable you to test your iOS and and Android apps at scale using [Sauce Labs CLI](https://docs.saucelabs.com/dev/cli/saucectl/).
+The purpose of this plugin is to simplify the set up, configuration, upload, and execution of espresso and XCUITest on the Sauce Labs platform by utilizing fastlane which will enable you to test your iOS and Android apps at scale.
 
 **IMPORTANT:** in order for you to use this plugin to execute UI tests, your test class names must proceed with Spec, Specs, Tests, or Test, for example ExampleSpec, ExampleSpecs, ExampleTest, ExampleTests. Your test case names must also begin with test, for example testIDoSomething, testIDoSomethingElse. This is so that the the plugin can search for test classes and their included test cases.
 
@@ -23,14 +23,14 @@ Failure to do this will result in missing test classes and test cases from your 
 
 | Available Actions   | Description                                                                                                                                                                                            |
 |---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| install_saucectl    | Downloads the Sauce Labs saucectl cli binary for test execution                                                                                                                                        |
-| sauce_upload        | Upload test artifacts to sauce labs storage                                                                                                                                                            | 
-| sauce_config        | Create SauceLabs configuration file for test execution based on given parameters                                                                                                                       |
-| sauce_runner        | Execute automated tests on sauce labs platform via saucectl binary for specified configuration                                                                                                         | 
-| delete_from_storage | Delete test artifacts from sauce labs storage by storage id or group id                                                                                                                                |
-| sauce_apps          | Returns the set of files by specific app id that have been uploaded to Sauce Storage by the requester                                                                                                  |
-| sauce_devices       | Returns a list of Device IDs for all devices in the data center that are currently free for testing.                                                                                                   |
-| disabled_tests      | Fetches any disabled ui test cases (for android searches for @Ignore tests, and for ios skipped tests within an xcode test plan). Plan is to use this in the future for generating pretty HTML reports | 
+| `install_saucectl`    | Downloads the Sauce Labs saucectl cli binary for test execution                                                                                                                                        |
+| `sauce_upload`        | Upload test artifacts to sauce labs storage                                                                                                                                                            | 
+| `sauce_config`        | Create SauceLabs configuration file for test execution based on given parameters                                                                                                                       |
+| `sauce_runner`        | Execute automated tests on sauce labs platform via saucectl binary for specified configuration                                                                                                         | 
+| `delete_from_storage` | Delete test artifacts from sauce labs storage by storage id or group id                                                                                                                                |
+| `sauce_apps`          | Returns the set of files by specific app id that have been uploaded to Sauce Storage by the requester                                                                                                  |
+| `sauce_devices`       | Returns a list of Device IDs for all devices in the data center that are currently free for testing.                                                                                                   |
+| `disabled_tests`      | Fetches any disabled ui test cases (for android searches for @Ignore tests, and for ios skipped tests within an xcode test plan). Plan is to use this in the future for generating pretty HTML reports | 
 
 An order of which you may utilize the above actions in your continuous integration platform could be:
 1. Install the saucectl binary via `install_saucectl`
