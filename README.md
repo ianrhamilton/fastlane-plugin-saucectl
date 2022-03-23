@@ -33,7 +33,7 @@ Failure to do this will result in missing test classes and test cases from your 
 | disabled_tests      | Fetches any disabled ui test cases (for android searches for @Ignore tests, and for ios skipped tests within an xcode test plan). Plan is to use this in the future for generating pretty HTML reports | 
 
 An order of which you may utilize the above actions in your continuous integration platform could be:
-1. Install the saucectl binary via `install_toolkit`
+1. Install the saucectl binary via `install_saucectl`
 2. Upload your test artifacts to Sauce Labs storage (for example app apk, and test runner apk)
 3. Create config.yml for given parameters via `sauce_config` 
 4. Execute test based on specified config via `sauce_runner`
