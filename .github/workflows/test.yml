@@ -2,9 +2,9 @@ name: Ruby
 
 on:
   push:
-    branches: [main]
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   test:
@@ -27,6 +27,7 @@ jobs:
         run: bundle exec rake
         env:
           CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
+          PR_NUMBER: ${{ github.event.number }}
       - name: Simplecov Report
         uses: aki77/simplecov-report-action@v1
         with:
