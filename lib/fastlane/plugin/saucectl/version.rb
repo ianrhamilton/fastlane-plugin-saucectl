@@ -1,5 +1,5 @@
 module Fastlane
   module Saucectl
-    VERSION = "0.1.0"
+    VERSION = "v0.1.0-beta.1"
   end
 end
