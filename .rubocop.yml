@@ -4,7 +4,7 @@ require:
 - rubocop-performance
 AllCops:
   SuggestExtensions: false
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 2.5
   NewCops: enable
   Include:
   - "**/*.rb"
