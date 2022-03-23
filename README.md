@@ -2,6 +2,8 @@
 
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-saucectl)
 [![codecov](https://codecov.io/gh/ianrhamilton/fastlane-plugin-rsaucectl/branch/main/graph/badge.svg?token=NSVhqgYFYv)](https://codecov.io/gh/ianrhamilton/fastlane-plugin-saucectl)
+[![Gem Version](https://badge.fury.io/rb/fastlane-plugin-saucectl.svg)](https://badge.fury.io/rb/fastlane-plugin-saucectl)
+[![Gem Downloads](https://img.shields.io/gem/dt/fastlane-plugin-saucectl?color=light-green)](https://img.shields.io/gem/dt/fastlane-plugin-saucectl)
 
 ## Getting Started
 
