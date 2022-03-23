@@ -5,7 +5,6 @@ description: >- # this means to ignore newlines until "baseurl:"
 remote_theme: just-the-docs/just-the-docs
 baseurl: "/fastlane-plugin-saucectl"
 url: "https://ianrhamilton.github.io"
-color_scheme: "dark"
 permalink: pretty
 search_enabled: true
 search:
