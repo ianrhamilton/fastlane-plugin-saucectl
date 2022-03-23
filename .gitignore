@@ -7,3 +7,4 @@ my-demo-app-ios
 my-demo-app-android
 coverage
 test-results
+*.icloud

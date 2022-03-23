@@ -8,9 +8,9 @@ permalink: /install/
 Install Sauce Labs framework agnostic test orchestrator saucectl to execute Espresso and XCUITest tests
 
 # Help
-Information and help for the `install_toolkit` action can be printed out by executed the following command:
+Information and help for the `install_saucectl` action can be printed out by executed the following command:
 ```sh
-fastlane action install_toolkit
+fastlane action install_saucectl
 ```
 -----------------------------------------------------------------------
 
@@ -19,6 +19,6 @@ fastlane action install_toolkit
 ### Delete by app_id
 ```ruby
 lane :install_toolkit do
-    install_toolkit
+  install_saucectl
 end 
 ```

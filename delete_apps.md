@@ -60,11 +60,10 @@ ____________________________________________________________________________
 ### Delete by app_id
 ```ruby
     lane :delete_by_app_id do
-      delete_from_storage({region: 'eu',
-                           sauce_username: 'foo',
-                           sauce_access_key: 'bar123',
-                           app_id: '1235-1235-1235-1235-1235'
-                          })
+      delete_from_storage(region: 'eu',
+                          sauce_username: 'foo',
+                          sauce_access_key: 'bar123',
+                          app_id: '1235-1235-1235-1235-1235')
       end 
 ```
 
@@ -72,11 +71,10 @@ ____________________________________________________________________________
 ### Delete by group_id
 ```ruby
   lane :delete_by_group_id do
-    delete_from_storage({region: 'eu',
-                         sauce_username: 'foo',
-                         sauce_access_key: 'bar123',
-                         group_id: '123456789'
-                        })
+    delete_from_storage(region: 'eu',
+                        sauce_username: 'foo',
+                        sauce_access_key: 'bar123',
+                        group_id: '123456789')
     end
 ```
 

@@ -89,16 +89,16 @@ The plugin will then instruct saucectl to treat each specified option as a suite
 
 | Distribution method       | Description                                                                    | 
 |---------------------------|--------------------------------------------------------------------------------|
-| `class`                   | Considers 1 test class to 1 suite per device or virtual device under test      |
 | `testCase`                | Considers 1 test case equal to 1 suite per device or virtual device under test |
+| `class`                   | Considers 1 test class to 1 suite per device or virtual device under test      |
 | `package`                 | Considers 1 package equal to 1 suite per device or virtual device under test   |
- | `shard`                   | Distributes test cases evenly between n number of devices or emulators         |
+| `shard`                   | Distributes test cases evenly between n number of devices or emulators         |
 
-##Example
+## Example
 
-###`test_distribution: 'testCase'`
+### `test_distribution: 'testCase'`
 
-![testCase distribution for virtual devices](assets/saucectl_test_case.drawio.png?raw=true "testCase")
+![testCase distribution for virtual devices](../assets/saucectl_test_case.drawio.png?raw=true "testCase")
 
 **Please note**, this is only recommended when executing tests via **virtual devices**. The reason for this is because they can be scaled based on your `max_concurrency`. This is of course unless you're lucky enough to have multiple of the same device and OS combinations that you can execute at scale.
 
@@ -120,6 +120,7 @@ end
 ```
 
 Would produce:
+
 ```yaml
 ---
 apiVersion: v1alpha
@@ -176,9 +177,9 @@ suites:
         - '11.0'
 ```
 
-##`test_distribution: 'class'`
+## `test_distribution: 'class'`
 
-![test class distribution](assets/saucectl_test_class.drawio.png?raw=true "class")
+![test class distribution](../assets/saucectl_test_class.drawio.png?raw=true "class")
 
 For example, given your project has three test classes, and I create a config with the following config:
 
@@ -257,9 +258,9 @@ suites:
 
 Therefore the test run will be limited to each class, hence shortening the length of test suites and video recordings. 
 
-##`test_distribution: 'shard'`
+## `test_distribution: 'shard'`
 
-![test class distribution](assets/saucectl_test_shard.drawio.png?raw=true "testCase")
+![test class distribution](../assets/saucectl_test_shard.drawio.png?raw=true "testCase")
 
 Espresso and Sauce Labs have their [own implementation of test sharding](https://docs.saucelabs.com/mobile-apps/automated-testing/espresso-xcuitest/espresso/#numshards) for parallel execution, this is **not the same**. The fastlane-plugin-saucectl supports cross platform sharding, and this implementation will gather test classes and distribute evenly between specified devices or virtual devices. 
 For example, given your project has six test classes, and I create a config with the following config:
@@ -272,7 +273,7 @@ lane :create_config do
               test_app: 'path/to/myTestRunner.apk',
               path_to_tests: 'my-demo-app-android/app/src/androidTest',
               max_concurrency: 3,
-              test_distribution: 'class',
+              test_distribution: 'shard',
               region: 'eu',
               emulators: [ {name: 'Android GoogleApi Emulator', platform_versions: ['11.0']}]
  )
@@ -298,97 +299,26 @@ The plugin will then instruct saucectl to treat each specified option as a suite
 
 ## `test_distribution: 'testCase'`
 
-![testCase distribution](assets/saucectl_test_ios_testcase.drawio.png?raw=true "testCase")
+![testCase distribution](../assets/saucectl_test_ios_testcase.drawio.png?raw=true "testCase")
 
 **Please note**, although this distribution method is available, it is **not recommended** for long running test suites. Hopefully in the future Sauce Labs will support virtual device testing for XCUITest, at that point this option will be useful as you can utilize your VM capacity. For now you can consider this as an experimental feature.
 
-```ruby
-lane :create_config do
-      sauce_config(platform: 'ios',
-                   kind: 'xcuitest',
-                   app: 'path/to/MyTestApp.ipa',
-                   test_app: 'path/to/MyTestAppRunner.ipa',
-                   region: 'eu',
-                   devices: [ {name: 'iPhone 11'} ],
-                   test_plan: 'EnabledUITests',
-                   test_distribution: 'testCase'
-                 )
-end 
-```
-
-Would generate the following config that **creates a suite for each test case**:
-
-```yaml
-apiVersion: v1alpha
-kind: xcuitest
-retries: 0
-sauce:
-  region: eu-central-1
-  concurrency: 3
-  metadata:
-    name: testing/somebuild-name-15
-    build: 'Release '
-xcuitest:
-  app: path/to/MyTestApp.ipa
-  testApp: path/to/MyTestAppRunner.ipa
-artifacts:
-  download:
-    when: always
-    match:
-    - junit.xml
-    directory: "./artifacts/"
-reporters:
-  junit:
-    enabled: true
-suites:
-- name: testing/somebuild-name-15-firstSpec
-  testOptions:
-    class: EmiratesUITests.FirstSpec
-  devices:
-  - name: 'iPhone 11'
-    orientation: portrait
-    options:
-      carrierConnectivity: false
-      deviceType: PHONE
-      private: true
-- name: testing/somebuild-name-15-secondSpec
-  testOptions:
-   class: EmiratesUITests.SecondSpec
-  devices:
-   - name: 'iPhone 11'
-     orientation: portrait
-     options:
-      carrierConnectivity: false
-      deviceType: PHONE
-      private: true
-- name: testing/somebuild-name-15-thirdSpec
-  testOptions:
-   class: EmiratesUITests.ThirdSpec
-  devices:
-   - name: 'iPhone 11'
-     orientation: portrait
-     options:
-      carrierConnectivity: false
-      deviceType: PHONE
-      private: true
-```
-
 ## `test_distribution: 'class'`
 
-![testCase distribution](assets/saucectl_test_ios_testclass.drawio.png?raw=true "testCase")
+![testCase distribution](../assets/saucectl_test_ios_testclass.drawio.png?raw=true "testCase")
 
 For example, given your project has three test classes, and I create a config with the following config:
 
 ```ruby
 lane :create_config do
-      sauce_config(platform: 'ios',
-                   kind: 'xcuitest',
-                   app: 'path/to/MyTestApp.ipa',
-                   test_app: 'path/to/MyTestAppRunner.ipa',
-                   region: 'eu',
-                   devices: [ {name: 'iPhone 11'} ],
-                   test_plan: 'EnabledUITests',
-                   test_distribution: 'class'
+    sauce_config(platform: 'ios',
+                 kind: 'xcuitest',
+                 app: 'path/to/MyTestApp.ipa',
+                 test_app: 'path/to/MyTestAppRunner.ipa',
+                 region: 'eu',
+                 devices: [ {name: 'iPhone 11'} ],
+                 test_target: 'MyDemoAppUITests',
+                 test_distribution: 'class'
                  )
 end 
 ```
@@ -451,6 +381,154 @@ suites:
 ```
 
 ## `test_distribution: 'shard'`
+
+There are two options for sharding XCUITests.
+1. TestPlan
+2. TestTarget
+
+## TestPlan
+
+It is possible to shard your UI tests when using Xcode test plan, therefore whatever test cases included in the test plan, the saucectl plugin will attempt to evenly distribute across your specified array of devices.  
+![test class distribution](../assets/saucectl_ios_test_shard_test_plan.png "sharding by testPlan")
+
+For example, given your testPlan has four enabled test classes and I create a config with the following config:
+
+```ruby
+lane :create_config do
+  sauce_config(platform: 'ios',
+               kind: 'xcuitest',
+               app: 'path/to/MyTestApp.ipa',
+               test_app: 'path/to/MyTestAppRunner.ipa',
+               region: 'eu',
+               devices: [ {name: 'iPhone RDC One'}, {id: 'iphone_rdc_two'} ],
+               test_plan: 'EnabledUITests',
+               test_distribution: 'shard')
+end 
+
+```
+
+Would produce the following config:
+
+```yaml
+---
+apiVersion: v1alpha
+kind: xcuitest
+retries: 0
+sauce:
+  region: eu-central-1
+  concurrency: 1
+  metadata:
+    name: unit-test-123
+    build: 'Release '
+xcuitest:
+  app: "path/to/MyTestApp.ipa"
+  testApp: "path/to/MyTestAppRunner.ipa"
+artifacts:
+  download:
+    when: always
+    match:
+    - junit.xml
+    directory: "./artifacts/"
+reporters:
+  junit:
+    enabled: true
+suites:
+- name: unit-test-123-shard 1
+  testOptions:
+    class:
+    - MyDemoAppUITests.SomeSpec/testTwo
+    - MyDemoAppUITests.SomeSpec/testThree
+  devices:
+  - name: iPhone RDC One
+    orientation: portrait
+    options:
+      carrierConnectivity: false
+      deviceType: PHONE
+      private: true
+- name: unit-test-123-shard 2
+  testOptions:
+    class:
+    - MyDemoAppUITests.SomeSpec/testFour
+    - MyDemoAppUITests.SomeSpec/testFive
+  devices:
+  - id: iphone_rdc_two
+    orientation: portrait
+    options:
+      carrierConnectivity: false
+      deviceType: PHONE
+      private: true
+```
+
+## TestTarget
+When a `testTarget` is specified the saucectl plugin will scan the specified testTarget for test classes and will distribute evenly (where possible) across given array of devices.
+
+![test class distribution](../assets/saucectl_ios_test_shard_testtarget.png "sharding by testPlan")
+
+For example, given I create a config with the following:
+
+```ruby
+lane :create_config do
+  sauce_config(platform: 'ios',
+               kind: 'xcuitest',
+               app: 'path/to/MyTestApp.ipa',
+               test_app: 'path/to/MyTestAppRunner.ipa',
+               region: 'eu',
+               devices: [ {name: 'iPhone RDC One'}, {id: 'iphone_rdc_two'} ],
+               test_target: 'MyDemoAppUITests',
+               test_distribution: 'shard')
+end
+```
+
+Would produce the following config:
+
+```yaml
+---
+apiVersion: v1alpha
+kind: xcuitest
+retries: 0
+sauce:
+  region: eu-central-1
+  concurrency: 1
+  metadata:
+    name: unit-test-123
+    build: 'Release '
+xcuitest:
+  app: "path/to/MyTestApp.ipa"
+  testApp: "path/to/MyTestAppRunner.ipa"
+artifacts:
+  download:
+    when: always
+    match:
+    - junit.xml
+    directory: "./artifacts/"
+reporters:
+  junit:
+    enabled: true
+suites:
+- name: unit-test-123-shard 1
+  testOptions:
+    class:
+    - MyDemoAppUITests.NavigationTest
+    - MyDemoAppUITests.ProductDetailsTest
+  devices:
+  - name: iPhone RDC One
+    orientation: portrait
+    options:
+      carrierConnectivity: false
+      deviceType: PHONE
+      private: true
+- name: unit-test-123-shard 2
+  testOptions:
+    class:
+    - MyDemoAppUITests.ProductListingPageTest
+  devices:
+  - id: iphone_rdc_two
+    orientation: portrait
+    options:
+      carrierConnectivity: false
+      deviceType: PHONE
+      private: true
+```
 
 ---------------------------------------------------------------------
 ## `emulators`
