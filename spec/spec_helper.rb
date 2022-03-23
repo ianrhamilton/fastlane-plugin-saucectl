@@ -7,6 +7,8 @@ SimpleCov.start do
   add_filter 'lib/fastlane/plugin/saucectl/actions'
 end
 
+SimpleCov.minimum_coverage 90
+
 if ENV['IS_CI']
   require 'codecov'
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
