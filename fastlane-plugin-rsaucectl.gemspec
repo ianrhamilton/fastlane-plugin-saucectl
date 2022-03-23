@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/ianrhamilton/fastlane-plugin-saucectl'
   spec.license       = 'MIT'
 
-  spec.files         = Dir['lib/**/**/*.rb', 'lib/**/**/*.yaml']
+  spec.files         = Dir['lib']
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
