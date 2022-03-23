@@ -13,6 +13,10 @@ module Fastlane
         "Execute automated tests on sauce labs platform via saucectl binary for specified configuration"
       end
 
+      def self.details
+        "Execute automated tests on sauce labs platform via saucectl binary for specified configuration"
+      end
+
       def self.available_options
         [
           FastlaneCore::ConfigItem.new(key: :sauce_username,
