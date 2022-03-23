@@ -4,14 +4,14 @@ title: Delete apps from storage
 permalink: /delete-apps/
 ---
 
-# Delete an App Storage File
-Deletes the specified file from Sauce Storage.
+# Delete App Storage File
+
+Deletes a specified file from Sauce Labs Storage.
 
 # Help
 Information and help for the `delete_from_storage` action can be printed out by executed the following command:
 ```sh
 fastlane action delete_from_storage
-
 ```
 -----------------------------------------------------------------------
 
