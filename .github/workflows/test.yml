@@ -1,7 +1,11 @@
 name: Ruby
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   test:
@@ -26,3 +30,4 @@ jobs:
         uses: aki77/simplecov-report-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+
