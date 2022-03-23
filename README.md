@@ -15,8 +15,11 @@ fastlane add_plugin saucectl
 
 The purpose of this plugin is to simplify the set up, configuration, upload, and execution of espresso and xcuitests via the [Sauce Labs](https://saucelabs.com/) platform by utilizing fastlane which will enable you to test your iOS and and Android apps at scale using [Sauce Labs CLI](https://docs.saucelabs.com/dev/cli/saucectl/).
 
-**To get started and for a detailed introduction to each of the actions available within this plugin, please see the [documentation](https://ianrhamilton.github.io/fastlane-plugin-saucectl/#fastlane-plugin-saucectl)**.
+**IMPORTANT:** in order for you to use this plugin to execute UI tests, your test class names must proceed with Spec, Specs, Tests, or Test, for example ExampleSpec, ExampleSpecs, ExampleTest, ExampleTests. Your test case names must also begin with test, for example testIDoSomething, testIDoSomethingElse. This is so that the the plugin can search for test classes and their included test cases.
 
+Failure to do this will result in missing test classes and test cases from your test run.
+
+**For a detailed introduction to each of the actions available within this plugin, please see the [documentation](https://ianrhamilton.github.io/fastlane-plugin-saucectl/#fastlane-plugin-saucectl)**.
 
 | Available Actions   | Description                                                                                                                                                                                            |
 |---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
