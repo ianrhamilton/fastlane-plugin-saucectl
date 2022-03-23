@@ -23,7 +23,7 @@ Failure to do this will result in missing test classes and test cases from your 
 
 | Available Actions   | Description                                                                                                                                                                                            |
 |---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| install_toolkit     | Downloads the Sauce Labs saucectl cli binary for test execution                                                                                                                                        |
+| install_saucectl    | Downloads the Sauce Labs saucectl cli binary for test execution                                                                                                                                        |
 | sauce_upload        | Upload test artifacts to sauce labs storage                                                                                                                                                            | 
 | sauce_config        | Create SauceLabs configuration file for test execution based on given parameters                                                                                                                       |
 | sauce_runner        | Execute automated tests on sauce labs platform via saucectl binary for specified configuration                                                                                                         | 
