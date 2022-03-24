@@ -32,7 +32,7 @@ module Fastlane
 
       def execute_saucectl_installer
         status = system('sh sauce')
-        status == 1 ? UI.user_error!("❌ failed to install saucectl: #{stderr}") : status
+        status == 1 ? UI.user_error!("❌ failed to install saucectl") : status
         executable = 'saucectl'
         FileUtils.mv("bin/#{executable}", executable) unless File.exist?(executable)
       end
