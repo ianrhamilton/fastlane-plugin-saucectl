@@ -4,7 +4,7 @@ require 'fastlane/plugin/saucectl/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'fastlane-plugin-saucectl'
-  spec.version       = '0.1.0'
+  spec.version       = Fastlane::Saucectl::VERSION
   spec.author        = 'Ian Hamilton'
   spec.email         = 'ian.ross.hamilton@gmail.com'
 
