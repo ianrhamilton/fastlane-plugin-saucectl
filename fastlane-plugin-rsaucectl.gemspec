@@ -28,6 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('rubocop-require_tools')
   spec.add_development_dependency('webmock')
   spec.metadata = {
-    'rubygems_mfa_required' => 'true'
+    'rubygems_mfa_required' => 'false'
   }
 end
