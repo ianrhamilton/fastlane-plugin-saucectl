@@ -26,13 +26,13 @@ module Fastlane
 
       def download_saucectl_installer
         URI.open('sauce', 'wb') do |file|
-          file << URI.open('https://saucelabs.github.io/saucectl/install').read
+          file << URI.open('https://saucelabs.github.io/saucectl/install', ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE).read
         end
       end
 
       def execute_saucectl_installer
         status = system('sh sauce')
-        status == 1 ? UI.user_error!("❌ failed to install saucectl: #{stderr}") : status
+        status == 1 ? UI.user_error!("❌ failed to install saucectl") : status
         executable = 'saucectl'
         FileUtils.mv("bin/#{executable}", executable) unless File.exist?(executable)
       end
