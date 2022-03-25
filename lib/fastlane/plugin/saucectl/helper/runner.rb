@@ -25,7 +25,7 @@ module Fastlane
       def system(*cmd)
         Open3.popen2e(*cmd) do |stdin, stdout_stderr, wait_thread|
           Thread.new do
-            stdout_stderr.each { |out| UI.message(out.kind_of?(Array) ? out.clear : out) }
+            stdout_stderr.each { |out| UI.message(out.clear) }
           end
           stdin.close
           wait_thread.value
