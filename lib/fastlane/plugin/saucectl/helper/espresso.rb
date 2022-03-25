@@ -5,7 +5,7 @@ require_relative "file_utils"
 
 module Fastlane
   module Saucectl
-    # This class is responsible for creating test execution plans for ios applications and will distribute tests
+    # This class is responsible for creating test execution plans for android applications and will distribute tests
     # that will be be executed via the cloud provider.
     #
     class Espresso
