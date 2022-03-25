@@ -21,3 +21,6 @@ aux_links_new_tab: false
 nav_sort: case_sensitive # Capital letters sorted before lowercase
 back_to_top: true
 back_to_top_text: "Back to top"
+aux_links:
+  "fastlane-plugin-saucectl on GitHub":
+    - "https://github.com/ianrhamilton/fastlane-plugin-saucectl"
