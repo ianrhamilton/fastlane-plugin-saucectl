@@ -13,7 +13,7 @@ module Fastlane
       UI = FastlaneCore::UI unless Fastlane.const_defined?(:UI)
 
       def install
-        timeout_in_seconds = 30
+        timeout_in_seconds = 90
         Timeout.timeout(timeout_in_seconds) do
           download_saucectl_installer
           execute_saucectl_installer
