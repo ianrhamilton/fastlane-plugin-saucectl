@@ -1,93 +1,78 @@
-lane :upload_apps do
-    @upload_id = sauce_upload(platform: 'android',
-                              app: 'mda-1.0.10-12.apk',
-                              file: '/path/to/my/app/mda-1.0.10-12.apk',
-                              region: 'eu')
+# This is an example fastlane file in order to demo how you would use this plugin minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "2.82.0"
 
-     @runner_id = sauce_upload(platform: 'android',
-                               app: 'mda-androidTest-1.0.10-12.apk',
-                               file: '/path/to/my/testrunner/mda-androidTest-1.0.10-12.apk',
-                               region: 'eu')
-end
+default_platform :android
 
-lane :install_toolkit do
-  install_toolkit()
-end
+platform :android do
 
-lane :create_config do
-    sauce_config(platform: 'android',
-                 kind: 'espresso',
-                 app: "storage:#{@upload_id}",
-                 test_app: "storage:#{@runner_id}",
-                 path_to_tests: 'path/to/app/src/androidTest',
-                 region: 'eu',
-                 emulators: [ {name: 'Android GoogleApi Emulator', platform_versions: %w[10.0 11.0], orientation: 'portrait'}])
-end
+    before_all do |lane, options|
+        upload_to_sauce
+    end
 
-lane :execute_tests do
-    sauce_runner
-end
+    desc "Execute ui tests using virtual devices"
+    lane :pr_tests do
+        generate_sauce_config
+        install
+        execute_tests
+    end
 
-lane :delete_apk do
-      delete_from_storage(region: 'eu',
-                          platform: 'android',
-                          app_name: 'Android.MyCustomApp.apk',
-                          app_id: "#{@upload_id}")
-end
+    desc "Upload app and test runner to Sauce Labs storage"
+    lane :upload_to_sauce do
+        @app_id = sauce_upload(platform: 'android',
+                               app: 'MyTestApp.apk',
+                               file: 'app/build/outputs/apk/MyTestApp.apk',
+                               region: 'eu',
+                               sauce_username: ENV['SAUCE_USERNAME'],
+                               sauce_access_key: ENV['SAUCE_ACCESS_KEY'])
 
-lane :delete_apk do
-      delete_from_storage(region: 'eu',
-                          platform: 'android',
-                          app_name: 'Android.MyCustomApp.apk',
-                          app_id: "#{@upload_id}")
-end
+        @test_app_id = sauce_upload(platform: 'android',
+                                    app: 'MyTestApp-androidTest.apk',
+                                    file: 'app/build/outputs/apk/androidTest/MyTestApp-androidTest.apk',
+                                    region: 'eu',
+                                    sauce_username: ENV['SAUCE_USERNAME'],
+                                    sauce_access_key: ENV['SAUCE_ACCESS_KEY'])
 
-lane :disabled_tests do
-      disabled_tests(platform: 'android',
-                     path_to_tests: 'my-demo-app-android/app/src/androidTest')
-end
+    end
 
-lane :get_available_devices
-    sauce_devices(region: 'us',
-                  sauce_username: 'foo',
-                  sauce_access_key: 'bar123')
-end
+    desc "Create saucectl configuration for Virtual Device execution"
+        lane :generate_sauce_config do |options|
+            sauce_config(platform: 'android',
+                         kind: 'espresso',
+                         app: "storage:#{@app_id}",
+                         test_app: "storage:#{@test_app_id}",
+                         path_to_tests: 'app/src/androidTest/',
+                         max_concurrency_size: 30,
+                         region: 'eu',
+                         test_distribution: 'testCase',
+                         emulators: [ {name: 'Android GoogleApi Emulator', platform_versions: ['11.0']}])
+    end
 
-lane :get_available_ios_devices
-    sauce_devices(platform: 'ios',
-                  region: 'eu',
-                  sauce_username: 'foo',
-                  sauce_access_key: 'bar123')
-end
+    desc "Install Sauce Labs toolkit dependencies"
+        lane :install do
+             install_saucectl
+    end
 
-lane :get_available_android_devices
-    sauce_devices(platform: 'android',
-                  region: 'eu',
-                  sauce_username: 'foo',
-                  sauce_access_key: 'bar123',
-                  )
-end
+    desc "Execute UI tests on sauce labs platform"
+        lane :execute_tests do
+             sauce_runner
+    end
 
-lane :get_apps do
-          sauce_apps(platform: 'android',
-                     query: 'test.apk',
-                     region: 'eu',
-                     sauce_username: 'foo',
-                     sauce_access_key: 'bar123',
-                     )
-end
+    desc "Delete apps from Sauce Labs storage"
+    lane :delete_apps do
 
-lane :get_uploaded_ios_apps do
-  sauce_apps(platform: 'ios',
-             query: 'test.app',
-             region: 'eu',
-             sauce_username: 'foo',
-             sauce_access_key: 'bar123',
-             )
-end
+          delete_from_storage(region: 'eu',
+                              sauce_username: ENV['SAUCE_USERNAME'],
+                              sauce_access_key: ENV['SAUCE_ACCESS_KEY'],
+                              app_id: @app_id)
 
-lane :get_uploaded_android_apps do
-  sauce_apps(platform: 'android',
-             query: 'test.apk',
-             region: 'eu')
+          delete_from_storage(region: 'eu',
+                              sauce_username: ENV['SAUCE_USERNAME'],
+                              sauce_access_key: ENV['SAUCE_ACCESS_KEY'],
+                              app_id: @test_app_id)
+    end
+
+    after_all do |lane, options|
+        delete_apps
+    end
 end
