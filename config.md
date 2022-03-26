@@ -537,9 +537,13 @@ suites:
 |----------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `false`  | `Array` | Specify an array of tests to execute. |
 
-**Example**
+**Android Example**
 
     test_class: ['com.some.package.testing.SomeClassOne', 'com.some.package.testing.SomeClassTwo', 'com.some.package.testing.SomeClassThree', 'com.some.package.testing.SomeClassFour']
+
+**iOS Example**
+
+    test_class: ['MyDemoAppUITests.SomeClassOne', 'MyDemoAppUITests.SomeClassTwo', 'MyDemoAppUITests.SomeClassThree', 'MyDemoAppUITests.SomeClassFour']
 
 ---------------------------------------------------------------------
 ## `emulators`
