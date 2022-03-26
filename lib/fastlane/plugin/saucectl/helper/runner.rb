@@ -26,9 +26,7 @@ module Fastlane
         Open3.popen2e(*cmd) do |stdin, stdout_stderr, wait_thread|
           Thread.new do
             stdout_stderr.each do |out|
-              message = out.gsub(/[{\d}]/, '')
-              message = message.gsub('.s -- ::. + + m=+. -- ::. + + m=+.', '')
-              UI.message(message)
+              UI.message(out)
             end
           end
           stdin.close
