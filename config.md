@@ -548,6 +548,8 @@ suites:
 ---------------------------------------------------------------------
 ## `emulators`
 
+**Virtual device testing is only available on Android only**. 
+
 | Required | Type    | Description                                                                                                                                                                                                                                           | 
 |----------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `false`  | `Array` | The parent property that defines details for running this suite on [virtual devices](https://docs.saucelabs.com/mobile-apps/automated-testing/espresso-xcuitest/espresso/#emulators) using an emulator. NOTE: only supported on the android platform. |
