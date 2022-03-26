@@ -5,7 +5,7 @@ permalink: /install/
 ---
 
 # Install Sauce Labs toolkit
-Install Sauce Labs framework agnostic test orchestrator saucectl to execute Espresso and XCUITest tests
+Install Sauce Labs framework agnostic test orchestrator saucectl to execute Espresso and XCUITest tests. The latest version of the saucectl binary will be downloaded, however you can also specify the version (tag) of the version you wish to install. For a complete list of versions [see](tags). 
 
 # Help
 Information and help for the `install_saucectl` action can be printed out by executed the following command:
@@ -16,9 +16,16 @@ fastlane action install_saucectl
 
 # Example action
 
-### Delete by app_id
+### Install latest version of saucectl
 ```ruby
 lane :install_toolkit do
   install_saucectl
+end 
+```
+
+### Install a specific version of saucectl
+```ruby
+lane :install_toolkit do
+  install_saucectl('0.86.0')
 end 
 ```
