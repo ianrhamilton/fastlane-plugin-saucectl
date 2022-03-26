@@ -12,11 +12,11 @@ module Fastlane
       include FileUtils
       UI = FastlaneCore::UI unless Fastlane.const_defined?(:UI)
 
-      def install
+      def install(version)
         timeout_in_seconds = 90
         Timeout.timeout(timeout_in_seconds) do
           download_saucectl_installer
-          execute_saucectl_installer
+          execute_saucectl_installer(version)
           UI.success("✅ Successfully installed saucectl runner binary 🚀")
         rescue OpenURI::HTTPError => e
           response = e.io
@@ -30,8 +30,9 @@ module Fastlane
         end
       end
 
-      def execute_saucectl_installer
-        status = system('sh sauce')
+      def execute_saucectl_installer(version)
+        saucectl_version = version[:version].nil? ? '' : "v#{version[:version]}"
+        status = system("sh sauce #{saucectl_version}")
         status == 1 ? UI.user_error!("❌ failed to install saucectl") : status
         executable = 'saucectl'
         FileUtils.mv("bin/#{executable}", executable) unless File.exist?(executable)
