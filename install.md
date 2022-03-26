@@ -5,7 +5,7 @@ permalink: /install/
 ---
 
 # Install Sauce Labs toolkit
-Install Sauce Labs framework agnostic test orchestrator saucectl to execute Espresso and XCUITest tests. The latest version of the saucectl binary will be downloaded, however you can also specify the version (tag) of the version you wish to install. For a complete list of versions [see](https://github.com/saucelabs/saucectl/releases/tag/v0.88.0). 
+Install Sauce Labs framework agnostic test orchestrator saucectl to execute Espresso and XCUITest tests. The latest version of the saucectl binary will be downloaded, however you can also specify the version (tag) of the version you wish to install. For a complete list of versions <a href="https://github.com/saucelabs/saucectl/releases/"> see </a>. 
 
 # Help
 Information and help for the `install_saucectl` action can be printed out by executed the following command:
