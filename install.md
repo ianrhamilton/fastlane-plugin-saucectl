@@ -26,6 +26,6 @@ end
 ### Install a specific version of saucectl
 ```ruby
 lane :install_toolkit do
-  install_saucectl('0.86.0')
+  install_saucectl(version: '0.86.0')
 end 
 ```
