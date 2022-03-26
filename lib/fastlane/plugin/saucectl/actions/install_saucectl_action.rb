@@ -24,7 +24,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :version,
                                        description: "Set the tag of saucectl you wish to install",
                                        optional: true,
-                                       type: Integer)
+                                       type: String)
         ]
       end
 
