@@ -459,6 +459,13 @@ suites:
       private: true
 ```
 
+## `test_distribution: 'package'`
+Instructs `saucectl` to run only tests in the specified package.
+
+## `test_distribution: 'size'`
+
+Instructs `saucectl` to run only tests that are annotated with the matching size value i.e `@SmallTest`, `@MediumTest` or `@LargeTest`. Valid values are small, medium, or large. You may only specify one value for this property.
+
 ## TestTarget
 When a `testTarget` is specified the saucectl plugin will scan the specified testTarget for test classes and will distribute evenly (where possible) across given array of devices.
 
