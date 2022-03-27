@@ -534,7 +534,7 @@ suites:
 ```
 
 ----------------------------------------------------------------------------
-## `test_distribution: 'size'`
+## `size: '@LargeTest'`
 
 **Android only**
 
@@ -550,7 +550,9 @@ Instructs `saucectl` to run only tests that are annotated with the matching size
 
 --------------------------------------------------------------------------
 
-## `test_distribution: 'annotation'`
+## `annotation: 'com.android.buzz.MyAnnotation'`
+
+**Android only**
 
 Instructs saucectl to run only tests that match a custom annotation that you have set.
 
