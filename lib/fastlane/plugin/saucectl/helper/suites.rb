@@ -60,16 +60,7 @@ module Fastlane
         elsif @config[:test_class]
           custom_test_classes
         else
-          test_suites = []
-          @config[:emulators].each do |emulator|
-            test_distribution_array.each do |test_type|
-              test_suites << {
-                'name' => suite_name(test_type).downcase,
-                'testOptions' => default_test_options(test_type)
-              }.merge(virtual_device_options(emulator))
-            end
-          end
-          test_suites
+          default_execution_suite
         end
       end
 
@@ -133,17 +124,33 @@ module Fastlane
         elsif @config[:test_class].kind_of?(Array)
           custom_test_classes
         else
-          test_suites = []
-          @config[:devices].each do |device|
+          default_execution_suite
+        end
+      end
+
+      def default_execution_suite
+        UI.user_error!("❌ execution by size is not supported on the iOS platform!") if @config[:platform].eql?('ios') && (@config[:size])
+        is_real_device = @config[:devices]
+        test_devices = @config[:devices] || @config[:emulators]
+        test_suites = []
+        if @config[:size]
+          test_devices.each do |device|
+            test_suites << {
+              'name' => suite_name(@config[:size]).downcase,
+              'testOptions' => default_test_options(@config[:size])
+            }.merge(is_real_device ? real_device_options(device) : virtual_device_options(device))
+          end
+        else
+          test_devices.each do |device|
             test_distribution_array.each do |test_type|
               test_suites << {
                 'name' => suite_name(test_type).downcase,
                 'testOptions' => default_test_options(test_type)
-              }.merge(real_device_options(device))
+              }.merge(is_real_device ? real_device_options(device) : virtual_device_options(device))
             end
           end
-          test_suites
         end
+        test_suites
       end
 
       def virtual_device_options(device)
@@ -182,11 +189,19 @@ module Fastlane
       end
 
       def default_test_options(test_type)
-        test_option_type = @config[:test_distribution].eql?('package') ? 'package' : 'class'
         if @config[:platform] == 'android'
-          { test_option_type => test_type }.merge(android_test_options)
+          test_option_type(test_type)
         else
           { 'class' => test_type }
+        end
+      end
+
+      def test_option_type(test_type)
+        if @config[:size]
+          { 'size' => @config[:size] }.merge(android_test_options)
+        else
+          test_option_type = @config[:test_distribution].eql?('package') ? 'package' : 'class'
+          { test_option_type => test_type }.merge(android_test_options)
         end
       end
 
