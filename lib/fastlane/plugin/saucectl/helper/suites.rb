@@ -129,14 +129,15 @@ module Fastlane
       end
 
       def default_execution_suite
-        UI.user_error!("❌ execution by size is not supported on the iOS platform!") if @config[:platform].eql?('ios') && (@config[:size])
+        type = @config[:annotation] ? 'annotation' : 'size'
+        UI.user_error!("❌ execution by #{type} is not supported on the iOS platform!") if @config[:platform].eql?('ios') && (@config[:size] || @config[:annotation])
         is_real_device = @config[:devices]
         test_devices = @config[:devices] || @config[:emulators]
         test_suites = []
-        if @config[:size]
+        if @config[:size] || @config[:annotation]
           test_devices.each do |device|
             test_suites << {
-              'name' => suite_name(@config[:size]).downcase,
+              'name' => suite_name(@config[:size] || @config[:annotation]).downcase,
               'testOptions' => default_test_options(@config[:size])
             }.merge(is_real_device ? real_device_options(device) : virtual_device_options(device))
           end
@@ -197,8 +198,10 @@ module Fastlane
       end
 
       def test_option_type(test_type)
-        if @config[:size]
-          { 'size' => @config[:size] }.merge(android_test_options)
+        if @config[:size] || @config[:annotation]
+          key = @config[:size] ? 'size' : 'annotation'
+          value = @config[:size] || @config[:annotation]
+          { key => value }.merge(android_test_options)
         else
           test_option_type = @config[:test_distribution].eql?('package') ? 'package' : 'class'
           { test_option_type => test_type }.merge(android_test_options)

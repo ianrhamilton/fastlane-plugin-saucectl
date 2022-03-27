@@ -380,12 +380,50 @@ describe Fastlane::Saucectl::Suites do
       expect(actual_test_options.size).to eql(2)
     end
 
+    it 'should distribute to real devices by annotation' do
+      @config[:platform] = 'android'
+      @config[:kind] = 'espresso'
+      @config[:path_to_tests] = File.expand_path("my-demo-app-android/app/src/androidTest")
+      @config[:devices] = [
+        {
+          name: 'Device One',
+          platform_version: '11.1',
+          orientation: 'portrait',
+          device_type: 'phone',
+          carrier_connectivity: false,
+          deviceType: 'phone',
+          private: true
+        },
+        {
+          id: "device_two",
+          orientation: 'portrait',
+          device_type: 'phone',
+          carrier_connectivity: false,
+          deviceType: 'phone',
+          private: true
+        },
+      ]
+      @config[:platform] = 'android'
+      @config[:kind] = 'espresso'
+      @config[:annotation] = 'com.android.buzz.MyAnnotation'
+      actual_test_options = Fastlane::Saucectl::Suites.new(@config).create_real_device_suites
+      expect(actual_test_options.size).to eql(2)
+    end
+
     it "should fail when user attempts to set by size when on iOS platform" do
       @config[:platform] = 'ios'
       @config[:kind] = 'xcuitest'
       @config[:size] = '@SmallTest'
       expect { Fastlane::Saucectl::Suites.new(@config).default_execution_suite }
         .to raise_error(StandardError, "❌ execution by size is not supported on the iOS platform!")
+    end
+
+    it "should fail when user attempts to set by annotation when on iOS platform" do
+      @config[:platform] = 'ios'
+      @config[:kind] = 'xcuitest'
+      @config[:annotation] = 'com.android.buzz.MyAnnotation'
+      expect { Fastlane::Saucectl::Suites.new(@config).default_execution_suite }
+        .to raise_error(StandardError, "❌ execution by annotation is not supported on the iOS platform!")
     end
   end
 end

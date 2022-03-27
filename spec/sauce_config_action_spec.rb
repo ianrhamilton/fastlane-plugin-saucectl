@@ -75,6 +75,24 @@ describe Fastlane::Actions::SauceConfigAction do
       expect(config).to eql expected_config
     end
 
+    it 'should create config.yml file for android espresso based on user specified virtual device configurations testing by annotation' do
+      Fastlane::FastFile.new.parse("lane :test do
+          sauce_config({ platform: 'android',
+                         kind: 'espresso',
+                         app: '#{File.expand_path("my-demo-app-android")}/myTestApp.apk',
+                         test_app: '#{File.expand_path("my-demo-app-android")}/myTestRunner.apk',
+                         path_to_tests: '#{File.expand_path("my-demo-app-android/app/src/androidTest")}',
+                         region: 'eu',
+                         annotation: 'com.android.buzz.MyAnnotation',
+                         emulators: [ {name: 'Android GoogleApi Emulator', platform_versions: %w[10.0 11.0], orientation: 'portrait'}]
+      })
+    end").runner.execute(:test)
+      config_folder = File.expand_path("../", "#{__dir__}")
+      config = YAML.load_file("#{config_folder}/.sauce/config.yml")
+      expected_config = {"apiVersion"=>"v1alpha", "kind"=>"espresso", "retries"=>0, "sauce"=>{"region"=>"eu-central-1", "concurrency"=>1, "metadata"=>{"name"=>"unit-test-123", "build"=>"Release "}}, "espresso"=>{"app"=> File.expand_path("my-demo-app-android/myTestApp.apk"), "testApp"=> File.expand_path("my-demo-app-android/myTestRunner.apk")}, "artifacts"=>{"download"=>{"when"=>"always", "match"=>["junit.xml"], "directory"=>"./artifacts/"}}, "reporters"=>{"junit"=>{"enabled"=>true}}, "suites"=>[{"name"=>"unit-test-123-myannotation", "testOptions"=>{"annotation"=>"com.android.buzz.MyAnnotation", "clearPackageData"=>true, "useTestOrchestrator"=>true}, "emulators"=>[{"name"=>"Android GoogleApi Emulator", "orientation"=>"portrait", "platformVersions"=>%w[10.0 11.0]}]}]}
+      expect(config).to eql expected_config
+    end
+
     it 'should create config.yml file for android espresso based on user specified real device configurations' do
       Fastlane::FastFile.new.parse("lane :test do
           sauce_config({ platform: 'android',
