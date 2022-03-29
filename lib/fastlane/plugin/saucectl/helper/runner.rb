@@ -24,8 +24,10 @@ module Fastlane
 
       def system(*cmd)
         Open3.popen3(*cmd) do |_stdout, stderr, _status, thread|
-          while (line = stderr.gets)
-            puts(line)
+          Thread.new do
+            while (line = stderr.gets)
+              puts(line)
+            end
           end
           thread.value
         end
