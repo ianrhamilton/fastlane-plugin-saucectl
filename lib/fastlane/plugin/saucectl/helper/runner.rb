@@ -23,13 +23,14 @@ module Fastlane
       end
 
       def system(*cmd)
-        Open3.popen3(*cmd) do |_stdout, stderr, _status, thread|
+        Open3.popen2e(*cmd) do |stdin, stdout_stderr, wait_thread|
           Thread.new do
-            while (line = stderr.gets)
-              puts(line)
+            stdout_stderr.each do |out|
+              puts(out)
             end
           end
-          thread.value
+          stdin.close
+          wait_thread.value
         end
       end
     end
