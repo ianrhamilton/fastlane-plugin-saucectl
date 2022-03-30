@@ -28,8 +28,6 @@ module Fastlane
             stdout_stderr.each do |out|
               message = out.gsub(/(?:\[[^\]].*\])|(?:\(\d{4}\))/, '')
               puts(message)
-            rescue StandardError
-              break
             end
           end
           stdin.close
