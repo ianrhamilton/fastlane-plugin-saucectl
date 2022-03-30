@@ -29,6 +29,8 @@ module Fastlane
               break if out =~ %r{Build Link: https://.*.com/builds/.*}
 
               puts(out)
+            rescue StandardError
+              break
             end
           end
           stdin.close
