@@ -26,9 +26,8 @@ module Fastlane
         Open3.popen2e(*cmd) do |stdin, stdout_stderr, wait_thread|
           Thread.new do
             stdout_stderr.each do |out|
-              break if out =~ %r{Build Link: https://.*.com/builds/.*}
-
-              puts(out)
+              message = out.gsub(/(?:\[[^\]].*\])|(?:\(\d{4}\))/, '')
+              puts(message)
             rescue StandardError
               break
             end
