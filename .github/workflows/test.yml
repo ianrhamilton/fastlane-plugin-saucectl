@@ -9,8 +9,10 @@ on:
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     strategy:
       matrix:
         ruby-version: [ '2.5' ]
