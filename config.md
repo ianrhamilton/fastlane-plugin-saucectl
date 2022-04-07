@@ -73,9 +73,9 @@ fastlane action sauce_config
 ---------------------------------------------------------------------
 ## `test_distribution`
 
-| Required    | Type     | Description                   | Default Method |
-|-------------|----------|-------------------------------|----------------|
-| ***false*** | `String` | Test run distribution method. | `class`        |
+| Required    | Type     | Description                   | 
+|-------------|----------|-------------------------------|
+| ***false*** | `String` | Test run distribution method. |
 
 ### Why distribute tests?
 One of the only drawbacks of the native sauce platform is the long running test runs or suite videos. Long running videos make it difficult to debug failures,
@@ -751,6 +751,36 @@ Pattern Matching:
 
 ---------------------------------------------------------------------
 # Example actions
+
+Create a config.yml file for android espresso based on test runner apk. This will execute all tests within your `androidTest` directory.
+```ruby
+
+lane :create_config do
+    sauce_config({platform: 'android',
+                  kind: 'espresso',
+                  app: '#{File.expand_path("my-demo-app-android")}/myTestApp.apk',
+                  test_app: '#{File.expand_path("my-demo-app-android")}/myTestRunner.apk',
+                  region: 'eu',
+                  emulators: [ {name: 'Android GoogleApi Emulator', platform_versions: %w[10.0 11.0], orientation: 'portrait'}]
+             })
+end
+```
+---------------------------------------------------------------------
+
+Create a config.yml file for android espresso based on test runner ipa file. This will execute all tests within your test target.
+```ruby
+
+lane :create_config do
+    sauce_config({platform: 'ios',
+                  kind: 'xcuitest',
+                  app: 'path/to/myTestApp.ipa',
+                  test_app: 'path/to/TestRunner.ipa',
+                  region: 'eu',
+                  devices: [ {name: 'iPhone 11'}]
+             })
+end
+```
+---------------------------------------------------------------------
 
 Create a config.yml file for android espresso based on user specified virtual device configurations
 ```ruby
