@@ -5,7 +5,8 @@ require 'net/http'
 require 'json'
 require 'base64'
 require 'open3'
-require_relative 'suites'
+require_relative 'ios_suites'
+require_relative 'android_suites'
 
 module Fastlane
   module Saucectl
@@ -26,11 +27,7 @@ module Fastlane
           'retries' => @config[:retries],
           'sauce' => {
             'region' => set_region.to_s,
-            'concurrency' => @config[:max_concurrency_size],
-            'metadata' => {
-              'name' => "#{ENV['JOB_NAME']}-#{ENV['BUILD_NUMBER']}",
-              'build' => "Release #{ENV['CI_COMMIT_SHORT_SHA']}"
-            }
+            'concurrency' => @config[:max_concurrency_size]
           },
           (@config[:kind]).to_s => set_apps,
           'artifacts' => {
@@ -49,12 +46,7 @@ module Fastlane
       end
 
       def set_region
-        case @config[:region]
-        when 'eu'
-          'eu-central-1'
-        else
-          'us-west-1'
-        end
+        @config[:region] == 'eu' ? 'eu-central-1' : 'us-west-1'
       end
 
       def set_apps
@@ -64,12 +56,16 @@ module Fastlane
         }
       end
 
+      def suite
+        @config[:platform].eql?('ios') ? Fastlane::Saucectl::IosSuites.new(@config) : Fastlane::Saucectl::AndroidSuites.new(@config)
+      end
+
       def create
         UI.message("Creating saucectl config .....🚕💨")
         file_name = 'config.yml'
         UI.user_error!("❌ Sauce Labs platform does not support virtual device execution for ios apps") if @config[:platform].eql?('ios') && @config[:emulators]
 
-        config = base_config.merge(create_suite)
+        config = base_config.merge({ 'suites' => suite.generate })
         out_file = File.new(file_name, 'w')
         out_file.puts(config.to_yaml)
         out_file.close
@@ -77,15 +73,6 @@ module Fastlane
         FileUtils.move(file_name, './.sauce')
         UI.message("Successfully created saucectl config ✅") if Dir.exist?('.sauce')
         UI.user_error!("Failed to create saucectl config ❌") unless Dir.exist?('.sauce')
-      end
-
-      def create_suite
-        suite = Fastlane::Saucectl::Suites.new(@config)
-        { 'suites' => if @config[:emulators]
-                        suite.create_virtual_device_suites
-                      else
-                        suite.create_real_device_suites
-                      end }
       end
 
       def creat_sauce_dir
