@@ -64,11 +64,11 @@ module Fastlane
         case test_distribution
         when 'testCase', 'testPlan'
           test_data.each do |type|
-            type[:tests].each { |test| tests_arr << "#{test_target}.#{type[:class]}/#{test}" }
+            type[:tests].each { |test| tests_arr << "#{test_target.tr(" ", "_")}.#{type[:class]}/#{test}" }
           end
         else
           test_data.each do |type|
-            tests_arr << "#{test_target}.#{type[:class]}"
+            tests_arr << "#{test_target.tr(" ", "_")}.#{type[:class]}"
           end
         end
         tests_arr.uniq
