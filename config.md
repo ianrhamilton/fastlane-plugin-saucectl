@@ -767,21 +767,6 @@ end
 ```
 ---------------------------------------------------------------------
 
-Create a config.yml file for android espresso based on test runner ipa file. This will execute all tests within your test target.
-```ruby
-
-lane :create_config do
-    sauce_config({platform: 'ios',
-                  kind: 'xcuitest',
-                  app: 'path/to/myTestApp.ipa',
-                  test_app: 'path/to/TestRunner.ipa',
-                  region: 'eu',
-                  devices: [ {name: 'iPhone 11'}]
-             })
-end
-```
----------------------------------------------------------------------
-
 Create a config.yml file for android espresso based on user specified virtual device configurations
 ```ruby
 
@@ -860,6 +845,22 @@ lane :create_config do
                   test_target: 'MyDemoAppUITests'
                  })
 end 
+```
+
+------------------------------------------------------------------
+
+Create a config.yml file for ios real devices based on test runner ipa file. This will execute all tests within your test target.
+```ruby
+
+lane :create_config do
+    sauce_config({platform: 'ios',
+                  kind: 'xcuitest',
+                  app: 'path/to/myTestApp.ipa',
+                  test_app: 'path/to/TestRunner.ipa',
+                  region: 'eu',
+                  devices: [ {name: 'iPhone 11'}]
+             })
+end
 ```
 
 ---------------------------------------------------------------------
