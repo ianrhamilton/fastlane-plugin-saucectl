@@ -33,13 +33,6 @@ Failure to do this will result in missing test classes and test cases from your 
 | `sauce_devices`       | Returns a list of Device IDs for all devices in the data center that are currently free for testing.                                                                                                         |
 | `disabled_tests`      | Fetches any disabled ui test cases (for android searches for @Ignore tests, and for ios skipped tests within an xcode test plan). Plan is to use this in the future for generating pretty HTML reports       | 
 
-An order of which you may utilize the above actions in your continuous integration platform could be:
-1. Install the saucectl binary via `install_saucectl`
-2. Upload your test artifacts to Sauce Labs storage (for example app apk, and test runner apk)
-3. Create config.yml for given parameters via `sauce_config` 
-4. Execute test based on specified config via `sauce_runner`
-5. Delete test artifacts via `delete_from_storage` so that your storage does not fill up (if you're executing tests on every PR, for example)
-
 ## Example
 
 Check out the [example `Fastfile`](fastlane/Fastfile) to see how to use this plugin. Try it by cloning the repo, running `fastlane install_plugins` and `bundle exec fastlane test`.
