@@ -16,7 +16,7 @@ fastlane add_plugin saucectl
 
 The purpose of this plugin is to simplify the set up, configuration, upload, and execution of espresso and XCUITest on the Sauce Labs platform by utilizing fastlane which will enable you to test your iOS and Android apps at scale.
 
-**IMPORTANT:** in order for you to use this plugin to execute UI tests, your test class names must proceed with `Spec`, `Specs`, `Tests`, or `Test`, for example `ExampleSpec`, `ExampleSpecs`, `ExampleTest`, `ExampleTests`. Your test case names must also begin with test, for example `testIDoSomething`, `testIDoSomethingElse`. This is so that the the plugin can search for test classes and their included test cases.
+**IMPORTANT:** To use this plugin to execute UI tests on Sauce Labs, your test class names must proceed with `Spec`, `Specs`, `Tests`, or `Test`, for example `ExampleSpec`, `ExampleSpecs`, `ExampleTest`, or `ExampleTests`. Your test case names must also begin with `test`, for example `testIDoSomething`, `testIDoSomethingElse`. This is so that the the plugin can search for test classes and their included test cases.
 
 Failure to do this will result in missing test classes and test cases from your test run.
 
