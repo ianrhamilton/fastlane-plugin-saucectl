@@ -697,7 +697,7 @@ Pattern Matching:
 
 | Required    | Type     |     | Description                                                                                                           | 
 |-------------|----------|:----|-----------------------------------------------------------------------------------------------------------------------|
-| ***false*** | `String` |     | Name of the Xcode test plan containing the tests that you wish to test/skip via your chosen test distribution method. |
+| ***false*** | `String` |     | Name of the Xcode test plan containing the tests that you wish to test/skip. |
 
 **Example**
 
@@ -914,14 +914,14 @@ end
 ```
 
 ---------------------------------------------------------------------
-Create real device config.yml file based on xcode test plan using testCase distribution method
+Create real device config.yml file based on xcode test plan.
 
 ```ruby
 lane :create_config do
     sauce_config({platform: 'ios',
                   kind: 'xcuitest',
-                  app: '#{File.expand_path("my-demo-app-ios")}/MyTestApp.ipa',
-                  test_app: '#{File.expand_path("my-demo-app-ios")}/MyTestAppRunner.ipa',
+                  app: 'path/to/MyTestApp.ipa',
+                  test_app: 'path/to/MyTestAppRunner.ipa',
                   region: 'eu',
                   devices: [ {name: 'iPhone RDC One'}, {id: 'iphone_rdc_two'} ],
                   test_plan: 'UITests'
