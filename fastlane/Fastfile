@@ -76,3 +76,125 @@ platform :android do
         delete_apps
     end
 end
+
+platform :ios do
+
+    desc "Execute ui tests using virtual devices"
+    lane :ui_tests do
+        generate_sauce_config
+        install
+        execute_tests
+    end
+
+   desc "Upload app and test runner to Sauce Labs storage"
+         lane :upload_to_sauce do
+             @app_id = sauce_upload(platform: 'ios',
+                                    app: 'SauceLabs-Demo-App.ipa',
+                                    file: 'SauceLabs-Demo-App.ipa',
+                                    region: 'eu',
+                                    sauce_username: ENV['SAUCE_USERNAME'],
+                                    sauce_access_key: ENV['SAUCE_ACCESS_KEY'])
+
+             @test_app_id = sauce_upload(platform: 'ios',
+                                         app: 'SauceLabs-Demo-App-Runner.XCUITest.ipa',
+                                         file: 'SauceLabs-Demo-App-Runner.XCUITest.ipa',
+                                         region: 'eu',
+                                         sauce_username: ENV['SAUCE_USERNAME'],
+                                         sauce_access_key: ENV['SAUCE_ACCESS_KEY'])
+   end
+
+    desc "Create saucectl configuration for test runner"
+    lane :generate_sauce_config_test_runner do
+        sauce_config({platform: 'ios',
+                      kind: 'xcuitest',
+                      app: 'SauceLabs-Demo-App.ipa',
+                      test_app: 'SauceLabs-Demo-App-Runner.XCUITest.ipa',
+                      region: 'eu',
+                      devices: [ {name: 'iPhone 11'}]
+                 })
+    end
+
+    desc "Create saucectl configuration for Xcode Test Plan"
+    lane :generate_sauce_config_test_plan do
+        sauce_config({platform: 'ios',
+                      kind: 'xcuitest',
+                      app: 'SauceLabs-Demo-App.ipa',
+                      test_app: 'SauceLabs-Demo-App-Runner.XCUITest.ipa',
+                      region: 'eu',
+                      test_plan: 'UITests',
+                      devices: [ {name: 'iPhone 11'}]
+                 })
+    end
+
+    desc "Create saucectl configuration for Test Plan"
+    lane :generate_sauce_config_shard_test_plan do
+      sauce_config({platform: 'ios',
+                    kind: 'xcuitest',
+                    app: 'SauceLabs-Demo-App.ipa',
+                    test_app: 'SauceLabs-Demo-App-Runner.XCUITest.ipa',
+                    region: 'eu',
+                    test_plan: 'EnabledUITests',
+                    test_distribution: 'shard',
+                    devices: [ {name: 'iPhone RDC One'}, {id: 'iphone_rdc_two'} ],
+                   })
+    end
+
+    desc "Create saucectl configuration distributing by class"
+    lane :generate_sauce_config_class_distribution do
+      sauce_config(platform: 'ios',
+                   kind: 'xcuitest',
+                   app: "SauceLabs-Demo-App.ipa",
+                   test_app: "SauceLabs-Demo-App-Runner.XCUITest.ipa",
+                   region: 'eu',
+                   test_target: "My Demo AppUITests",
+                   test_distribution: 'class',
+                   devices: [ {name: 'iPhone RDC One'} ])
+    end
+
+    desc "Create saucectl configuration distributing by testCase"
+    lane :generate_sauce_config_test_distribution do
+      sauce_config(platform: 'ios',
+                   kind: 'xcuitest',
+                   app: "SauceLabs-Demo-App.ipa",
+                   test_app: "SauceLabs-Demo-App-Runner.XCUITest.ipa",
+                   region: 'eu',
+                   test_target: "My Demo AppUITests",
+                   test_distribution: 'testCase',
+                   devices: [ {name: 'iPhone RDC One'} ])
+    end
+
+    desc "Create saucectl configuration for specific test classes"
+    lane :generate_sauce_config_custom_class do
+      sauce_config(platform: 'ios',
+                   kind: 'xcuitest',
+                   app: "SauceLabs-Demo-App.ipa",
+                   test_app: "SauceLabs-Demo-App-Runner.XCUITest.ipa",
+                   region: 'eu',
+                   test_class: ['My_Demo_AppUITests.ProductDetailsTest', 'My_Demo_AppUITests.ProductListingPageTest/testProductListingPageAddMultipleItemsToCar'],
+                   devices: [ {name: 'iPhone RDC One'} ])
+    end
+
+    desc "Install Sauce Labs toolkit dependencies"
+        lane :install do
+             install_saucectl
+    end
+
+    desc "Execute UI tests on sauce labs platform"
+        lane :execute_tests do
+             sauce_runner
+    end
+
+    desc "Delete apps from Sauce Labs storage"
+    lane :delete_apps do
+
+          delete_from_storage(region: 'eu',
+                              sauce_username: ENV['SAUCE_USERNAME'],
+                              sauce_access_key: ENV['SAUCE_ACCESS_KEY'],
+                              app_id: @app_id)
+
+          delete_from_storage(region: 'eu',
+                              sauce_username: ENV['SAUCE_USERNAME'],
+                              sauce_access_key: ENV['SAUCE_ACCESS_KEY'],
+                              app_id: @test_app_id)
+    end
+end
