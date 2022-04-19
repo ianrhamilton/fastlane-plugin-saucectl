@@ -79,9 +79,9 @@ end
 
 platform :ios do
 
-    desc "Execute ui tests using virtual devices"
+    desc "Execute ui tests using real devices"
     lane :ui_tests do
-        generate_sauce_config
+        generate_sauce_config_test_runner
         install
         execute_tests
     end
