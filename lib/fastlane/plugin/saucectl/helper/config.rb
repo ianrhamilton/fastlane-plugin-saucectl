@@ -24,13 +24,13 @@ module Fastlane
         {
           'apiVersion' => 'v1alpha',
           'kind' => @config[:kind],
-          'retries' => @config[:retries],
           'defaults' => {
             'timeout' => @config[:timeout],
           },
           'sauce' => {
             'region' => set_region.to_s,
-            'concurrency' => @config[:max_concurrency_size]
+            'concurrency' => @config[:max_concurrency_size],
+            'retries' => @config[:retries]
           },
           (@config[:kind]).to_s => set_apps,
           'artifacts' => {
