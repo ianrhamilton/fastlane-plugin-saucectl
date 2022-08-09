@@ -178,7 +178,11 @@ module Fastlane
                                        description: "Sets the maximum number of suites to execute at the same time. If the test defines more suites than the max, excess suites are queued and run in order as each suite completes",
                                        optional: true,
                                        type: Integer,
-                                       default_value: 1)
+                                       default_value: 1),
+          FastlaneCore::ConfigItem.new(key: :timeout,
+                                       description: "Instructs how long (in ms, s, m, or h) saucectl should wait for each suite to complete. You can override this setting for individual suites using the timeout setting within the suites object. If not set, the default value is 0 (unlimited).",
+                                       optional: true,
+                                       type: String)
         ]
       end
 
