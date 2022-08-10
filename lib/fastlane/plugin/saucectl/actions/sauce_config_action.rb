@@ -182,7 +182,8 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :timeout,
                                        description: "Instructs how long (in ms, s, m, or h) saucectl should wait for each suite to complete. You can override this setting for individual suites using the timeout setting within the suites object. If not set, the default value is 0 (unlimited).",
                                        optional: true,
-                                       type: String)
+                                       type: String,
+                                       default_value: '0')
         ]
       end
 
