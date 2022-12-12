@@ -1,0 +1,11 @@
+_site
+.sass-cache
+.jekyll-metadata
+.idea
+Gemfile.lock
+my-demo-app-ios
+my-demo-app-android
+coverage
+test-results
+*.icloud
+pkg

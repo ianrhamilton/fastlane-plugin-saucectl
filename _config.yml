@@ -1,0 +1,29 @@
+title: fastlane-plugin-saucectl
+email: ian.ross.hamilton@gmail.com
+description: >- # this means to ignore newlines until "baseurl:"
+  Test your iOS and and Android apps at scale using Sauce Labs toolkit.
+remote_theme: just-the-docs/just-the-docs
+baseurl: "/fastlane-plugin-saucectl"
+url: "https://ianrhamilton.github.io"
+permalink: pretty
+search_enabled: true
+search:
+  heading_level: 2
+  previews: 2
+  preview_words_before: 3
+  preview_words_after: 3
+  tokenizer_separator: /[\s/]+/
+  rel_url: true
+  button: false
+
+heading_anchors: true
+aux_links_new_tab: false
+nav_sort: case_sensitive # Capital letters sorted before lowercase
+back_to_top: true
+back_to_top_text: "Back to top"
+aux_links:
+  "fastlane-plugin-saucectl on GitHub":
+    - "https://github.com/ianrhamilton/fastlane-plugin-saucectl"
+
+ga_tracking: G-V62Q3R4GMJ
+ga_tracking_anonymize_ip: true # Use GDPR compliant Google Analytics settings (true/nil by default)
