@@ -152,6 +152,7 @@ If you have these tests running in a continuous integration environment that may
 <summary>Fastfile</summary>
 <pre>
 
+
 ```ruby
 
 # This is an example fastlane file in order to demo how you would use this plugin minimum version number required.
@@ -241,6 +242,7 @@ platform :ios do
 end
 
 ```
+
 </pre>
 </details>
 

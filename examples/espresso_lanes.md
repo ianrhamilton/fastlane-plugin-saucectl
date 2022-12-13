@@ -113,10 +113,9 @@ If you have these tests running in a continuous integration environment that may
 <summary>Fastfile</summary>
 <pre>
 
+
 ```ruby
 
-# This is an example fastlane file in order to demo how you would use this plugin minimum version number required.
-# Update this, if you use features of a newer version
 fastlane_version "2.82.0"
 
 default_platform :android
@@ -195,6 +194,7 @@ platform :android do
 end
 
 ```
+
 </pre>
 </details>
 
