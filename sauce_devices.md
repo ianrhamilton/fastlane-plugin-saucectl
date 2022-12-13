@@ -235,7 +235,10 @@ end
                       region: 'eu')
 ```
 
-Example Response
+<details>
+<summary>Example Response</summary>
+<pre>
+
 ```json
 [
   "iPhone_12_15_beta_real",
@@ -272,3 +275,6 @@ Example Response
 ]
 
 ```
+
+</pre>
+</details>

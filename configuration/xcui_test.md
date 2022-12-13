@@ -19,7 +19,7 @@ parent: Configuration
 
 <span class="label success">Real Device Support</span> <span class="label danger">Virtual Device Not Supported</span>
 
-This page defines each of the configuration parameters that is required for running Espresso tests on the Sauce Labs platform. Please note, in order for you to use this plugin to execute UI tests, your test class names must proceed with `Spec`, `Specs`, `Tests`, or `Test`**, for example, `ExampleSpec`, `ExampleSpecs`, `ExampleTest`, `ExampleTests`. Your test case names must also begin with `test`, for example, `testIDoSomething`, `testIDoSomethingElse`. 
+This page defines each of the configuration parameters that is required for running XCUI tests on the Sauce Labs platform. Please note, in order for you to use this plugin to execute UI tests, your test class names must proceed with `Spec`, `Specs`, `Tests`, or `Test`**, for example, `ExampleSpec`, `ExampleSpecs`, `ExampleTest`, `ExampleTests`. Your test case names must also begin with `test`, for example, `testIDoSomething`, `testIDoSomethingElse`. 
 
 **These naming conventions are required so that this plugin can scan for test classes and their defined test cases**.
 

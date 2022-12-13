@@ -85,9 +85,13 @@ lane :get_apps do
              query: 'test.apk', 
              region: 'eu')
 end 
+
 ```
 
-Response
+<details>
+<summary>Example Response</summary>
+<pre>
+
 ```json
 {
     "items": [
@@ -132,4 +136,7 @@ Response
     "per_page": 25,
     "total_items": 1
 }
+
 ```
+</pre>
+</details>
