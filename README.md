@@ -14,16 +14,16 @@ fastlane add_plugin saucectl
 
 ## About fastlane-plugin-saucectl
 
-The purpose of this plugin is to simplify the set up, configuration, upload, and execution of espresso and XCUITest on the Sauce Labs platform by utilizing fastlane which will enable you to test your iOS and Android apps at scale.
+The purpose of this plugin is to simplify the set-up, configuration, upload, and execution of espresso and XCUITest on the Sauce Labs platform by utilizing fastlane which will enable you to test your iOS and Android apps at scale.
 
-**IMPORTANT:** To use this plugin to execute UI tests on Sauce Labs, your test class names must proceed with `Spec`, `Specs`, `Tests`, or `Test`, for example `ExampleSpec`, `ExampleSpecs`, `ExampleTest`, or `ExampleTests`. Your test case names must also begin with `test`, for example `testIDoSomething`, `testIDoSomethingElse`. This is so that the the plugin can search for test classes and their included test cases.
+**IMPORTANT:** To use this plugin to execute UI tests on Sauce Labs, your test class names must proceed with `Spec`, `Specs`, `Tests`, or `Test`, for example `ExampleSpec`, `ExampleSpecs`, `ExampleTest`, or `ExampleTests`. Your test case names must also begin with `test`, for example `testIDoSomething`, `testIDoSomethingElse`. This is so that the plugin can search for test classes and their included test cases.
 
 Failure to do this will result in missing test classes and test cases from your test run.
 
 **For a detailed introduction to each of the actions available within this plugin, please see the [documentation](https://ianrhamilton.github.io/fastlane-plugin-saucectl/#fastlane-plugin-saucectl)**.
 
-| Available Actions   | Description                                                                                                                                                                                                  |
-|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Available Actions     | Description                                                                                                                                                                                                  |
+|-----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `install_saucectl`    | Downloads the Sauce Labs saucectl cli binary for test execution. Optionally specify the [version](https://github.com/saucelabs/saucectl/releases/) you wish to install or automatically download the latest. |
 | `sauce_upload`        | Upload test artifacts to sauce labs storage                                                                                                                                                                  | 
 | `sauce_config`        | Create SauceLabs configuration file for test execution based on given parameters                                                                                                                             |

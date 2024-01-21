@@ -67,12 +67,15 @@ module Fastlane
       end
 
       def upload
-        UI.message("⏳ Uploading \"#{@config[:app]}\" upload to Sauce Labs.")
+        UI.message("⏳ Uploading \"#{@config[:app]}\" to Sauce Labs.")
         path = 'v1/storage/upload'
         https, url = build_http_request_for(path)
         request = Net::HTTP::Post.new(url)
         request['Authorization'] = "Basic #{@encoded_auth_string}"
         form_data = [['payload', File.open(@config[:file])], ['name', @config[:app]]]
+        unless @config[:app_description].nil?
+          form_data.append(['description', @config[:app_description]])
+        end
         request.set_form(form_data, 'multipart/form-data')
         response = https.request(request)
         UI.success("✅ Successfully uploaded app to sauce labs: \n #{response.body}") if response.code.eql?('201')

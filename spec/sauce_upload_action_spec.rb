@@ -121,5 +121,40 @@ describe Fastlane::Actions::SauceUploadAction do
 
       end.to raise_error("No sauce labs access key provided, set using: sauce_access_key: '1234' or consider setting your credentials as environment variables.")
     end
+
+    it "should raise an error when description is defined but empty" do
+      expect do
+        Fastlane::FastFile.new.parse("lane :test do
+          sauce_upload({
+                     platform: 'android',
+                     sauce_username: 'foo',
+                     sauce_access_key: 'bar',
+                     app: 'Android.MyCustomApp.apk',
+                     file: '#{@file}',
+                     region: 'eu',
+                     app_description: ''
+                   })
+          end").runner.execute(:test)
+
+      end.to raise_error("Description was empty or > 255 characters. Do not set app_description or set using app_description: 'Foo'")
+    end
+
+    it "should raise an error when description is longer than 255 characters" do
+      expect do
+        Fastlane::FastFile.new.parse("lane :test do
+          sauce_upload({
+                     platform: 'android',
+                     sauce_username: 'foo',
+                     sauce_access_key: 'bar',
+                     app: 'Android.MyCustomApp.apk',
+                     file: '#{@file}',
+                     region: 'eu',
+                     app_description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata '
+                   })
+          end").runner.execute(:test)
+
+      end.to raise_error("Description was empty or > 255 characters. Do not set app_description or set using app_description: 'Foo'")
+    end
+
   end
 end

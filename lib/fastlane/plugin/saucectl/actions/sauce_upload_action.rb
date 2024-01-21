@@ -79,6 +79,14 @@ module Fastlane
                                        type: String,
                                        verify_block: proc do |value|
                                          UI.user_error!(@messages['sauce_api_key_error']) unless value && !value.empty?
+                                       end),
+          FastlaneCore::ConfigItem.new(key: :app_description,
+                                       description: "A description of the artifact (optional, 1-255 chars)",
+                                       optional: true,
+                                       is_string: true,
+                                       type: String,
+                                       verify_block: proc do |value|
+                                         UI.user_error!(@messages['description_malformed']) unless value && !value.empty? && value.to_s.length < 256
                                        end)
         ]
       end
