@@ -15,7 +15,7 @@ jobs:
       pull-requests: write
     strategy:
       matrix:
-        ruby-version: [ '2.5' ]
+        ruby-version: [ '3.0' ]
 
     steps:
       - uses: actions/checkout@v2
